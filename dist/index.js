@@ -6,19 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const productRoutes_1 = require("./routes/productRoutes");
-const client_1 = require("@prisma/client");
+const prisma_1 = __importDefault(require("./plugins/prisma"));
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
 });
 const start = async () => {
     try {
-        const prisma = new client_1.PrismaClient();
-        await prisma.$connect();
-        server.decorate("prisma", prisma);
-        server.addHook("onClose", async (server) => {
-            await server.prisma.$disconnect();
-        });
+        await server.register(prisma_1.default);
         await server.register(productRoutes_1.productRoutes, { prefix: "/api/" });
         server.log.info(`Prisma available: ${!!server.prisma}`);
         const myPort = Number(process.env.MY_PORT) || 5445;

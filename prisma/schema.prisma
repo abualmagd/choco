@@ -76,6 +76,7 @@ model Product {
   costPrice   Decimal?
   sku         String?
   barcode     String?
+  brand       String?
   trackInventory Boolean @default(true)
   inventoryQuantity Int  @default(0)
   allowBackorder Boolean @default(false)
