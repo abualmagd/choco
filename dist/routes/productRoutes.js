@@ -140,7 +140,7 @@ const productRoutes = async (fastify, opt) => {
                     user: {
                         select: {
                             id: true,
-                            firstName: true,
+                            name: true,
                             avatar: true,
                         },
                     },

@@ -11,8 +11,7 @@ model User {
   id            Int           @id @default(autoincrement())
   email         String        @unique
   password      String
-  firstName     String?
-  lastName      String?
+  name          String?
   phone         String?
   avatar        String?
   role          Role          @default(CUSTOMER)
@@ -23,6 +22,10 @@ model User {
   wishlist      WishlistItem[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+
+  //auth columns 
+  sessions      Session[]
+  accounts      Account[] 
 }
 
 enum Role {
@@ -30,6 +33,36 @@ enum Role {
   ADMIN
   MODERATOR
 }
+
+
+
+model Session {
+  id        String   @id @unique 
+  data      String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int      
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             Int     
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  @@unique([provider, providerAccountId])
+}
+
 
 model Address {
   id          Int       @id @default(autoincrement())

@@ -167,7 +167,7 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
           user: {
             select: {
               id: true,
-              firstName: true,
+              name: true,
               avatar: true,
             },
           },
