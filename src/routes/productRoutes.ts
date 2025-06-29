@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
+import { isAdminAuth, isModeratorAuth } from "../authentication/middleware";
 
 export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
   //get list of products
@@ -8,24 +9,28 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const products = await fastify.prisma.product.findMany();
-        reply.send({ data: products });
+        return reply.send({ data: products });
       } catch (error) {
-        reply.send(error).status(500);
+        return reply.send(error).status(500);
       }
     }
   );
 
   //create one product must be admin
-  fastify.post("/products", async (request, reply) => {
-    try {
-      const newProduct = await fastify.prisma.product.create({
-        data: request.body as Prisma.ProductCreateInput,
-      });
-      reply.status(201).send(newProduct);
-    } catch (error) {
-      reply.status(409).send(error);
+  fastify.post(
+    "/products",
+    { preHandler: isAdminAuth },
+    async (request, reply) => {
+      try {
+        const newProduct = await fastify.prisma.product.create({
+          data: request.body as Prisma.ProductCreateInput,
+        });
+        return reply.status(201).send(newProduct);
+      } catch (error) {
+        return reply.status(409).send(error);
+      }
     }
-  });
+  );
 
   //get product with reviews and discouts
   fastify.get(
@@ -38,9 +43,9 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
             discounts: true,
           },
         });
-        reply.send({ data: products });
+        return reply.send({ data: products });
       } catch (error) {
-        reply.send(error).status(500);
+        return reply.send(error).status(500);
       }
     }
   );
@@ -70,9 +75,9 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
           });
         }
 
-        reply.send(product);
+        return reply.send(product);
       } catch (error) {
-        reply.send(error);
+        return reply.send(error);
       }
     }
   );
@@ -80,6 +85,7 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
   //delete product for admin user only
   fastify.delete<{ Params: { id: string } }>(
     "/products/:id",
+    { preHandler: isAdminAuth },
     async (request, reply) => {
       try {
         const productId = parseInt(request.params.id, 10);
@@ -88,11 +94,11 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
             id: productId,
           },
         });
-        reply.send({
+        return reply.send({
           data: `product with id=${request.params.id} deleted successfully`,
         });
       } catch (error) {
-        reply.send(error);
+        return reply.send(error);
       }
     }
   );
@@ -100,6 +106,7 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
   //update product for admin only
   fastify.put<{ Params: { id: string } }>(
     "/products/:id",
+    { preHandler: isModeratorAuth },
     async (request, reply) => {
       try {
         const productId = parseInt(request.params.id, 10);
@@ -110,9 +117,9 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
             id: productId,
           },
         });
-        reply.send(updatedProduct);
+        return reply.send(updatedProduct);
       } catch (error) {
-        reply.send(error);
+        return reply.send(error);
       }
     }
   );
@@ -128,9 +135,9 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
             productId: productId,
           },
         });
-        reply.send(reviews);
+        return reply.send(reviews);
       } catch (error) {
-        reply.send(error);
+        return reply.send(error);
       }
     }
   );
@@ -173,9 +180,9 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
           },
         },
       });
-      reply.send(newReview);
+      return reply.send(newReview);
     } catch (error) {
-      reply.send(error);
+      return reply.send(error);
     }
   });
 };

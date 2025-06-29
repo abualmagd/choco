@@ -12,27 +12,28 @@ exports.sessionOption = {
     secret: process.env.SESSION_SECRET || "hsgshgsbcbhcsbshbvshxkanxknzkjsbxhgbghvcxs",
     cookie: {
         secure: process.env.NODE_ENV === "production",
-        maxAge: 86400000, // 1 day
+        maxAge: 86400000 * 7, // 1 day
     },
     cookieName: "sessionId",
     store: {
         async set(sessionId, session, callback) {
-            var _a, _b;
+            var _a;
             try {
-                await prisma.session.upsert({
-                    where: { id: sessionId },
-                    update: {
-                        data: JSON.stringify(session),
-                        expiresAt: new Date(Date.now() + 86400000),
-                        userId: (_a = session.user) === null || _a === void 0 ? void 0 : _a.id,
-                    },
-                    create: {
-                        id: sessionId,
-                        data: JSON.stringify(session),
-                        expiresAt: new Date(Date.now() + 86400000),
-                        userId: (_b = session.user) === null || _b === void 0 ? void 0 : _b.id,
-                    },
-                });
+                if ((_a = session.user) === null || _a === void 0 ? void 0 : _a.id) {
+                    await prisma.session.upsert({
+                        where: { id: sessionId },
+                        update: {
+                            expiresAt: new Date(Date.now() + 86400000 * 7),
+                            userId: session.user.id,
+                        },
+                        create: {
+                            id: sessionId,
+                            expiresAt: new Date(Date.now() + 86400000 * 7),
+                            userId: session.user.id,
+                        },
+                    });
+                    callback();
+                }
                 callback();
             }
             catch (error) {
@@ -40,6 +41,7 @@ exports.sessionOption = {
             }
         },
         async get(sessionId, callback) {
+            var _a;
             try {
                 const session = await prisma.session.findUnique({
                     where: {
@@ -49,7 +51,17 @@ exports.sessionOption = {
                         user: true,
                     },
                 });
-                const typedSession = Object.assign(Object.assign({}, JSON.parse(session === null || session === void 0 ? void 0 : session.data)), { cookie: {
+                const typedSession = {
+                    id: sessionId,
+                    expiresAt: session === null || session === void 0 ? void 0 : session.expiresAt,
+                    userId: (_a = session === null || session === void 0 ? void 0 : session.user) === null || _a === void 0 ? void 0 : _a.id,
+                    user: {
+                        id: session === null || session === void 0 ? void 0 : session.userId,
+                        username: session === null || session === void 0 ? void 0 : session.user.name,
+                        email: session === null || session === void 0 ? void 0 : session.user.name,
+                        role: session === null || session === void 0 ? void 0 : session.user.role,
+                    },
+                    cookie: {
                         originalMaxAge: 86400000,
                         expires: session === null || session === void 0 ? void 0 : session.expiresAt,
                         secure: process.env.NODE_ENV === "production",
@@ -59,11 +71,12 @@ exports.sessionOption = {
                         maxAge: undefined,
                         signed: undefined,
                         domain: undefined,
-                    } });
+                    },
+                };
                 callback(null, typedSession);
             }
             catch (error) {
-                callback(error);
+                callback(null);
             }
         },
         async destroy(sessionId, callback) {

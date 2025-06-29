@@ -11,6 +11,7 @@ const cookie_1 = __importDefault(require("@fastify/cookie"));
 const session_1 = __importDefault(require("@fastify/session"));
 const auth_1 = require("./authentication/auth");
 const oauth2_1 = __importDefault(require("@fastify/oauth2"));
+const authRouters_1 = require("./routes/authRouters");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -23,6 +24,9 @@ const start = async () => {
         await server.register(session_1.default, auth_1.sessionOption);
         await server.register(oauth2_1.default, auth_1.oauthGoogleOption);
         await server.register(oauth2_1.default, auth_1.oauthFaceBookOption);
+        await server.register(authRouters_1.authRouters, {
+            prefix: "/api/auth/",
+        });
         server.log.info(`Prisma available: ${!!server.prisma}`);
         const myPort = Number(process.env.MY_PORT) || 5445;
         server.listen({ port: myPort }, (err, adress) => {

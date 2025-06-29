@@ -6,3 +6,12 @@ declare module "fastify" {
     facebookOAuth2: OAuth2Namespace;
   }
 }
+
+import "@fastify/oauth2";
+
+declare module "@fastify/oauth2" {
+  interface Token {
+    scope?: string;
+    session_state?: string;
+  }
+}

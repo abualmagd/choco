@@ -38,7 +38,6 @@ enum Role {
 
 model Session {
   id        String   @id @unique 
-  data      String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int      
   expiresAt DateTime

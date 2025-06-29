@@ -10,6 +10,7 @@ import {
   sessionOption,
 } from "./authentication/auth";
 import fastifyOauth2 from "@fastify/oauth2";
+import { authRouters } from "./routes/authRouters";
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ const start = async () => {
     await server.register(fastifySession, sessionOption);
     await server.register(fastifyOauth2, oauthGoogleOption);
     await server.register(fastifyOauth2, oauthFaceBookOption);
+    await server.register(authRouters, {
+      prefix: "/api/auth/",
+    });
     server.log.info(`Prisma available: ${!!server.prisma}`);
 
     const myPort: number = Number(process.env.MY_PORT) || 5445;

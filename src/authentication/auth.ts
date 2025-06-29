@@ -21,27 +21,28 @@ export const sessionOption: FastifySessionOptions = {
     process.env.SESSION_SECRET || "hsgshgsbcbhcsbshbvshxkanxknzkjsbxhgbghvcxs",
   cookie: {
     secure: process.env.NODE_ENV === "production",
-    maxAge: 86400000, // 1 day
+    maxAge: 86400000 * 7, // 1 day
   },
   cookieName: "sessionId",
 
   store: {
     async set(sessionId, session: AppSession, callback) {
       try {
-        await prisma.session.upsert({
-          where: { id: sessionId },
-          update: {
-            data: JSON.stringify(session),
-            expiresAt: new Date(Date.now() + 86400000),
-            userId: session.user?.id,
-          },
-          create: {
-            id: sessionId,
-            data: JSON.stringify(session),
-            expiresAt: new Date(Date.now() + 86400000),
-            userId: session.user?.id!,
-          },
-        });
+        if (session.user?.id) {
+          await prisma.session.upsert({
+            where: { id: sessionId },
+            update: {
+              expiresAt: new Date(Date.now() + 86400000 * 7),
+              userId: session.user.id,
+            },
+            create: {
+              id: sessionId,
+              expiresAt: new Date(Date.now() + 86400000 * 7),
+              userId: session.user.id,
+            },
+          });
+          callback();
+        }
         callback();
       } catch (error) {
         callback(error);
@@ -58,7 +59,15 @@ export const sessionOption: FastifySessionOptions = {
           },
         });
         const typedSession = {
-          ...JSON.parse(session?.data!),
+          id: sessionId,
+          expiresAt: session?.expiresAt,
+          userId: session?.user?.id!,
+          user: {
+            id: session?.userId!,
+            username: session?.user.name!,
+            email: session?.user.name!,
+            role: session?.user.role!,
+          },
           cookie: {
             originalMaxAge: 86400000,
             expires: session?.expiresAt,
@@ -71,9 +80,9 @@ export const sessionOption: FastifySessionOptions = {
             domain: undefined,
           },
         };
-        callback(null, typedSession);
+        callback(null, typedSession as Session);
       } catch (error) {
-        callback(error);
+        callback(null);
       }
     },
     async destroy(sessionId, callback) {

@@ -1,27 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productRoutes = void 0;
+const middleware_1 = require("../authentication/middleware");
 const productRoutes = async (fastify, opt) => {
     //get list of products
     fastify.get("/products", async (request, reply) => {
         try {
             const products = await fastify.prisma.product.findMany();
-            reply.send({ data: products });
+            return reply.send({ data: products });
         }
         catch (error) {
-            reply.send(error).status(500);
+            return reply.send(error).status(500);
         }
     });
     //create one product must be admin
-    fastify.post("/products", async (request, reply) => {
+    fastify.post("/products", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
         try {
             const newProduct = await fastify.prisma.product.create({
                 data: request.body,
             });
-            reply.status(201).send(newProduct);
+            return reply.status(201).send(newProduct);
         }
         catch (error) {
-            reply.status(409).send(error);
+            return reply.status(409).send(error);
         }
     });
     //get product with reviews and discouts
@@ -33,10 +34,10 @@ const productRoutes = async (fastify, opt) => {
                     discounts: true,
                 },
             });
-            reply.send({ data: products });
+            return reply.send({ data: products });
         }
         catch (error) {
-            reply.send(error).status(500);
+            return reply.send(error).status(500);
         }
     });
     //get product by slug
@@ -60,14 +61,14 @@ const productRoutes = async (fastify, opt) => {
                     statusCode: 404,
                 });
             }
-            reply.send(product);
+            return reply.send(product);
         }
         catch (error) {
-            reply.send(error);
+            return reply.send(error);
         }
     });
     //delete product for admin user only
-    fastify.delete("/products/:id", async (request, reply) => {
+    fastify.delete("/products/:id", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
         try {
             const productId = parseInt(request.params.id, 10);
             await fastify.prisma.product.delete({
@@ -75,16 +76,16 @@ const productRoutes = async (fastify, opt) => {
                     id: productId,
                 },
             });
-            reply.send({
+            return reply.send({
                 data: `product with id=${request.params.id} deleted successfully`,
             });
         }
         catch (error) {
-            reply.send(error);
+            return reply.send(error);
         }
     });
     //update product for admin only
-    fastify.put("/products/:id", async (request, reply) => {
+    fastify.put("/products/:id", { preHandler: middleware_1.isModeratorAuth }, async (request, reply) => {
         try {
             const productId = parseInt(request.params.id, 10);
             const updatedData = (await request.body);
@@ -94,10 +95,10 @@ const productRoutes = async (fastify, opt) => {
                     id: productId,
                 },
             });
-            reply.send(updatedProduct);
+            return reply.send(updatedProduct);
         }
         catch (error) {
-            reply.send(error);
+            return reply.send(error);
         }
     });
     //GET /api/products/:id/reviews - Get product reviews
@@ -109,10 +110,10 @@ const productRoutes = async (fastify, opt) => {
                     productId: productId,
                 },
             });
-            reply.send(reviews);
+            return reply.send(reviews);
         }
         catch (error) {
-            reply.send(error);
+            return reply.send(error);
         }
     });
     //create review for product //authenticated user only
@@ -146,10 +147,10 @@ const productRoutes = async (fastify, opt) => {
                     },
                 },
             });
-            reply.send(newReview);
+            return reply.send(newReview);
         }
         catch (error) {
-            reply.send(error);
+            return reply.send(error);
         }
     });
 };
