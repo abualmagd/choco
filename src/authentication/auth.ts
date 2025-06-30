@@ -1,8 +1,8 @@
+import bcrypt from "bcrypt";
 import fastifyOauth2, { FastifyOAuth2Options } from "@fastify/oauth2";
 import { FastifySessionOptions } from "@fastify/session";
 import { PrismaClient } from "@prisma/client";
 import { Session } from "fastify";
-import bcrypt from "bcrypt";
 
 interface UserSessionData {
   user?: {
@@ -21,9 +21,11 @@ export const sessionOption: FastifySessionOptions = {
     process.env.SESSION_SECRET || "hsgshgsbcbhcsbshbvshxkanxknzkjsbxhgbghvcxs",
   cookie: {
     secure: process.env.NODE_ENV === "production",
-    maxAge: 86400000 * 7, // 1 day
+    maxAge: 86400000 * 7, // 7 day
   },
   cookieName: "sessionId",
+  rolling: false,
+  saveUninitialized: false,
 
   store: {
     async set(sessionId, session: AppSession, callback) {
@@ -87,7 +89,7 @@ export const sessionOption: FastifySessionOptions = {
     },
     async destroy(sessionId, callback) {
       try {
-        await prisma.session.delete({
+        await prisma.session.deleteMany({
           where: {
             id: sessionId,
           },

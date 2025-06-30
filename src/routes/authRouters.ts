@@ -1,6 +1,10 @@
 import { hashPassword } from "./../authentication/auth";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { verifyPassword } from "../authentication/auth";
+import { CustomResponse, ResError } from "../utils/responseClasses";
+import { sendEamil } from "../services/emailServices";
+import { randomInt } from "node:crypto";
+import { isAuthenticate } from "../authentication/middleware";
 
 export const authRouters: FastifyPluginAsync = async (
   fastify: FastifyInstance,
@@ -33,10 +37,13 @@ export const authRouters: FastifyPluginAsync = async (
         id: user?.id!,
         username: user?.name ?? undefined,
         email: user?.email,
-        role: user?.role ?? "user",
+        role: user?.role ?? "CUSTOMER",
       };
 
-      return reply.send({ success: true, message: "Logged in successfully" });
+      return reply.send({
+        success: true,
+        message: "Logged in successfully",
+      });
     } catch (error) {
       return reply.send(error);
     }
@@ -65,7 +72,7 @@ export const authRouters: FastifyPluginAsync = async (
           id: user?.id!,
           username: user?.name ?? undefined,
           email: user?.email,
-          role: user?.role ?? "user",
+          role: user?.role ?? "CUSTOMER",
         };
 
         await request.session.save();
@@ -86,6 +93,7 @@ export const authRouters: FastifyPluginAsync = async (
     }
   });
 
+  //log out user
   fastify.post("/logout", async (request, reply) => {
     try {
       if (request.session.sessionId) {
@@ -121,6 +129,7 @@ export const authRouters: FastifyPluginAsync = async (
     }
   });
 
+  //login social media
   fastify.post("login/:provider", async (request, reply) => {
     const provider = request.params;
     switch (provider) {
@@ -150,6 +159,7 @@ export const authRouters: FastifyPluginAsync = async (
     }
   });
 
+  //social callback
   fastify.get<{ Params: { provider: string } }>(
     "/login/:provider/callback",
     async (request, reply) => {
@@ -254,6 +264,83 @@ export const authRouters: FastifyPluginAsync = async (
           return reply.redirect("/login");
           break;
       }
+    }
+  );
+
+  //forget password
+  fastify.post<{ Params: { email: string } }>(
+    "/forget-password",
+    async (request, reply) => {
+      const email = request.body;
+      if (!email) {
+        const err: MyError = {
+          code: 400,
+          message: "email required",
+          error: "missing email",
+        };
+        return reply.status(400).send(err);
+      }
+      const temporaryPassword = randomInt(100000, 10000000)
+        .toString()
+        .padStart(6, "0");
+      const user = await fastify.prisma.user.update({
+        where: { id: request.session.user?.id },
+        data: {
+          password: await hashPassword(temporaryPassword),
+        },
+      });
+      if (!user) {
+        return reply.send(
+          new ResError(
+            500,
+            "failed password recovery",
+            "failed in password refresh"
+          )
+        );
+      }
+      //send email to user by the temporary password
+      await sendEamil(
+        user.name!,
+        user.email,
+        `your temporary password is ${temporaryPassword}`
+      );
+
+      return reply.send(
+        new CustomResponse(
+          "if your email is registerd, you will get  a password recovery email",
+          null
+        )
+      );
+    }
+  );
+
+  //update password
+  fastify.post<{ Body: { oldpassword: string; newpassword: string } }>(
+    "/update-password",
+    { preHandler: isAuthenticate },
+    async (request, reply) => {
+      const { oldpassword, newpassword } = request.body;
+
+      const user = await fastify.prisma.user.update({
+        where: { id: request.session.user?.id },
+        data: {
+          password: await hashPassword(newpassword),
+        },
+      });
+      if (!user) {
+        return reply.send(
+          new ResError(
+            500,
+            "failed password renewing",
+            "failed in password renewing"
+          )
+        );
+      }
+      //send email to user by the temporary password
+      await sendEamil(user.name!, user.email, `your password was renewed`);
+      return reply.send(
+        new CustomResponse("your password was updated well", null)
+      );
     }
   );
 };

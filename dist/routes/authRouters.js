@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouters = void 0;
 const auth_1 = require("./../authentication/auth");
 const auth_2 = require("../authentication/auth");
+const responseClasses_1 = require("../utils/responseClasses");
+const emailServices_1 = require("../services/emailServices");
+const node_crypto_1 = require("node:crypto");
+const middleware_1 = require("../authentication/middleware");
 const authRouters = async (fastify, opt) => {
     fastify.post("/login", async (request, reply) => {
         var _a, _b;
@@ -28,9 +32,12 @@ const authRouters = async (fastify, opt) => {
                 id: user === null || user === void 0 ? void 0 : user.id,
                 username: (_a = user === null || user === void 0 ? void 0 : user.name) !== null && _a !== void 0 ? _a : undefined,
                 email: user === null || user === void 0 ? void 0 : user.email,
-                role: (_b = user === null || user === void 0 ? void 0 : user.role) !== null && _b !== void 0 ? _b : "user",
+                role: (_b = user === null || user === void 0 ? void 0 : user.role) !== null && _b !== void 0 ? _b : "CUSTOMER",
             };
-            return reply.send({ success: true, message: "Logged in successfully" });
+            return reply.send({
+                success: true,
+                message: "Logged in successfully",
+            });
         }
         catch (error) {
             return reply.send(error);
@@ -55,7 +62,7 @@ const authRouters = async (fastify, opt) => {
                     id: user === null || user === void 0 ? void 0 : user.id,
                     username: (_a = user === null || user === void 0 ? void 0 : user.name) !== null && _a !== void 0 ? _a : undefined,
                     email: user === null || user === void 0 ? void 0 : user.email,
-                    role: (_b = user === null || user === void 0 ? void 0 : user.role) !== null && _b !== void 0 ? _b : "user",
+                    role: (_b = user === null || user === void 0 ? void 0 : user.role) !== null && _b !== void 0 ? _b : "CUSTOMER",
                 };
                 await request.session.save();
                 return reply.send({
@@ -73,6 +80,7 @@ const authRouters = async (fastify, opt) => {
             return reply.send(error);
         }
     });
+    //log out user
     fastify.post("/logout", async (request, reply) => {
         try {
             if (request.session.sessionId) {
@@ -105,6 +113,7 @@ const authRouters = async (fastify, opt) => {
             return reply.send(error);
         }
     });
+    //login social media
     fastify.post("login/:provider", async (request, reply) => {
         const provider = request.params;
         switch (provider) {
@@ -126,6 +135,7 @@ const authRouters = async (fastify, opt) => {
                 break;
         }
     });
+    //social callback
     fastify.get("/login/:provider/callback", async (request, reply) => {
         var _a, _b;
         const { provider } = request.params;
@@ -210,6 +220,51 @@ const authRouters = async (fastify, opt) => {
                 return reply.redirect("/login");
                 break;
         }
+    });
+    //forget password
+    fastify.post("/forget-password", async (request, reply) => {
+        var _a;
+        const email = request.body;
+        if (!email) {
+            const err = {
+                code: 400,
+                message: "email required",
+                error: "missing email",
+            };
+            return reply.status(400).send(err);
+        }
+        const temporaryPassword = (0, node_crypto_1.randomInt)(100000, 10000000)
+            .toString()
+            .padStart(6, "0");
+        const user = await fastify.prisma.user.update({
+            where: { id: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id },
+            data: {
+                password: await (0, auth_1.hashPassword)(temporaryPassword),
+            },
+        });
+        if (!user) {
+            return reply.send(new responseClasses_1.ResError(500, "failed password recovery", "failed in password refresh"));
+        }
+        //send email to user by the temporary password
+        await (0, emailServices_1.sendEamil)(user.name, user.email, `your temporary password is ${temporaryPassword}`);
+        return reply.send(new responseClasses_1.CustomResponse("if your email is registerd, you will get  a password recovery email", null));
+    });
+    //update password
+    fastify.post("/update-password", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
+        var _a;
+        const { oldpassword, newpassword } = request.body;
+        const user = await fastify.prisma.user.update({
+            where: { id: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id },
+            data: {
+                password: await (0, auth_1.hashPassword)(newpassword),
+            },
+        });
+        if (!user) {
+            return reply.send(new responseClasses_1.ResError(500, "failed password renewing", "failed in password renewing"));
+        }
+        //send email to user by the temporary password
+        await (0, emailServices_1.sendEamil)(user.name, user.email, `your password was renewed`);
+        return reply.send(new responseClasses_1.CustomResponse("your password was updated well", null));
     });
 };
 exports.authRouters = authRouters;

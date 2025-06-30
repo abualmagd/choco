@@ -12,6 +12,7 @@ const session_1 = __importDefault(require("@fastify/session"));
 const auth_1 = require("./authentication/auth");
 const oauth2_1 = __importDefault(require("@fastify/oauth2"));
 const authRouters_1 = require("./routes/authRouters");
+const categoryRoutes_1 = require("./routes/categoryRoutes");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -20,6 +21,7 @@ const start = async () => {
     try {
         await server.register(prisma_1.default);
         await server.register(productRoutes_1.productRoutes, { prefix: "/api/" });
+        await server.register(categoryRoutes_1.categoryRoutes, { prefix: "/api/" });
         await server.register(cookie_1.default);
         await server.register(session_1.default, auth_1.sessionOption);
         await server.register(oauth2_1.default, auth_1.oauthGoogleOption);

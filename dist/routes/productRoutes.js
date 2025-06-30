@@ -94,6 +94,11 @@ const productRoutes = async (fastify, opt) => {
                 where: {
                     id: productId,
                 },
+                include: {
+                    categories: {
+                        take: 10,
+                    },
+                },
             });
             return reply.send(updatedProduct);
         }
@@ -148,6 +153,62 @@ const productRoutes = async (fastify, opt) => {
                 },
             });
             return reply.send(newReview);
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
+    //update reviews
+    fastify.put("/products/:id/reviews", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
+        try {
+            const productId = parseInt(request.params.id, 10);
+            const { id, title, rating, comment } = request.body;
+            const userId = 1; //'getUserId()'
+            // Validate rating (1-5 stars)
+            if (rating < 1 || rating > 5) {
+                return reply.status(400).send({
+                    error: "Bad Request",
+                    message: "Rating must be between 1 and 5",
+                });
+            }
+            const newReview = await fastify.prisma.review.update({
+                where: { id: id },
+                data: {
+                    title: title,
+                    productId: productId,
+                    rating: rating,
+                    comment: comment,
+                    userId: userId,
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            avatar: true,
+                        },
+                    },
+                },
+            });
+            return reply.send(newReview);
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
+    fastify.delete("/products/:id/reviews", { preHandler: middleware_1.isModeratorAuth }, async (request, reply) => {
+        try {
+            const { id } = request.body;
+            if (!id) {
+                return reply.status(400).send({
+                    error: "Bad Request",
+                    message: "Review id is missing",
+                });
+            }
+            await fastify.prisma.review.delete({
+                where: { id: id },
+            });
+            return reply.send("deleted succesfully");
         }
         catch (error) {
             return reply.send(error);

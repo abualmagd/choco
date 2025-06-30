@@ -4,6 +4,14 @@ export const isAuthenticate: preHandlerAsyncHookHandler = async (
   request,
   reply
 ) => {
+  if (request.session.cookie.expires! < new Date()) {
+    return reply.code(405).send({
+      code: 405,
+      error: "sesssion expired",
+      message: "Unauthorized: session expired please login again",
+    });
+  }
+
   if (!request.session.user) {
     return reply.status(401).send({
       code: 401,
@@ -17,6 +25,14 @@ export const isAdminAuth: preHandlerAsyncHookHandler = async (
   request,
   reply
 ) => {
+  if (request.session.cookie.expires! < new Date()) {
+    return reply.code(405).send({
+      code: 405,
+      error: "sesssion expired",
+      message: "Unauthorized: session expired please login again",
+    });
+  }
+
   if (!request.session.user) {
     return reply.status(401).send({
       code: 401,
@@ -26,6 +42,7 @@ export const isAdminAuth: preHandlerAsyncHookHandler = async (
   }
 
   if (request.session.user.role !== "ADMIN") {
+    //return reply.send(request.session);
     return reply.status(403).send({
       code: 403,
       error: "Forbidden",

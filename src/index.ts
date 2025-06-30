@@ -11,6 +11,7 @@ import {
 } from "./authentication/auth";
 import fastifyOauth2 from "@fastify/oauth2";
 import { authRouters } from "./routes/authRouters";
+import { categoryRoutes } from "./routes/categoryRoutes";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const start = async () => {
   try {
     await server.register(prismaPlugin);
     await server.register(productRoutes, { prefix: "/api/" });
+    await server.register(categoryRoutes, { prefix: "/api/" });
     await server.register(fastifyCookie);
     await server.register(fastifySession, sessionOption);
     await server.register(fastifyOauth2, oauthGoogleOption);

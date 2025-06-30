@@ -4,17 +4,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyPassword = exports.hashPassword = exports.oauthFaceBookOption = exports.oauthGoogleOption = exports.sessionOption = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const oauth2_1 = __importDefault(require("@fastify/oauth2"));
 const client_1 = require("@prisma/client");
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma = new client_1.PrismaClient();
 exports.sessionOption = {
     secret: process.env.SESSION_SECRET || "hsgshgsbcbhcsbshbvshxkanxknzkjsbxhgbghvcxs",
     cookie: {
         secure: process.env.NODE_ENV === "production",
-        maxAge: 86400000 * 7, // 1 day
+        maxAge: 86400000 * 7, // 7 day
     },
     cookieName: "sessionId",
+    rolling: false,
+    saveUninitialized: false,
     store: {
         async set(sessionId, session, callback) {
             var _a;
@@ -81,7 +83,7 @@ exports.sessionOption = {
         },
         async destroy(sessionId, callback) {
             try {
-                await prisma.session.delete({
+                await prisma.session.deleteMany({
                     where: {
                         id: sessionId,
                     },

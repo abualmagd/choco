@@ -1,6 +1,10 @@
 import { Prisma } from "@prisma/client";
 import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
-import { isAdminAuth, isModeratorAuth } from "../authentication/middleware";
+import {
+  isAdminAuth,
+  isAuthenticate,
+  isModeratorAuth,
+} from "../authentication/middleware";
 
 export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
   //get list of products
@@ -116,6 +120,11 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
           where: {
             id: productId,
           },
+          include: {
+            categories: {
+              take: 10,
+            },
+          },
         });
         return reply.send(updatedProduct);
       } catch (error) {
@@ -185,4 +194,81 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
       return reply.send(error);
     }
   });
+
+  //update reviews
+  fastify.put<{
+    Params: { id: string };
+    Body: {
+      id: number;
+      title: string;
+      rating: number;
+      comment: string;
+    };
+  }>(
+    "/products/:id/reviews",
+    { preHandler: isAuthenticate },
+    async (request, reply) => {
+      try {
+        const productId = parseInt(request.params.id, 10);
+        const { id, title, rating, comment } = request.body;
+        const userId = 1; //'getUserId()'
+        // Validate rating (1-5 stars)
+        if (rating < 1 || rating > 5) {
+          return reply.status(400).send({
+            error: "Bad Request",
+            message: "Rating must be between 1 and 5",
+          });
+        }
+        const newReview = await fastify.prisma.review.update({
+          where: { id: id },
+          data: {
+            title: title,
+            productId: productId,
+            rating: rating,
+            comment: comment,
+            userId: userId,
+          },
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+        });
+        return reply.send(newReview);
+      } catch (error) {
+        return reply.send(error);
+      }
+    }
+  );
+
+  fastify.delete<{
+    Params: { id: string };
+    Body: {
+      id: number;
+    };
+  }>(
+    "/products/:id/reviews",
+    { preHandler: isModeratorAuth },
+    async (request, reply) => {
+      try {
+        const { id } = request.body;
+        if (!id) {
+          return reply.status(400).send({
+            error: "Bad Request",
+            message: "Review id is missing",
+          });
+        }
+        await fastify.prisma.review.delete({
+          where: { id: id },
+        });
+        return reply.send("deleted succesfully");
+      } catch (error) {
+        return reply.send(error);
+      }
+    }
+  );
 };
