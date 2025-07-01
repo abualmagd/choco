@@ -8,17 +8,23 @@ import {
 
 export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
   //get list of products
-  fastify.get(
-    "/products",
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      try {
-        const products = await fastify.prisma.product.findMany();
-        return reply.send({ data: products });
-      } catch (error) {
-        return reply.send(error).status(500);
-      }
+  fastify.get("/products", async (request, reply) => {
+    try {
+      //  return reply.send(typeof request.query);
+      const { page, pagesize } = request.query as {
+        page: string;
+        pagesize: string;
+      };
+      const skip = page ? (parseInt(page) - 1) * parseInt(pagesize ?? "25") : 0;
+      const products = await fastify.prisma.product.findMany({
+        skip: skip,
+        take: pagesize ? parseInt(pagesize) : 25,
+      });
+      return reply.send({ data: products });
+    } catch (error) {
+      return reply.send(error).status(500);
     }
-  );
+  });
 
   //create one product must be admin
   fastify.post(

@@ -103,19 +103,22 @@ export const categoryRoutes: FastifyPluginAsync = async (
   //get category products with pagination
   fastify.get<{
     Params: { slug: string };
-    Body: { page: number; pagesize: number };
-  }>("/categories/:id/products", async (request, reply) => {
+  }>("/categories/:slug/products", async (request, reply) => {
     try {
       const { slug } = request.params;
-      const { page, pagesize } = request.body;
+      const { page, pagesize } = request.query as {
+        page: string;
+        pagesize: string;
+      };
+      const skip = page ? (parseInt(page) - 1) * parseInt(pagesize ?? "10") : 0;
       const category = await fastify.prisma.category.findUnique({
         where: {
           slug: slug,
         },
         include: {
           products: {
-            skip: pagesize * (page - 1),
-            take: pagesize,
+            skip: skip,
+            take: pagesize ? parseInt(pagesize) : 10,
             orderBy: {
               createdAt: "desc",
             },
