@@ -10,10 +10,13 @@ import {
   sessionOption,
 } from "./authentication/auth";
 import fastifyOauth2 from "@fastify/oauth2";
-import { authRouters } from "./routes/authRouters";
+import { authRouters } from "./routes/authRoutes";
 import { categoryRoutes } from "./routes/categoryRoutes";
 import { variantRoutes } from "./routes/variantRoutes";
 import { cartRoutes } from "./routes/cartRoutes";
+import { orderRoutes } from "./routes/orderRoutes";
+import { orderItemsRoutes } from "./routes/orderItems";
+import { wishItemsRoutes } from "./routes/wishlistItems";
 
 dotenv.config();
 
@@ -28,6 +31,9 @@ const start = async () => {
     await server.register(categoryRoutes, { prefix: "/api/" });
     await server.register(variantRoutes, { prefix: "/api/" });
     await server.register(cartRoutes, { prefix: "/api/" });
+    await server.register(orderRoutes, { prefix: "/api/" });
+    await server.register(orderItemsRoutes, { prefix: "/api/" });
+    await server.register(wishItemsRoutes, { prefix: "/api/" });
 
     await server.register(fastifyCookie);
     await server.register(fastifySession, sessionOption);

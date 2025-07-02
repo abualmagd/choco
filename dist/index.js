@@ -11,10 +11,13 @@ const cookie_1 = __importDefault(require("@fastify/cookie"));
 const session_1 = __importDefault(require("@fastify/session"));
 const auth_1 = require("./authentication/auth");
 const oauth2_1 = __importDefault(require("@fastify/oauth2"));
-const authRouters_1 = require("./routes/authRouters");
+const authRoutes_1 = require("./routes/authRoutes");
 const categoryRoutes_1 = require("./routes/categoryRoutes");
 const variantRoutes_1 = require("./routes/variantRoutes");
 const cartRoutes_1 = require("./routes/cartRoutes");
+const orderRoutes_1 = require("./routes/orderRoutes");
+const orderItems_1 = require("./routes/orderItems");
+const wishlistItems_1 = require("./routes/wishlistItems");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -26,11 +29,14 @@ const start = async () => {
         await server.register(categoryRoutes_1.categoryRoutes, { prefix: "/api/" });
         await server.register(variantRoutes_1.variantRoutes, { prefix: "/api/" });
         await server.register(cartRoutes_1.cartRoutes, { prefix: "/api/" });
+        await server.register(orderRoutes_1.orderRoutes, { prefix: "/api/" });
+        await server.register(orderItems_1.orderItemsRoutes, { prefix: "/api/" });
+        await server.register(wishlistItems_1.wishItemsRoutes, { prefix: "/api/" });
         await server.register(cookie_1.default);
         await server.register(session_1.default, auth_1.sessionOption);
         await server.register(oauth2_1.default, auth_1.oauthGoogleOption);
         await server.register(oauth2_1.default, auth_1.oauthFaceBookOption);
-        await server.register(authRouters_1.authRouters, {
+        await server.register(authRoutes_1.authRouters, {
             prefix: "/api/auth/",
         });
         server.log.info(`Prisma available: ${!!server.prisma}`);

@@ -9,6 +9,11 @@ export const cartRoutes: FastifyPluginAsync = async (
   //GET /api/cart - Get user's cart
   fastify.get("/cart", async (request, reply) => {
     try {
+      if (!request.session.user?.id) {
+        return reply
+          .status(400)
+          .send(new ResError(400, " please sign in again", " Unauthorized "));
+      }
       const cart = await fastify.prisma.cart.findUnique({
         where: { userId: request.session.user?.id },
         include: {
@@ -112,6 +117,11 @@ export const cartRoutes: FastifyPluginAsync = async (
   ///api/cart - Clear cart
   fastify.put("/cart/clear", async (request, reply) => {
     try {
+      if (!request.session.user?.id) {
+        return reply
+          .status(400)
+          .send(new ResError(400, " please sign in again", " Unauthorized "));
+      }
       const cart = await fastify.prisma.cart.findUnique({
         where: { userId: request.session.user?.id },
       });
