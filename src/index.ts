@@ -17,6 +17,10 @@ import { cartRoutes } from "./routes/cartRoutes";
 import { orderRoutes } from "./routes/orderRoutes";
 import { orderItemsRoutes } from "./routes/orderItems";
 import { wishItemsRoutes } from "./routes/wishlistItems";
+import { discountRoutes } from "./routes/discountRoutes";
+import { viewRoutes } from "./routes/viewRoutes";
+import { EdgePlugin } from "./utils/edge";
+import path from "path";
 
 dotenv.config();
 
@@ -34,6 +38,22 @@ const start = async () => {
     await server.register(orderRoutes, { prefix: "/api/" });
     await server.register(orderItemsRoutes, { prefix: "/api/" });
     await server.register(wishItemsRoutes, { prefix: "/api/" });
+    await server.register(discountRoutes, { prefix: "/api/" });
+    await server.register(viewRoutes);
+
+    /*server.decorateReply(
+      "view",
+      async function (template: string, state?: Record<string, any>) {
+        const { Edge } = await import("edge.js");
+        const edge = Edge.create();
+        edge.mount(path.join(__dirname, "./views"));
+        const html = edge.render(template, state);
+        this.header("content-type", "text/html; charset=utf-8");
+        this.send(html);
+      }
+    );*/
+
+    await server.register(EdgePlugin);
 
     await server.register(fastifyCookie);
     await server.register(fastifySession, sessionOption);

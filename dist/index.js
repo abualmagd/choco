@@ -18,6 +18,9 @@ const cartRoutes_1 = require("./routes/cartRoutes");
 const orderRoutes_1 = require("./routes/orderRoutes");
 const orderItems_1 = require("./routes/orderItems");
 const wishlistItems_1 = require("./routes/wishlistItems");
+const discountRoutes_1 = require("./routes/discountRoutes");
+const viewRoutes_1 = require("./routes/viewRoutes");
+const edge_1 = require("./utils/edge");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -32,6 +35,20 @@ const start = async () => {
         await server.register(orderRoutes_1.orderRoutes, { prefix: "/api/" });
         await server.register(orderItems_1.orderItemsRoutes, { prefix: "/api/" });
         await server.register(wishlistItems_1.wishItemsRoutes, { prefix: "/api/" });
+        await server.register(discountRoutes_1.discountRoutes, { prefix: "/api/" });
+        await server.register(viewRoutes_1.viewRoutes);
+        /*server.decorateReply(
+          "view",
+          async function (template: string, state?: Record<string, any>) {
+            const { Edge } = await import("edge.js");
+            const edge = Edge.create();
+            edge.mount(path.join(__dirname, "./views"));
+            const html = edge.render(template, state);
+            this.header("content-type", "text/html; charset=utf-8");
+            this.send(html);
+          }
+        );*/
+        await server.register(edge_1.EdgePlugin);
         await server.register(cookie_1.default);
         await server.register(session_1.default, auth_1.sessionOption);
         await server.register(oauth2_1.default, auth_1.oauthGoogleOption);

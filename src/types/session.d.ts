@@ -1,6 +1,7 @@
 import { Session } from "fastify";
 // types/fastify-session.d.ts
 import "@fastify/session";
+import { FastifyReply } from "fastify";
 
 declare module "@fastify/session" {
   interface FastifySessionObject {
@@ -18,5 +19,11 @@ import { OAuth2Namespace } from "@fastify/oauth2";
 declare module "fastify" {
   interface FastifyInstance {
     googleOAuth2: OAuth2Namespace;
+  }
+}
+
+declare module "fastify" {
+  interface FastifyReply {
+    view(template: string, data?: Record<string, any>): void;
   }
 }
