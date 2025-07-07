@@ -11,9 +11,12 @@ const variantRoutes = async (fastify, opt) => {
             const { id } = request.params;
             const bodyData = request.body;
             const variant = await fastify.prisma.productVariant.create({
-                data: Object.assign(Object.assign({}, bodyData), { product: {
+                data: {
+                    ...bodyData,
+                    product: {
                         connect: { id: parseInt(id) },
-                    } }),
+                    },
+                },
             });
             if (!variant) {
                 return reply

@@ -8,7 +8,7 @@ const productRoutes = async (fastify, opt) => {
         try {
             //  return reply.send(typeof request.query);
             const { page, pagesize } = request.query;
-            const skip = page ? (parseInt(page) - 1) * parseInt(pagesize !== null && pagesize !== void 0 ? pagesize : "25") : 0;
+            const skip = page ? (parseInt(page) - 1) * parseInt(pagesize ?? "25") : 0;
             const products = await fastify.prisma.product.findMany({
                 skip: skip,
                 take: pagesize ? parseInt(pagesize) : 25,

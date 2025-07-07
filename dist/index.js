@@ -20,7 +20,7 @@ const orderItems_1 = require("./routes/orderItems");
 const wishlistItems_1 = require("./routes/wishlistItems");
 const discountRoutes_1 = require("./routes/discountRoutes");
 const viewRoutes_1 = require("./routes/viewRoutes");
-const edge_1 = require("./utils/edge");
+const edge_1 = require("./plugins/edge");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,

@@ -25,17 +25,17 @@ const discountRoutes = async (fastify, opt) => {
                     code: code,
                 },
             });
-            if (!(discount === null || discount === void 0 ? void 0 : discount.isActive)) {
+            if (!discount?.isActive) {
                 return reply
                     .status(500)
                     .send(new responseClasses_1.ResError(500, " code is invalid, discount is inactive", "invalid error"));
             }
-            if ((discount === null || discount === void 0 ? void 0 : discount.endDate) > new Date()) {
+            if (discount?.endDate > new Date()) {
                 return reply
                     .status(500)
                     .send(new responseClasses_1.ResError(500, " discount code is invalid, itis expired", "invalid error"));
             }
-            if ((discount === null || discount === void 0 ? void 0 : discount.usedCount) > discount.maxUses) {
+            if (discount?.usedCount > discount.maxUses) {
                 return reply
                     .status(500)
                     .send(new responseClasses_1.ResError(500, " code is invalid, discount reach the max use", "invalid error"));

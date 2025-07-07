@@ -2,13 +2,12 @@ import fp from "fastify-plugin";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import path from "path";
 import { Edge } from "edge.js";
-
 let edgeInstance: any = null;
 export const EdgePlugin: FastifyPluginAsync = fp(
   async (fastify: FastifyInstance, opt: any) => {
     if (!edgeInstance) {
       edgeInstance = new Edge({
-        cache: true,
+        cache: false,
       });
       edgeInstance.mount(path.join(process.cwd(), "views")); // Adjust path as needed
     }

@@ -9,7 +9,6 @@ const node_crypto_1 = require("node:crypto");
 const middleware_1 = require("../authentication/middleware");
 const authRouters = async (fastify, opt) => {
     fastify.post("/login", async (request, reply) => {
-        var _a, _b;
         const { email, password } = request.body;
         try {
             const user = await fastify.prisma.user.findUnique({
@@ -29,10 +28,10 @@ const authRouters = async (fastify, opt) => {
             }
             // ✅ Create the session
             request.session.user = {
-                id: user === null || user === void 0 ? void 0 : user.id,
-                username: (_a = user === null || user === void 0 ? void 0 : user.name) !== null && _a !== void 0 ? _a : undefined,
-                email: user === null || user === void 0 ? void 0 : user.email,
-                role: (_b = user === null || user === void 0 ? void 0 : user.role) !== null && _b !== void 0 ? _b : "CUSTOMER",
+                id: user?.id,
+                username: user?.name ?? undefined,
+                email: user?.email,
+                role: user?.role ?? "CUSTOMER",
             };
             return reply.send({
                 success: true,
@@ -45,7 +44,6 @@ const authRouters = async (fastify, opt) => {
     });
     //register then login
     fastify.post("/register", async (request, reply) => {
-        var _a, _b;
         try {
             const { email, password, name, phone } = request.body;
             const user = await fastify.prisma.user.create({
@@ -59,10 +57,10 @@ const authRouters = async (fastify, opt) => {
             if (user) {
                 // ✅ Create the session
                 request.session.user = {
-                    id: user === null || user === void 0 ? void 0 : user.id,
-                    username: (_a = user === null || user === void 0 ? void 0 : user.name) !== null && _a !== void 0 ? _a : undefined,
-                    email: user === null || user === void 0 ? void 0 : user.email,
-                    role: (_b = user === null || user === void 0 ? void 0 : user.role) !== null && _b !== void 0 ? _b : "CUSTOMER",
+                    id: user?.id,
+                    username: user?.name ?? undefined,
+                    email: user?.email,
+                    role: user?.role ?? "CUSTOMER",
                 };
                 await request.session.save();
                 return reply.send({
@@ -137,7 +135,6 @@ const authRouters = async (fastify, opt) => {
     });
     //social callback
     fastify.get("/login/:provider/callback", async (request, reply) => {
-        var _a, _b;
         const { provider } = request.params;
         switch (provider) {
             case "google":
@@ -171,8 +168,8 @@ const authRouters = async (fastify, opt) => {
                     },
                 });
                 request.session.user = {
-                    id: user === null || user === void 0 ? void 0 : user.id,
-                    username: user === null || user === void 0 ? void 0 : user.name,
+                    id: user?.id,
+                    username: user?.name,
                     role: user.role,
                 };
                 return reply.redirect("/");
@@ -189,7 +186,7 @@ const authRouters = async (fastify, opt) => {
                         data: {
                             email: userInfoF.email,
                             name: userInfoF.name,
-                            avatar: ((_b = (_a = userInfoF.picture) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.url) || null,
+                            avatar: userInfoF.picture?.data?.url || null,
                             password: "", // Empty password for OAuth users
                             accounts: {
                                 create: {
@@ -223,7 +220,6 @@ const authRouters = async (fastify, opt) => {
     });
     //forget password
     fastify.post("/forget-password", async (request, reply) => {
-        var _a;
         const email = request.body;
         if (!email) {
             const err = {
@@ -237,7 +233,7 @@ const authRouters = async (fastify, opt) => {
             .toString()
             .padStart(6, "0");
         const user = await fastify.prisma.user.update({
-            where: { id: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id },
+            where: { id: request.session.user?.id },
             data: {
                 password: await (0, auth_1.hashPassword)(temporaryPassword),
             },
@@ -251,10 +247,9 @@ const authRouters = async (fastify, opt) => {
     });
     //update password
     fastify.post("/update-password", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
-        var _a;
         const { oldpassword, newpassword } = request.body;
         const user = await fastify.prisma.user.update({
-            where: { id: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id },
+            where: { id: request.session.user?.id },
             data: {
                 password: await (0, auth_1.hashPassword)(newpassword),
             },

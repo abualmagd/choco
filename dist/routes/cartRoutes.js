@@ -5,15 +5,14 @@ const responseClasses_1 = require("../utils/responseClasses");
 const cartRoutes = async (fastify, opt) => {
     //GET /api/cart - Get user's cart
     fastify.get("/cart", async (request, reply) => {
-        var _a, _b;
         try {
-            if (!((_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id)) {
+            if (!request.session.user?.id) {
                 return reply
                     .status(400)
                     .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
             }
             const cart = await fastify.prisma.cart.findUnique({
-                where: { userId: (_b = request.session.user) === null || _b === void 0 ? void 0 : _b.id },
+                where: { userId: request.session.user?.id },
                 include: {
                     items: true,
                 },
@@ -26,11 +25,10 @@ const cartRoutes = async (fastify, opt) => {
     });
     //create cart for user
     fastify.post("/cart", async (request, reply) => {
-        var _a;
         try {
             const cart = await fastify.prisma.cart.create({
                 data: {
-                    userId: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id,
+                    userId: request.session.user?.id,
                 },
             });
             return reply.send(cart);
@@ -58,16 +56,15 @@ const cartRoutes = async (fastify, opt) => {
     });
     //add item to cart (create item)
     fastify.post("/cart/add", async (request, reply) => {
-        var _a, _b;
         try {
             let userCart;
             userCart = await fastify.prisma.cart.findUnique({
-                where: { userId: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id },
+                where: { userId: request.session.user?.id },
             });
             if (!userCart) {
                 userCart = await fastify.prisma.cart.create({
                     data: {
-                        userId: (_b = request.session.user) === null || _b === void 0 ? void 0 : _b.id,
+                        userId: request.session.user?.id,
                     },
                 });
             }
@@ -105,15 +102,14 @@ const cartRoutes = async (fastify, opt) => {
     });
     ///api/cart - Clear cart
     fastify.put("/cart/clear", async (request, reply) => {
-        var _a, _b;
         try {
-            if (!((_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id)) {
+            if (!request.session.user?.id) {
                 return reply
                     .status(400)
                     .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
             }
             const cart = await fastify.prisma.cart.findUnique({
-                where: { userId: (_b = request.session.user) === null || _b === void 0 ? void 0 : _b.id },
+                where: { userId: request.session.user?.id },
             });
             if (!cart) {
                 return reply.send(new responseClasses_1.ResError(500, "error in clearing cart", " cart clear error"));

@@ -19,7 +19,7 @@ import { orderItemsRoutes } from "./routes/orderItems";
 import { wishItemsRoutes } from "./routes/wishlistItems";
 import { discountRoutes } from "./routes/discountRoutes";
 import { viewRoutes } from "./routes/viewRoutes";
-import { EdgePlugin } from "./utils/edge";
+import { EdgePlugin } from "./plugins/edge";
 import path from "path";
 
 dotenv.config();

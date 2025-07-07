@@ -7,15 +7,14 @@ const middleware_1 = require("../authentication/middleware");
 const orderRoutes = async (fastify, opt) => {
     //GET /api/orders - Get user's orders
     fastify.get("/orders", async (request, reply) => {
-        var _a, _b;
         try {
-            if (!((_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id)) {
+            if (!request.session.user?.id) {
                 return reply
                     .status(400)
                     .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
             }
             const orders = await fastify.prisma.order.findMany({
-                where: { userId: (_b = request.session.user) === null || _b === void 0 ? void 0 : _b.id },
+                where: { userId: request.session.user?.id },
             });
             return reply.send(orders);
         }
@@ -25,13 +24,12 @@ const orderRoutes = async (fastify, opt) => {
     });
     //POST /api/orders - Create new order
     fastify.post("/orders", async (request, reply) => {
-        var _a;
         try {
             const orderData = request.body;
             const order = await fastify.prisma.order.create({
                 data: {
                     orderNumber: orderData.orderNumber,
-                    userId: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id,
+                    userId: request.session.user?.id,
                     subtotal: orderData.subtotal,
                     tax: orderData.tax,
                     shipping: orderData.shipping,
@@ -53,9 +51,8 @@ const orderRoutes = async (fastify, opt) => {
     });
     //GET /api/orders/:id - Get order details
     fastify.get("/orders/:id", async (request, reply) => {
-        var _a;
         try {
-            if (!((_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id)) {
+            if (!request.session.user?.id) {
                 return reply
                     .status(400)
                     .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
@@ -101,9 +98,8 @@ const orderRoutes = async (fastify, opt) => {
     });
     //GET /api/orders/:id/invoice - Get order invoice
     fastify.get("/orders/:id/invoice", async (request, reply) => {
-        var _a;
         try {
-            if (!((_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id)) {
+            if (!request.session.user?.id) {
                 return reply
                     .status(400)
                     .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));

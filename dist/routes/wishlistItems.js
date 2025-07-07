@@ -6,10 +6,9 @@ const middleware_1 = require("../authentication/middleware");
 const wishItemsRoutes = async (fastify, opt) => {
     //get wishlist items
     fastify.get("/wishItems", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
-        var _a;
         try {
             const wishItems = await fastify.prisma.wishlistItem.findMany({
-                where: { userId: (_a = request.session.user) === null || _a === void 0 ? void 0 : _a.id },
+                where: { userId: request.session.user?.id },
             });
             return reply.send(wishItems);
         }

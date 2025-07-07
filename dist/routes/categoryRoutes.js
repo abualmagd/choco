@@ -24,8 +24,8 @@ const categoryRoutes = async (fastify, option) => {
                     name: name,
                     description: description,
                     image: image,
-                    isActive: isActive !== null && isActive !== void 0 ? isActive : true,
-                    parentId: parentId !== null && parentId !== void 0 ? parentId : null,
+                    isActive: isActive ?? true,
+                    parentId: parentId ?? null,
                 },
             });
             return reply.send(categories);
@@ -78,7 +78,7 @@ const categoryRoutes = async (fastify, option) => {
         try {
             const { slug } = request.params;
             const { page, pagesize } = request.query;
-            const skip = page ? (parseInt(page) - 1) * parseInt(pagesize !== null && pagesize !== void 0 ? pagesize : "10") : 0;
+            const skip = page ? (parseInt(page) - 1) * parseInt(pagesize ?? "10") : 0;
             const category = await fastify.prisma.category.findUnique({
                 where: {
                     slug: slug,

@@ -19,9 +19,8 @@ exports.sessionOption = {
     saveUninitialized: false,
     store: {
         async set(sessionId, session, callback) {
-            var _a;
             try {
-                if ((_a = session.user) === null || _a === void 0 ? void 0 : _a.id) {
+                if (session.user?.id) {
                     await prisma.session.upsert({
                         where: { id: sessionId },
                         update: {
@@ -43,7 +42,6 @@ exports.sessionOption = {
             }
         },
         async get(sessionId, callback) {
-            var _a;
             try {
                 const session = await prisma.session.findUnique({
                     where: {
@@ -55,17 +53,17 @@ exports.sessionOption = {
                 });
                 const typedSession = {
                     id: sessionId,
-                    expiresAt: session === null || session === void 0 ? void 0 : session.expiresAt,
-                    userId: (_a = session === null || session === void 0 ? void 0 : session.user) === null || _a === void 0 ? void 0 : _a.id,
+                    expiresAt: session?.expiresAt,
+                    userId: session?.user?.id,
                     user: {
-                        id: session === null || session === void 0 ? void 0 : session.userId,
-                        username: session === null || session === void 0 ? void 0 : session.user.name,
-                        email: session === null || session === void 0 ? void 0 : session.user.name,
-                        role: session === null || session === void 0 ? void 0 : session.user.role,
+                        id: session?.userId,
+                        username: session?.user.name,
+                        email: session?.user.name,
+                        role: session?.user.role,
                     },
                     cookie: {
                         originalMaxAge: 86400000,
-                        expires: session === null || session === void 0 ? void 0 : session.expiresAt,
+                        expires: session?.expiresAt,
                         secure: process.env.NODE_ENV === "production",
                         httpOnly: true,
                         path: "/",
