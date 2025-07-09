@@ -30,6 +30,12 @@ const server = fastify({
 
 const start = async () => {
   try {
+    await server.register(require("@fastify/static"), {
+      root: path.join(process.cwd(), "public"),
+      prefix: "/public/", // optional: default '/'
+    });
+    console.log("✅ Static files registered from /public");
+
     await server.register(prismaPlugin);
     await server.register(productRoutes, { prefix: "/api/" });
     await server.register(categoryRoutes, { prefix: "/api/" });
@@ -41,20 +47,7 @@ const start = async () => {
     await server.register(discountRoutes, { prefix: "/api/" });
     await server.register(viewRoutes);
 
-    /*server.decorateReply(
-      "view",
-      async function (template: string, state?: Record<string, any>) {
-        const { Edge } = await import("edge.js");
-        const edge = Edge.create();
-        edge.mount(path.join(__dirname, "./views"));
-        const html = edge.render(template, state);
-        this.header("content-type", "text/html; charset=utf-8");
-        this.send(html);
-      }
-    );*/
-
     await server.register(EdgePlugin);
-
     await server.register(fastifyCookie);
     await server.register(fastifySession, sessionOption);
     await server.register(fastifyOauth2, oauthGoogleOption);

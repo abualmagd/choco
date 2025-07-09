@@ -21,12 +21,18 @@ const wishlistItems_1 = require("./routes/wishlistItems");
 const discountRoutes_1 = require("./routes/discountRoutes");
 const viewRoutes_1 = require("./routes/viewRoutes");
 const edge_1 = require("./plugins/edge");
+const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
 });
 const start = async () => {
     try {
+        await server.register(require("@fastify/static"), {
+            root: path_1.default.join(process.cwd(), "public"),
+            prefix: "/public/", // optional: default '/'
+        });
+        console.log("✅ Static files registered from /public");
         await server.register(prisma_1.default);
         await server.register(productRoutes_1.productRoutes, { prefix: "/api/" });
         await server.register(categoryRoutes_1.categoryRoutes, { prefix: "/api/" });
@@ -37,17 +43,6 @@ const start = async () => {
         await server.register(wishlistItems_1.wishItemsRoutes, { prefix: "/api/" });
         await server.register(discountRoutes_1.discountRoutes, { prefix: "/api/" });
         await server.register(viewRoutes_1.viewRoutes);
-        /*server.decorateReply(
-          "view",
-          async function (template: string, state?: Record<string, any>) {
-            const { Edge } = await import("edge.js");
-            const edge = Edge.create();
-            edge.mount(path.join(__dirname, "./views"));
-            const html = edge.render(template, state);
-            this.header("content-type", "text/html; charset=utf-8");
-            this.send(html);
-          }
-        );*/
         await server.register(edge_1.EdgePlugin);
         await server.register(cookie_1.default);
         await server.register(session_1.default, auth_1.sessionOption);
