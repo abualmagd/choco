@@ -3,9 +3,18 @@
 @set('title', 'Styllish')
 
 @section('content')
-  <h1 class="font-extrabold">Welcome to Edge.js !</h1>
-  <div>
-    lorsk dkdk kdk dkmkd dk dkn
+  <h1 class="font-extrabold">Welcome to Styllish!</h1>
+  <div class=" h-[700px] bg-red-500">
+    @component('components/card', { 
+     
+      title:'styllish shoes for women ',
+      action:{
+        link:'/',
+        word:'shop now'
+      }
+     })
+      
+    @end
   </div>
 @endsection
 

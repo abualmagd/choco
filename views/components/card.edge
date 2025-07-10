@@ -1,0 +1,17 @@
+
+<div class="flex relative rounded-md max-h-[500px] max-w-[600px]">
+<figure class="w-full h-full">
+    <img src="{{cardImage||'/public/assetes/images/holder.jpg'}}" class=" rounded-md object-contain"/>
+</figure>
+@if(title) 
+<p class=" absolute left-20 bottom-[30%] font-bold text-3xl md:text-5xl md:w-96 w-44 capitalize leading-tight drop-shadow-lg">
+    {{title||' '}}
+</p>    
+@end
+
+@if(action)
+<a  href="{{action.link}}" class=" absolute left-20 bottom-[20%] underline uppercase font-semibold">
+{{action.word||'shop now'}}
+</a>
+@end
+</div>
