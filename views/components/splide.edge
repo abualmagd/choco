@@ -22,28 +22,28 @@ if (window.Splide && window.splide.Extensions) {
     
     })">
 
-    <section class="splide" aria-label="Splide Basic HTML Example">
-        <div class="splide__track">
-            <ul class="splide__list">
+  <section class="splide" aria-label="Splide Basic HTML Example">
+    <div class="splide__track">
+      <ul class="splide__list">
 
-                @each(item in collections)
-                <li class="splide__slide">
+        @each(item in collections)
+        <li class="splide__slide">
 
-                    @component('components/card', {
+          @component('components/card', {
 
-                    title:'styllish shoes for women ',
-                    action:{
-                    link:'/',
-                    word:'shop now'
-                    }
-                    })
+          title:'styllish shoes for women ',
+          action:{
+          link:'/',
+          word:'shop now'
+          }
+          })
 
-                    @end
-                </li>
-                @end
-            </ul>
-        </div>
-    </section>
+          @end
+        </li>
+        @end
+      </ul>
+    </div>
+  </section>
 
 
 </div>

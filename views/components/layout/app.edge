@@ -27,6 +27,14 @@
       margin: -8px;
     }
 
+    .splide__pagination {
+      top: 100% !important;
+    }
+
+    .splide__pagination__page.is-active {
+      background: #3B82F6 !important;
+    }
+
     .splide__slide>div {
       height: 100%;
       padding: 8px 16px;
@@ -38,7 +46,7 @@
   </style>
 </head>
 
-<body class="md:px-20">
+<body class="md:px-20 max-w-7xl mx-auto">
   @!component('../components/header',{tag:"Online Shop",
   links:[
   { title: 'Home', href: '/home' },

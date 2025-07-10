@@ -6,7 +6,11 @@ module.exports = {
   ],
   darkMode: "media", // or 'class'
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        playfair: ["Playfair Display", "sans"],
+      },
+    },
   },
   variants: {
     extend: {},
