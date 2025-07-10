@@ -1,0 +1,49 @@
+<div x-init="$nextTick(()=>{
+if (window.Splide && window.splide.Extensions) {
+        new Splide('.splide', {
+          type: 'loop',
+          height: '500px',
+          perPage: 2,
+          perMove: 1,
+          grid: {
+           dimensions: [[1, 1],[2, 1],[1, 1],[2, 1],[1, 1],[2, 1],[1, 1],[2, 1],[1, 1],[2, 1],[1, 1],[2, 1],[1, 1],[2, 1],[1, 1],[2, 1],[1, 1],[2, 1]],
+            gap: { row: '16px', col: '16px' }
+          },
+          breakpoints: {
+            800: { perPage: 1, grid: false }
+          }
+        }).mount( window.splide.Extensions );
+      } else {
+         console.error('Splide not loaded!', {
+    Splide: window.Splide,
+    Grid: window.splide.Extensions
+  });
+      }
+    
+    })">
+
+    <section class="splide" aria-label="Splide Basic HTML Example">
+        <div class="splide__track">
+            <ul class="splide__list">
+
+                @each(item in collections)
+                <li class="splide__slide">
+
+                    @component('components/card', {
+
+                    title:'styllish shoes for women ',
+                    action:{
+                    link:'/',
+                    word:'shop now'
+                    }
+                    })
+
+                    @end
+                </li>
+                @end
+            </ul>
+        </div>
+    </section>
+
+
+</div>

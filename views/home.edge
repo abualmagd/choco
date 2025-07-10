@@ -3,18 +3,13 @@
 @set('title', 'Styllish')
 
 @section('content')
-  <h1 class="font-extrabold">Welcome to Styllish!</h1>
-  <div class=" h-[700px] bg-red-500">
-    @component('components/card', { 
-     
-      title:'styllish shoes for women ',
-      action:{
-        link:'/',
-        word:'shop now'
-      }
-     })
-      
-    @end
-  </div>
-@endsection
+<h1 class="font-extrabold">Welcome to Styllish!</h1>
+<div class=" h-[500px]">
+  @component('components/splide', {
+  collections:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
+  })
+
+  @end
+</div>
+@endsection
