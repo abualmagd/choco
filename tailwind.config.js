@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         playfair: ["Playfair Display", "sans"],
+        inter: ["Inter", "serif"],
       },
     },
   },
