@@ -1,0 +1,17 @@
+<div class=" grid md:grid-cols-3 grid-cols-1 justify-items-center w-full h-[500px]">
+    <div>
+        image splide
+    </div>
+
+    <div>
+        {{product.name||product.slug}}
+    </div>
+
+
+    @component('components/addtoCart', {
+    product:product
+    })
+
+    @end
+
+</div>

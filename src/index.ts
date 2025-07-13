@@ -65,10 +65,6 @@ const start = async () => {
       }
       console.log("server listening at ", adress);
     });
-
-    server.get("/", (request, reply) => {
-      return reply.send("hello from my choco");
-    });
   } catch (error) {}
 };
 

@@ -1,0 +1,25 @@
+<div class=" rounded-md h-full w-full flex flex-col justify-between bg-white shadow-lg p-8">
+    <p class="flex flex-row justify-between">
+        <span>{{product.price||00}}</span>
+        @if(product.discounts.length>0)
+        <span>{{product.discounts[0].value||' '}}</span>
+        @end
+
+    </p>
+
+
+    <div class="add-to-cart-buy-now  flex flex-col gap-3">
+        <div class=" border-2 border-gray-200 flex w-28 h-10 items-center  justify-between" x-data="{count:1}">
+            <button x-on:click="count=count+1" class=" text-2xl ml-2">+</button>
+            <p x-text="count" class=" text-2xl">1</p>
+            <button x-on:click="count!==1?count=count-1:''" class=" text-2xl mr-2">-</button>
+        </div>
+        <button
+            class=" capitalize bg-blue-800 shadow-md rounded-md h-10 text-white font-semibold flex items-center justify-center">buy
+            now</button>
+        <button
+            class=" capitalize shadow-md bg-gray-50 rounded-md h-10 border-2 border-blue-400 text-blue-600 font-semibold flex items-center justify-center">add
+            to
+            cart</button>
+    </div>
+</div>

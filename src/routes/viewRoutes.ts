@@ -4,7 +4,7 @@ export const viewRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
   opt: any
 ) => {
-  fastify.get("/home", async (request, reply: FastifyReply) => {
+  fastify.get("/", async (request, reply: FastifyReply) => {
     try {
       return reply.view("home", { username: "Ismail" });
     } catch (error) {
@@ -12,7 +12,23 @@ export const viewRoutes: FastifyPluginAsync = async (
     }
   });
 
-  fastify.get("/product/:slug", async (request, reply) => {
-    return "view here product page";
+  fastify.get("/products/:slug", async (request, reply) => {
+    try {
+      const { slug } = request.params as { slug: string };
+      const data = await fastify.prisma.product.findUnique({
+        where: { slug: slug },
+        include: {
+          reviews: {
+            take: 5,
+          },
+          discounts: true,
+          categories: true,
+          variants: true,
+        },
+      });
+      return reply.view("product", { product: data });
+    } catch (error) {
+      return reply.send(error);
+    }
   });
 };

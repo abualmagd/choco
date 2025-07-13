@@ -1,0 +1,23 @@
+@layout('components/layout/app')
+
+@set('title', 'Styllish')
+
+
+@section('content')
+
+@if(!product)
+@component('components/notfound', { })
+
+@end
+@else
+<div>
+    <div class=" h-10"></div>
+    @component('components/productGrid', {
+    product:product
+    })
+
+    @end
+</div>
+@end
+
+@end
