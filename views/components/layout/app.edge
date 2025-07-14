@@ -46,25 +46,52 @@
   </style>
 </head>
 
-<body class="md:px-20 max-w-7xl mx-auto font-inter">
-  @!component('../components/header',{tag:"Online Shop",
-  links:[
-  { title: 'Home', href: '/' },
-  { title: 'Men', href: '/men' },
-  { title: 'Women', href: '/women' },
-  { title: 'Trends', href: '/trends' },
-  { title: 'Collections', href: '/collections' },
-  { title: 'Sale', href: '/sale' },
-  { title: 'Blog', href: '/blog' }
-  ]
+<body class=" flex flex-col max-w-8xl mx-auto font-inter">
+  <div class="md:px-20 w-full mx-auto">
+    @!component('../components/header',{tag:"Online Shop",
+    links:[
+    { title: 'Home', href: '/' },
+    { title: 'Men', href: '/men' },
+    { title: 'Women', href: '/women' },
+    { title: 'Trends', href: '/trends' },
+    { title: 'Collections', href: '/collections' },
+    { title: 'Sale', href: '/sale' },
+    { title: 'Blog', href: '/blog' }
+    ]
+    })
+    @!section('content')
+  </div>
+
+
+  @component('../components/myFooter', {
+  tag:"Online Shop",
+  title:'styllish',
+  shopLinks:[{title:'account',link:'/account'},
+  {title:'login',link:'/login'},
+  {title:'wishlist',link:'/wishlist'},
+  {title:'cart',link:'/cart'}
+  ],
+  infoLinks:[
+  {title:'shopping policy',link:'/shopping-policy'},
+  {title:'return & refunds',link:'/return-refund'},
+  {title:'cookies policy',link:'/cookies-policy'},
+  {title:'frequently asked',link:'/asked'},
+  ],
+  companyLinks:[{title:'about us',link:'/about'},
+  {title:'privacy policy',link:'/privacy-policy'},
+  {title:'terms & conditions',link:'/terms'},
+  {title:'contact us',link:'/contact'}
+  ],
   })
-  @!section('content')
 
-
+  @end
 
   <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-grid@0.4.1/dist/js/splide-extension-grid.min.js"></script>
+  <script src="/public/app.js">
+
+  </script>
 </body>
 
 </html>

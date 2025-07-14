@@ -1,0 +1,76 @@
+<div class=" w-full h-full" x-init="$nextTick(()=>{
+if (window.Splide) {
+       const main= new Splide('#main-slider', {
+             type       : 'fade',
+             heightRatio: 0.5,
+             pagination : false,
+            arrows     : false,
+            cover      : true,
+            height: '420px',
+});
+
+
+const thumbnails=new Splide('#thumbnail-slider', {
+  rewind          : true,
+  fixedWidth      : 104,
+  fixedHeight     : 58,
+  isNavigation    : true,
+  gap             : 10,
+  focus           : 'center',
+  pagination      : false,
+  cover           : true,
+  dragMinThreshold: {
+    mouse: 4,
+    touch: 10,
+  },
+  breakpoints : {
+    640: {
+      fixedWidth  : 66,
+      fixedHeight : 38,
+    },
+  },
+}
+);
+
+main.sync( thumbnails );
+main.mount();
+thumbnails.mount();
+
+
+
+   $store.productGallery.setInstance(main);
+}
+    })">
+
+    <!-- Main Slider -->
+    <section id="main-slider" class="splide" aria-label="Main product images">
+        <div class="splide__track">
+            <ul class="splide__list">
+                @each(item in [1,2,3,4,5,6,7])
+                <li class="splide__slide">
+                    <img src="{{cardImage||'/public/assetes/images/holder.jpg'}}" alt="{{imageAlt||'product image'}}"
+                        class="rounded-md object-cover w-full h-full" />
+                </li>
+                @end
+            </ul>
+        </div>
+    </section>
+
+    <!-- Thumbnail Slider -->
+    <section id="thumbnail-slider" class="splide mt-4" aria-label="Thumbnail navigation">
+        <div class="splide__track">
+            <ul class="splide__list">
+                @each(item in [1,2,3,4,5,6,7])
+                <li class="splide__slide">
+                    <img src="{{cardImage||'/public/assetes/images/holder.jpg'}}"
+                        alt="{{imageAlt||'product thumbnail'}}" class="rounded-md object-cover w-full h-full" />
+                </li>
+                @end
+            </ul>
+        </div>
+    </section>
+
+
+
+
+</div>

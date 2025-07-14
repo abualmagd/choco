@@ -3,20 +3,21 @@
 @set('title', 'Styllish')
 
 @section('content')
-<div class=" h-[700px]">
+<div class=" h-[600px]">
   @component('components/splide', {
   collections:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
   })
 
   @end
 </div>
-<div class=" h-7"></div>
+
 @component('components/discountBanner', { })
 
 @end
 
 @component('components/featured', {
-
+title:'Featured Products',
+link:'/featured-products',
 featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 })
 
@@ -25,7 +26,8 @@ featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
 <div class=" flex md:flex-row flex-col gap-7 my-20 h-[500px]">
   @component('components/card', {
-  title:'styllish shoes for women ',
+  title:'Minimal Collection ',
+  cardImage:'/public/assetes/images/shoes.jpg',
   action:{
   link:'/',
   word:'shop now'
@@ -33,7 +35,8 @@ featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
   })
   @end
   @component('components/card', {
-  title:'styllish shoes for women ',
+  title:'Sneakers ',
+  cardImage:'/public/assetes/images/shoes2.jpg',
   action:{
   link:'/',
   word:'shop now'
@@ -41,4 +44,16 @@ featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
   })
   @end
 </div>
+
+
+
+@component('components/featured', {
+title:'Latest Products',
+link:'/latest-products',
+featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+})
+
+@end
+
+<div class=" h-7"></div>
 @endsection

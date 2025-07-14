@@ -1,11 +1,48 @@
-<div class=" grid md:grid-cols-3 grid-cols-1 justify-items-center w-full h-[500px]">
-    <div>
-        image splide
+<div class=" grid md:grid-cols-2 grid-cols-1 gap-14 justify-items-center w-full h-[500px]">
+
+    <div class=" w-full h-full flex ">
+
+        @component('components/productGallery', {
+        produc:product
+        })
+
+        @end
+        <div class=" flex flex-col  z-50 w-14 h-[420px] pl-1" x-data="{word:'hello'}">
+            <a href="/share" class="  bg-[#F2F2F2] rounded-md  p-2 mb-1  flex justify-center items-center">
+                <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4.02108 0.696237L4 10.6958M4.02108 0.696237C3.88558 0.690629 3.74925 0.739062 3.62775 0.841571C2.87242 1.47919 1.5 3.13652 1.5 3.13652M4.02108 0.696237C4.14258 0.701279 4.2635 0.749771 4.37233 0.841704C5.12758 1.47945 6.5 3.13652 6.5 3.13652"
+                        stroke="#141414" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </a>
+            <button x-on:click="'share'"
+                class="  bg-[#F2F2F2] rounded-md  p-2 mb-auto flex justify-center items-center">
+                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M16.2187 2.35763C13.9839 0.986868 12.0335 1.53927 10.8618 2.41918C10.3813 2.77998 10.1412 2.96037 9.99984 2.96037C9.8585 2.96037 9.61834 2.77998 9.13784 2.41918C7.96619 1.53927 6.01574 0.986868 3.78104 2.35763C0.848228 4.15663 0.184604 10.0916 6.94944 15.0987C8.23794 16.0523 8.88217 16.5292 9.99984 16.5292C11.1175 16.5292 11.7618 16.0523 13.0503 15.0987C19.8151 10.0916 19.1514 4.15663 16.2187 2.35763Z"
+                        stroke="#141414" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+            </button>
+
+            <div class=" flex flex-col gap-2">
+                <button x-on:click="$store.productGallery.next()"
+                    class="bg-[#F2F2F2] rounded-md  p-2 flex justify-center items-center ">
+                    <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1.02905C1 1.02905 5.99999 4.71147 6 6.02905C6.00001 7.34672 1 11.0291 1 11.0291"
+                            stroke="#141414" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button x-on:click="$store.productGallery.prev()"
+                    class=" bg-[#F2F2F2] rounded-md   p-2 flex justify-center items-center">
+                    <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5.02905C12 5.02905 7.00001 8.71147 7 10.0291C6.99999 11.3467 12 15.0291 12 15.0291"
+                            stroke="#141414" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div>
-        {{product.name||product.slug}}
-    </div>
 
 
     @component('components/addtoCart', {
