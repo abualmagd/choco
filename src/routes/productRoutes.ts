@@ -5,6 +5,7 @@ import {
   isAuthenticate,
   isModeratorAuth,
 } from "../authentication/middleware";
+import { CustomResponse, ResError } from "../utils/responseClasses";
 
 export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
   //get list of products
@@ -70,7 +71,9 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
             slug: request.params.slug,
           },
           include: {
-            reviews: true,
+            reviews: {
+              take: 10,
+            },
             discounts: true,
             categories: true,
             variants: true,
@@ -165,41 +168,45 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
       rating: number;
       comment: string;
     };
-  }>("/products/:id/reviews", async (request, reply) => {
-    try {
-      const productId = parseInt(request.params.id, 10);
-      const { title, rating, comment } = request.body;
-      const userId = 1; //'getUserId()'
-      // Validate rating (1-5 stars)
-      if (rating < 1 || rating > 5) {
-        return reply.status(400).send({
-          error: "Bad Request",
-          message: "Rating must be between 1 and 5",
-        });
-      }
-      const newReview = await fastify.prisma.review.create({
-        data: {
-          title: title,
-          productId: productId,
-          rating: rating,
-          comment: comment,
-          userId: userId,
-        },
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              avatar: true,
+  }>(
+    "/products/:id/reviews",
+    { preHandler: isAuthenticate },
+    async (request, reply) => {
+      try {
+        const productId = parseInt(request.params.id, 10);
+        const { title, rating, comment } = request.body;
+        const userId = 1; //'getUserId()'
+        // Validate rating (1-5 stars)
+        if (rating < 1 || rating > 5) {
+          return reply.status(400).send({
+            error: "Bad Request",
+            message: "Rating must be between 1 and 5",
+          });
+        }
+        const newReview = await fastify.prisma.review.create({
+          data: {
+            title: title,
+            productId: productId,
+            rating: rating,
+            comment: comment,
+            userId: userId,
+          },
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
             },
           },
-        },
-      });
-      return reply.send(newReview);
-    } catch (error) {
-      return reply.send(error);
+        });
+        return reply.send(newReview);
+      } catch (error) {
+        return reply.send(error);
+      }
     }
-  });
+  );
 
   //update reviews
   fastify.put<{
@@ -277,4 +284,90 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
       }
     }
   );
+
+  fastify.get("/products/ratings/:slug", async (request, reply) => {
+    try {
+      const { slug } = request.params as { slug: string };
+      const product = await fastify.prisma.product.findUnique({
+        where: { slug: slug },
+        include: {
+          reviews: {
+            take: 10,
+          },
+          discounts: true,
+          categories: true,
+        },
+      });
+      if (!product) {
+        return reply.send(
+          new ResError(404, " no product with this slug", " not found")
+        );
+      }
+      const reviewStats = await fastify.prisma.review.groupBy({
+        by: ["rating"],
+        where: {
+          product: {
+            slug: slug,
+          },
+        },
+        _count: {
+          rating: true,
+        },
+      });
+
+      const totalReviews = await fastify.prisma.review.count({
+        where: {
+          product: {
+            slug: slug,
+          },
+        },
+      });
+
+      const averageRating = await fastify.prisma.review.aggregate({
+        where: {
+          product: {
+            slug: slug,
+          },
+        },
+        _avg: {
+          rating: true,
+        },
+      });
+
+      // Transform the stats into a more usable format
+      const ratingCounts: any = {};
+      reviewStats.forEach((stat) => {
+        ratingCounts[stat.rating] = stat._count.rating;
+      });
+
+      // Fill in missing ratings
+      for (let i = 1; i <= 5; i++) {
+        if (!ratingCounts[i]) {
+          ratingCounts[i] = 0;
+        }
+      }
+
+      // Calculate percentages
+      const ratingPercentages: any = {};
+      for (let i = 1; i <= 5; i++) {
+        ratingPercentages[i] =
+          ((ratingCounts[i] / totalReviews) * 100).toFixed(0) + "%";
+      }
+
+      return reply.send(
+        new CustomResponse(
+          {
+            product: product,
+            totalReviews: totalReviews,
+            averageRating: averageRating,
+            ratingCounts: ratingCounts,
+            ratingPercentages: ratingPercentages,
+          },
+          null
+        )
+      );
+    } catch (error) {
+      return reply.send(error);
+    }
+  });
 };

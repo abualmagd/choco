@@ -14,11 +14,11 @@
             Product overview
         </p>
 
-        <li><span class=" capitalize mr-1 font-medium ">brand: </span>{{product.brand||''}}</li>
-        <li><span class=" capitalize mr-1 font-medium">weight: </span>{{product.weight||''}} gm</li>
-        <li><span class=" capitalize mr-1 font-medium">height: </span> {{product.height||''}} cm</li>
-        <li><span class=" capitalize mr-1 font-medium">length: </span>{{product.length||''}} cm</li>
-        <li><span class=" capitalize mr-1 font-medium">Digital: </span>{{product.isDigital||''}}</li>
+        <li><span class=" capitalize mr-1 font-medium ">brand: </span>{{data.product.brand||''}}</li>
+        <li><span class=" capitalize mr-1 font-medium">weight: </span>{{data.product.weight||''}} gm</li>
+        <li><span class=" capitalize mr-1 font-medium">height: </span> {{data.product.height||''}} cm</li>
+        <li><span class=" capitalize mr-1 font-medium">length: </span>{{data.product.length||''}} cm</li>
+        <li><span class=" capitalize mr-1 font-medium">Digital: </span>{{data.product.isDigital||''}}</li>
     </ul>
 
     <div id="product-reviews" class=" flex flex-col w-full">
@@ -34,8 +34,10 @@
 
 
                 @component('components/productRating', {
-                ratingPercent:3.5,
-                ratingCount:350
+                ratingPercent:Math.floor(data.averageRating._avg.rating*10)/10,
+                totalReviews:data.totalReviews,
+                ratingCounts:data.ratingCounts,
+                ratingPercentages:data.ratingPercentages
                 })
 
                 @end
@@ -85,19 +87,19 @@
                     </div>
                 </div>
                 <ul class=" p-5">
-                    @each(item in [1,2,3,4,5,6,7,8,9,10,11])
+                    @each((item,index) in data.product.reviews)
                     <li>
-                        <p class=" font-bold">title of review</p>
+                        <p class=" font-bold">{{item.title||' '}}</p>
                         <p class=" line-clamp-3 relative leading-tight text-sm text-gray-500">
-                            comment of review comment of review comment of review comment of review
-                            comment of review comment of review comment of review comment of review
-                            comment of review comment of review comment of review comment of review
+                            {{item.comment||' '}}
                             <a href="/reviews/id"
                                 class=" text-blue-500 absolute bottom-0 right-0 bg-white cursor-pointer">..more</a>
                         </p>
 
                     </li>
+                    @if(index!==(data.product.reviews.length-1))
                     <div class=" divider border-b-2 w-full h-4 mb-4"></div>
+                    @end
                     @end
 
 
@@ -109,4 +111,7 @@
         </div>
 
     </div>
+
+
+
 </div>

@@ -4,14 +4,15 @@
         <a href="{{link||'/products'}}" class=" underline ml-auto">view all</a>
     </div>
 
-    <div class=" flex md:gap-6 gap-11 justify-center flex-col flex-wrap  md:flex-row flex-shrink-0 overflow-hidden ">
+    <div
+        class=" flex md:gap-4 gap-11 items-center  w-full  justify-between flex-col flex-wrap  md:flex-row flex-shrink-0 overflow-hidden ">
         @each((item,index) in featuredProducts)
-        @if(index>3)
+        @if(index>4)
 
         @else
         @!component('components/cubicCard', {
         id:1,
-        cardImage:'public/assetes/images/holder.jpg',
+        cardImage:'/public/assetes/images/holder.jpg',
         description:'Running shoes for men',
         price:122,
         currency:'$'

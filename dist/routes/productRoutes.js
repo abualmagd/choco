@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productRoutes = void 0;
 const middleware_1 = require("../authentication/middleware");
+const responseClasses_1 = require("../utils/responseClasses");
 const productRoutes = async (fastify, opt) => {
     //get list of products
     fastify.get("/products", async (request, reply) => {
@@ -54,7 +55,9 @@ const productRoutes = async (fastify, opt) => {
                     slug: request.params.slug,
                 },
                 include: {
-                    reviews: true,
+                    reviews: {
+                        take: 10,
+                    },
                     discounts: true,
                     categories: true,
                     variants: true,
@@ -128,7 +131,7 @@ const productRoutes = async (fastify, opt) => {
         }
     });
     //create review for product //authenticated user only
-    fastify.post("/products/:id/reviews", async (request, reply) => {
+    fastify.post("/products/:id/reviews", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
         try {
             const productId = parseInt(request.params.id, 10);
             const { title, rating, comment } = request.body;
@@ -215,6 +218,79 @@ const productRoutes = async (fastify, opt) => {
                 where: { id: id },
             });
             return reply.send("deleted succesfully");
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
+    fastify.get("/products/ratings/:slug", async (request, reply) => {
+        try {
+            const { slug } = request.params;
+            const product = await fastify.prisma.product.findUnique({
+                where: { slug: slug },
+                include: {
+                    reviews: {
+                        take: 10,
+                    },
+                    discounts: true,
+                    categories: true,
+                },
+            });
+            if (!product) {
+                return reply.send(new responseClasses_1.ResError(404, " no product with this slug", " not found"));
+            }
+            const reviewStats = await fastify.prisma.review.groupBy({
+                by: ["rating"],
+                where: {
+                    product: {
+                        slug: slug,
+                    },
+                },
+                _count: {
+                    rating: true,
+                },
+            });
+            const totalReviews = await fastify.prisma.review.count({
+                where: {
+                    product: {
+                        slug: slug,
+                    },
+                },
+            });
+            const averageRating = await fastify.prisma.review.aggregate({
+                where: {
+                    product: {
+                        slug: slug,
+                    },
+                },
+                _avg: {
+                    rating: true,
+                },
+            });
+            // Transform the stats into a more usable format
+            const ratingCounts = {};
+            reviewStats.forEach((stat) => {
+                ratingCounts[stat.rating] = stat._count.rating;
+            });
+            // Fill in missing ratings
+            for (let i = 1; i <= 5; i++) {
+                if (!ratingCounts[i]) {
+                    ratingCounts[i] = 0;
+                }
+            }
+            // Calculate percentages
+            const ratingPercentages = {};
+            for (let i = 1; i <= 5; i++) {
+                ratingPercentages[i] =
+                    ((ratingCounts[i] / totalReviews) * 100).toFixed(0) + "%";
+            }
+            return reply.send(new responseClasses_1.CustomResponse({
+                product: product,
+                totalReviews: totalReviews,
+                averageRating: averageRating,
+                ratingCounts: ratingCounts,
+                ratingPercentages: ratingPercentages,
+            }, null));
         }
         catch (error) {
             return reply.send(error);
