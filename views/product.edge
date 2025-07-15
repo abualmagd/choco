@@ -10,14 +10,18 @@
 
 @end
 @else
-<div>
 
-    @component('components/productGrid', {
-    product:product
-    })
+@component('components/productGrid', {
+product:product
+})
+@end
 
-    @end
-</div>
+@component('components/productDetails', {
+product:product
+})
+@end
+
+
 @end
 
 @end

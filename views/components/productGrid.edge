@@ -8,13 +8,20 @@
 
         @end
         <div class=" flex flex-col  z-50 w-14 h-[420px] pl-1" x-data="{word:'hello'}">
-            <a href="/share" class="  bg-[#F2F2F2] rounded-md  p-2 mb-1  flex justify-center items-center">
-                <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button x-on:click=" await navigator.share({
+                  text: 'description',
+                    url: 'http/speaksnaps.com',
+                    title: 'test'})"
+                class="share-btn  bg-[#F2F2F2] rounded-md  p-2 mb-1  flex justify-center items-center">
+                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
-                        d="M4.02108 0.696237L4 10.6958M4.02108 0.696237C3.88558 0.690629 3.74925 0.739062 3.62775 0.841571C2.87242 1.47919 1.5 3.13652 1.5 3.13652M4.02108 0.696237C4.14258 0.701279 4.2635 0.749771 4.37233 0.841704C5.12758 1.47945 6.5 3.13652 6.5 3.13652"
+                        d="M15 5.86255C15.6454 5.99637 16.1323 6.21971 16.5237 6.59246C17.5 7.52239 17.5 9.01913 17.5 12.0125C17.5 15.006 17.5 16.5026 16.5237 17.4326C15.5474 18.3625 13.976 18.3625 10.8333 18.3625H9.16667C6.02397 18.3625 4.45262 18.3625 3.47631 17.4326C2.5 16.5026 2.5 15.006 2.5 12.0125C2.5 9.01913 2.5 7.52239 3.47631 6.59246C3.86765 6.21971 4.35458 5.99637 5 5.86255"
+                        stroke="#141414" stroke-width="1.25" stroke-linecap="round" />
+                    <path
+                        d="M10.0211 1.69624L10 11.6958M10.0211 1.69624C9.88558 1.69063 9.74925 1.73906 9.62775 1.84157C8.87242 2.47919 7.5 4.13652 7.5 4.13652M10.0211 1.69624C10.1426 1.70128 10.2635 1.74977 10.3723 1.8417C11.1276 2.47945 12.5 4.13652 12.5 4.13652"
                         stroke="#141414" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-            </a>
+            </button>
             <button x-on:click="'share'"
                 class="  bg-[#F2F2F2] rounded-md  p-2 mb-auto flex justify-center items-center">
                 <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,0 +1,112 @@
+<div class=" flex flex-col w-full ">
+    <div class=" h-20"></div>
+    <div class=" tabs flex w-full justify-start gap-3 p-2 shadow-sm">
+        <a href="#product-details" class=" capitalize shadow-sm  border-2 rounded-full border-[#ecebeb] px-4 py-2  ">
+            Product overview
+        </a>
+        <a href="#product-reviews" class=" capitalize  shadow-sm border-2 rounded-full border-[#ecebeb] px-4 py-2  ">
+            Product rating & reviews
+        </a>
+    </div>
+
+    <ul id="product-details" class=" flex flex-col  list-inside gap-2 w-full h-96 mt-4 list-disc">
+        <p class=" capitalize font-bold text-lg">
+            Product overview
+        </p>
+
+        <li><span class=" capitalize mr-1 font-medium ">brand: </span>{{product.brand||''}}</li>
+        <li><span class=" capitalize mr-1 font-medium">weight: </span>{{product.weight||''}} gm</li>
+        <li><span class=" capitalize mr-1 font-medium">height: </span> {{product.height||''}} cm</li>
+        <li><span class=" capitalize mr-1 font-medium">length: </span>{{product.length||''}} cm</li>
+        <li><span class=" capitalize mr-1 font-medium">Digital: </span>{{product.isDigital||''}}</li>
+    </ul>
+
+    <div id="product-reviews" class=" flex flex-col w-full">
+        <p class=" capitalize font-bold text-lg border-b-2 border-gray-200 h-16 flex items-center">
+            Product reviews & rating
+        </p>
+
+
+        <div class=" flex md:flex-row flex-col md:items-start items-center  w-full ">
+            <div class=" rev-precentage flex flex-col  md:w-1/3 w-full ">
+                <div class=" h-7 margin"></div>
+                <p class=" capitalize font-semibold my-3">Overall Rating</p>
+
+
+                @component('components/productRating', {
+                ratingPercent:3.5,
+                ratingCount:350
+                })
+
+                @end
+            </div>
+            <div class=" list-reviews w-full md:border-l-2 md:border-gray-200 md:ml-1">
+                <div class=" reviews-filter-bar flex w-full h-24 items-center px-3">
+                    <h3 class=" mr-auto font-semibold capitalize">
+                        Reviews
+                    </h3>
+                    <div class=" filtering-stars flex gap-2 mr-4 text-sm">
+                        <p class="py-3 capitalize text-[#c0bebe]">filter by:</p>
+                        <select class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-40 ">
+                            <option>
+                                All stars
+                            </option>
+                            <option>
+                                All stars
+                            </option>
+                            <option>
+                                5 stars
+                            </option>
+                            <option>
+                                4 stars
+                            </option>
+                            <option>
+                                3 stars
+                            </option>
+                            <option>
+                                2 stars
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class=" filtering selects flex gap-2 text-sm">
+                        <p class="py-3 capitalize text-[#c0bebe]">sort by</p>
+                        <select class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-40 ">
+                            <option>
+                                top reviews
+                            </option>
+                            <option>
+                                bad reviews
+                            </option>
+                            <option>
+                                recent reviews
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <ul class=" p-5">
+                    @each(item in [1,2,3,4,5,6,7,8,9,10,11])
+                    <li>
+                        <p class=" font-bold">title of review</p>
+                        <p class=" line-clamp-3 relative leading-tight text-sm text-gray-500">
+                            comment of review comment of review comment of review comment of review
+                            comment of review comment of review comment of review comment of review
+                            comment of review comment of review comment of review comment of review
+                            <a href="/reviews/id"
+                                class=" text-blue-500 absolute bottom-0 right-0 bg-white cursor-pointer">..more</a>
+                        </p>
+
+                    </li>
+                    <div class=" divider border-b-2 w-full h-4 mb-4"></div>
+                    @end
+
+
+
+                </ul>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
