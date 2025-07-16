@@ -282,7 +282,9 @@ const productRoutes = async (fastify, opt) => {
             const ratingPercentages = {};
             for (let i = 1; i <= 5; i++) {
                 ratingPercentages[i] =
-                    ((ratingCounts[i] / totalReviews) * 100).toFixed(0) + "%";
+                    ratingCounts[1] !== 0
+                        ? ((ratingCounts[i] / totalReviews) * 100).toFixed(0) + "%"
+                        : "0%";
             }
             return reply.send(new responseClasses_1.CustomResponse({
                 product: product,

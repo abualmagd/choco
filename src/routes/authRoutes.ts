@@ -343,4 +343,12 @@ export const authRouters: FastifyPluginAsync = async (
       );
     }
   );
+
+  fastify.get("/session", async (request, reply) => {
+    const id = request.session.user?.id!;
+    const sessions = await fastify.prisma.session.findMany({
+      where: { userId: id },
+    });
+    return reply.send(sessions);
+  });
 };

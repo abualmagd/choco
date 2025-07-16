@@ -1,4 +1,4 @@
-<div class="  h-full w-full flex flex-col gap-4 justify-evenly  p-8" x-data="{count:1 ,size:8 ,color:'yellow'}">
+<div class="  h-full w-full flex flex-col gap-4 justify-evenly  p-8" x-data="cartComponent({{ product.id }})">
 
     <h1 class=" md:text-3xl text-xl font-bold leading-tight">{{product.name||''}}</h1>
     <div class="flex flex-row justify-between">
@@ -22,6 +22,8 @@
             {{product.description||''}}
         </h2>
     </div>
+
+
 
     <div class="add-to-cart-buy-now  flex flex-col gap-3">
         <div class="product-color flex flex-col ">
@@ -57,14 +59,17 @@
             <p x-text="count" class=" text-2xl">1</p>
             <button x-on:click="count!==1?count=count-1:''" class=" text-2xl mr-2">-</button>
         </div>
+
+
+        <p class=" text-red-400 text-2xl" x-text="error" x-show="error"></p>
+
         <div class=" flex w-full gap-3">
             <button
                 class=" capitalize flex-1 bg-blue-800 shadow-md rounded-md h-10 text-white font-semibold flex items-center justify-center">buy
                 now</button>
-            <button
-                class=" capitalize flex-1 shadow-md bg-gray-50 rounded-md h-10 border-2 border-blue-400 text-blue-600 font-semibold flex items-center justify-center">add
-                to
-                cart</button>
+            <button x-on:click="addToCart()" x-bind:disabled="isLoading" x-text="isLoading?'adding...':'add to cart'"
+                class=" capitalize flex-1 shadow-md bg-gray-50 rounded-md h-10 border-2 border-blue-400 text-blue-600 font-semibold flex items-center justify-center">
+            </button>
         </div>
 
     </div>

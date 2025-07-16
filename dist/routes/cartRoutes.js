@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cartRoutes = void 0;
 const responseClasses_1 = require("../utils/responseClasses");
+const auth_1 = require("../authentication/auth");
 const cartRoutes = async (fastify, opt) => {
     //GET /api/cart - Get user's cart
     fastify.get("/cart", async (request, reply) => {
@@ -57,6 +58,23 @@ const cartRoutes = async (fastify, opt) => {
     //add item to cart (create item)
     fastify.post("/cart/add", async (request, reply) => {
         try {
+            //user didnot registered
+            if (!request.session.user) {
+                const anonymousEmail = `anon_${request.ip.replace(/\./g, "-")}@anon.com`;
+                const user = await fastify.prisma.user.create({
+                    data: {
+                        email: anonymousEmail,
+                        password: await (0, auth_1.hashPassword)(request.ip + Date.now()), // More unique
+                        name: "Anonymous",
+                        phone: null,
+                    },
+                });
+                request.session.user = {
+                    id: user.id,
+                    email: user.email,
+                };
+                await request.session.save();
+            }
             let userCart;
             userCart = await fastify.prisma.cart.findUnique({
                 where: { userId: request.session.user?.id },

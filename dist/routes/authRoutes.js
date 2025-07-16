@@ -261,5 +261,12 @@ const authRouters = async (fastify, opt) => {
         await (0, emailServices_1.sendEamil)(user.name, user.email, `your password was renewed`);
         return reply.send(new responseClasses_1.CustomResponse("your password was updated well", null));
     });
+    fastify.get("/session", async (request, reply) => {
+        const id = request.session.user?.id;
+        const sessions = await fastify.prisma.session.findMany({
+            where: { userId: id },
+        });
+        return reply.send(sessions);
+    });
 };
 exports.authRouters = authRouters;

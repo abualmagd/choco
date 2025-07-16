@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { CustomResponse, ResError } from "../utils/responseClasses";
+import { hashPassword } from "../authentication/auth";
 
 export const cartRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
@@ -64,6 +65,30 @@ export const cartRoutes: FastifyPluginAsync = async (
   //add item to cart (create item)
   fastify.post("/cart/add", async (request, reply) => {
     try {
+      //user didnot registered
+      if (!request.session.user) {
+        const anonymousEmail = `anon_${request.ip.replace(
+          /\./g,
+          "-"
+        )}@anon.com`;
+
+        const user = await fastify.prisma.user.create({
+          data: {
+            email: anonymousEmail,
+            password: await hashPassword(request.ip + Date.now()), // More unique
+            name: "Anonymous",
+            phone: null,
+          },
+        });
+
+        request.session.user = {
+          id: user.id,
+          email: user.email,
+        };
+
+        await request.session.save();
+      }
+
       let userCart;
       userCart = await fastify.prisma.cart.findUnique({
         where: { userId: request.session.user?.id },

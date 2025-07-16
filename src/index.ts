@@ -1,4 +1,4 @@
-import fastify from "fastify";
+import fastify, { FastifyRequest } from "fastify";
 import dotenv from "dotenv";
 import { productRoutes } from "./routes/productRoutes";
 import prismaPlugin from "./plugins/prisma";
@@ -21,6 +21,10 @@ import { discountRoutes } from "./routes/discountRoutes";
 import { viewRoutes } from "./routes/viewRoutes";
 import { EdgePlugin } from "./plugins/edge";
 import path from "path";
+import fastifyCors from "@fastify/cors";
+import fastifyRateLimit from "@fastify/rate-limit";
+import { ResError } from "./utils/responseClasses";
+import fastifyHelmet from "@fastify/helmet";
 
 dotenv.config();
 
@@ -30,11 +34,38 @@ const server = fastify({
 
 const start = async () => {
   try {
+    await server.register(fastifyCors, {
+      origin: [" http://[::1]:3000"],
+      methods: ["GET", "POST", "DELETE", "PUT"],
+      allowedHeaders: ["Content-Type", "Authorization", "X-API-KEY"],
+      credentials: true,
+    });
+
+    await server.register(fastifyRateLimit, {
+      global: true,
+      max: 100,
+      timeWindow: 60000,
+      ban: 5,
+      cache: 10000,
+      keyGenerator(req: FastifyRequest) {
+        return (req.headers["x-api-key"] as string) || req.ip;
+      },
+    });
+
+    /*await server.register(fastifyHelmet, {
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+        },
+      },
+    });*/
+
     await server.register(require("@fastify/static"), {
       root: path.join(process.cwd(), "public"),
       prefix: "/public/", // optional: default '/'
     });
-    console.log("✅ Static files registered from /public");
 
     await server.register(prismaPlugin);
     await server.register(productRoutes, { prefix: "/api/" });
@@ -55,7 +86,27 @@ const start = async () => {
     await server.register(authRouters, {
       prefix: "/api/auth/",
     });
-    server.log.info(`Prisma available: ${!!server.prisma}`);
+
+    server.addHook("onRequest", async (request, reply) => {
+      const apiKey = request.headers["x-api-key"] as string;
+      const validKeys = new Set([process.env.APi_key_1, process.env.APi_key_2]);
+
+      if (request.url.startsWith("/api")) {
+        if (!apiKey || !validKeys.has(apiKey)) {
+          return reply
+            .status(401)
+            .send(
+              new ResError(
+                401,
+                "Invalid or missing API key",
+                "unauthorized call"
+              )
+            );
+        }
+      } else {
+        return;
+      }
+    });
 
     const myPort: number = Number(process.env.MY_PORT) || 5445;
     server.listen({ port: myPort }, (err, adress) => {

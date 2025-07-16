@@ -24,6 +24,9 @@
                     d="M16.5 21C17.3284 21 18 20.3284 18 19.5C18 18.6716 17.3284 18 16.5 18C15.6716 18 15 18.6716 15 19.5C15 20.3284 15.6716 21 16.5 21Z"
                     fill="black" />
             </svg>
+            <p x-show=" $store.cart.count"
+                class=" bg-red-500 h-3 w-3 rounded-full absolute bottom-5 animate-bounce right-0 z-10">
+            </p>
         </a>
 
         <button x-on:click="open=!open" class=" md:hidden flex">

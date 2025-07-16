@@ -22,17 +22,44 @@ const discountRoutes_1 = require("./routes/discountRoutes");
 const viewRoutes_1 = require("./routes/viewRoutes");
 const edge_1 = require("./plugins/edge");
 const path_1 = __importDefault(require("path"));
+const cors_1 = __importDefault(require("@fastify/cors"));
+const rate_limit_1 = __importDefault(require("@fastify/rate-limit"));
+const responseClasses_1 = require("./utils/responseClasses");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
 });
 const start = async () => {
     try {
+        await server.register(cors_1.default, {
+            origin: [" http://[::1]:3000"],
+            methods: ["GET", "POST", "DELETE", "PUT"],
+            allowedHeaders: ["Content-Type", "Authorization", "X-API-KEY"],
+            credentials: true,
+        });
+        await server.register(rate_limit_1.default, {
+            global: true,
+            max: 100,
+            timeWindow: 60000,
+            ban: 5,
+            cache: 10000,
+            keyGenerator(req) {
+                return req.headers["x-api-key"] || req.ip;
+            },
+        });
+        /*await server.register(fastifyHelmet, {
+          contentSecurityPolicy: {
+            directives: {
+              defaultSrc: ["'self'"],
+              scriptSrc: ["'self'", "'unsafe-inline'"],
+              styleSrc: ["'self'", "'unsafe-inline'"],
+            },
+          },
+        });*/
         await server.register(require("@fastify/static"), {
             root: path_1.default.join(process.cwd(), "public"),
             prefix: "/public/", // optional: default '/'
         });
-        console.log("✅ Static files registered from /public");
         await server.register(prisma_1.default);
         await server.register(productRoutes_1.productRoutes, { prefix: "/api/" });
         await server.register(categoryRoutes_1.categoryRoutes, { prefix: "/api/" });
@@ -51,7 +78,20 @@ const start = async () => {
         await server.register(authRoutes_1.authRouters, {
             prefix: "/api/auth/",
         });
-        server.log.info(`Prisma available: ${!!server.prisma}`);
+        server.addHook("onRequest", async (request, reply) => {
+            const apiKey = request.headers["x-api-key"];
+            const validKeys = new Set([process.env.APi_key_1, process.env.APi_key_2]);
+            if (request.url.startsWith("/api")) {
+                if (!apiKey || !validKeys.has(apiKey)) {
+                    return reply
+                        .status(401)
+                        .send(new responseClasses_1.ResError(401, "Invalid or missing API key", "unauthorized call"));
+                }
+            }
+            else {
+                return;
+            }
+        });
         const myPort = Number(process.env.MY_PORT) || 5445;
         server.listen({ port: myPort }, (err, adress) => {
             if (err) {
