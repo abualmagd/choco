@@ -80,7 +80,7 @@ const start = async () => {
         });
         server.addHook("onRequest", async (request, reply) => {
             const apiKey = request.headers["x-api-key"];
-            const validKeys = new Set([process.env.APi_key_1, process.env.APi_key_2]);
+            const validKeys = new Set([process.env.API_KEY_1, process.env.API_KEY_2]);
             if (request.url.startsWith("/api")) {
                 if (!apiKey || !validKeys.has(apiKey)) {
                     return reply

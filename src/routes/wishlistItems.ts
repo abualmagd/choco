@@ -29,9 +29,12 @@ export const wishItemsRoutes: FastifyPluginAsync = async (
     { preHandler: isAuthenticate },
     async (request, reply) => {
       try {
-        const itemData = request.body as Prisma.WishlistItemCreateInput;
+        const { productId } = request.body as { productId: string };
         const wishlistitem = await fastify.prisma.wishlistItem.create({
-          data: itemData,
+          data: {
+            userId: request.session.user?.id!,
+            productId: parseInt(productId),
+          },
         });
         return reply.send(wishlistitem);
       } catch (error) {

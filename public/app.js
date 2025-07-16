@@ -1,5 +1,4 @@
 document.addEventListener("alpine:init", () => {
-  console.log("alpine init");
   Alpine.store("productGallery", {
     instance: null,
     setInstance(instance) {
@@ -37,13 +36,13 @@ document.addEventListener("alpine:init", () => {
     async addToCart() {
       this.isLoading = true;
       try {
-        console.log("hel");
         await addToCartApi({
           productId: this.productId,
           qauntity: this.count,
         });
 
         Alpine.store("cart").updateCart();
+        notify(" product added to your cart");
         this.isLoading = false;
       } catch (error) {
         this.error = error;
@@ -54,15 +53,19 @@ document.addEventListener("alpine:init", () => {
   }));
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  Alpine.start();
+});
+
+window.API_KEY = '{{ env("API_KEY_1") }}';
+
 window.addToCartApi = async function AddToCart(data) {
   try {
-    console.log("start adding");
     const response = await fetch("/api/cart/add", {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        "x-api-key":
-          "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE",
+        "x-api-key": window.API_KEY,
       },
       method: "POST",
     });
@@ -76,6 +79,38 @@ window.addToCartApi = async function AddToCart(data) {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  Alpine.start();
-});
+window.notify = (message, error = false) => {
+  Toastify({
+    text: message,
+    gravity: "bottom",
+    stopOnFocus: true,
+    position: "center",
+    close: true,
+    duration: 3000,
+    style: {
+      background: error
+        ? "linear-gradient(to right, #c62336, #f94845)"
+        : "linear-gradient(to right, #3fea2c, #31c47f)",
+    },
+  }).showToast();
+};
+
+window.addToWishList = async (data) => {
+  try {
+    const response = await fetch("/api/wishItems", {
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": window.API_KEY,
+      },
+      method: "POST",
+    });
+    console.log(response);
+    if (!response.ok) {
+      throw new Error("Failed to add to cart");
+    }
+    return response.json();
+  } catch (error) {
+    throw error;
+  }
+};
