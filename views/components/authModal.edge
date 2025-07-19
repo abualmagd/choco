@@ -1,0 +1,123 @@
+<dialog id="authModal" role="dialog" x-ref="dialog" x-data="authModalComponent" class=" rounded-lg" x-transition
+    @keydown.escape.window="closeDialog">
+    <div class=" p-5 relative  max-h-[90vh] w-[90vw] max-w-[50rem] md:w-[50rem]">
+        <a href="#" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" x-on:click="$refs.dialog.close()">
+            ✕
+        </a>
+        <div class="flex flex-row h-[90%] w-[95%]  mx-auto gap-4 overflow-y-hidden transition-all duration-1000 ease-linear
+            ">
+            <div class="md:flex hidden image-div  md:w-1/2 py-5 px-1 transition-all duration-500 ease-linear z-20"
+                :class="{'translate-x-full':isLoginView}">
+                <div
+                    class="w-full flex flex-col  justify-between px-8 text-black h-full rounded-xl bg-gradient-to-br  from-primary to-primary/80">
+                    <h1 class=" text-xl mt-10  font-bold ">
+                        Start
+                        <br />
+                        Shopping easily with <br />
+                        our <span class="platform">platform.</span>
+                    </h1>
+                    <p class="text-xs my-5">
+                        Shop smarter. Master your style with our curated collections and discover daily deals.
+                    </p>
+                    <img alt="coding illustarion -programing learning" src="/public/assetes/images/logo.svg"
+                        class=" w-72  h-44 " />
+                </div>
+            </div>
+            <div class="login flex flex-col  md:w-1/2 w-full py-5 justify-center items-center transition-all
+                duration-500 ease-linear " :class="{'md:-translate-x-full  md:pr-8':isLoginView,'pr-2':!isLoginView}">
+                <div class="flex flex-col  mx-auto justify-center mb-2">
+                    <img src="/public/assetes/images/logo.svg" width="80" height="80" alt="codefray logo learn coding and
+                        master web development" />
+                </div>
+
+                <template x-if="isLoginView">
+                    <strong class=" text-lg" x-text="'Welcome back!'">
+
+                    </strong>
+                    <p class=" text-xs my-2 text-secondary/50">
+                        please login to your account
+                    </p>
+                </template>
+
+                <template x-if="!isLoginView">
+                    <strong class=" text-lg" x-text="'Join Us!'">
+
+                    </strong>
+                    <p class=" text-xs my-2 text-secondary/50">
+                        please create your account
+                    </p>
+                </template>
+                <form @submit.prevent="LoginWithEmail" class=" flex flex-col my-3 w-full gap-3">
+                    <input type="email" name="email" id="email" x-model="email" required placeholder="Email adress"
+                        class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full" />
+                    <input type="password" name="password" id="password" x-model="password" required
+                        class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full"
+                        placeholder="Password must be 6 digits" />
+                    <a href="/" class=" text-xs text-gray-300 ml-auto" x-show="isLoginView">
+                        forget password
+                    </a>
+
+                    <template x-if="promise==='loading'">
+
+                        <div class="flex w-24 justify-center mx-auto mt-2">
+                            <img src="/public/assetes/images/spinner.svg" width="25" height="25"
+                                alt=" spinner for loading data" class=" animate-spin" />
+                        </div>
+
+                    </template>
+
+                    <template x-if="promise==='waiting'&isLoginView ">
+                        <div class=" w-full gap-2 flex  flex-col">
+                            <input type="submit" value="Login"
+                                class="rounded-md cursor-pointer py-2   bg-blue-400 mt-2" />
+                            <p class="text-xs mx-auto text-gray-500">
+                                ╼╼╼╼╼╼ or login with ╼╼╼╼╼╼
+                            </p>
+                        </div>
+
+                    </template>
+
+                    <template x-if="promise==='waiting'&!isLoginView ">
+                        <div class=" w-full gap-2 flex  flex-col">
+                            <input type="submit" value="Register"
+                                class="rounded-md cursor-pointer py-2   bg-blue-400 mt-2" />
+                            <p class="text-xs mx-auto text-gray-500">
+                                ╼╼╼╼╼╼ or register with ╼╼╼╼╼╼
+                            </p>
+                        </div>
+
+                    </template>
+                    <div class="flex gap-3 mt-3 w-full px-3 justify-center">
+                        <div x-on:click="signUserGithub"
+                            class="github  w-1/2 rounded-md cursor-pointer py-2 border text-center ">
+                            Google
+                        </div>
+                        <div x-on:click="signUserDiscord"
+                            class="Discord w-1/2 rounded-md cursor-pointer py-2 border text-center">
+                            Facebook
+                        </div>
+                    </div>
+
+                    <template x-if="isLoginView">
+                        <div class="text-xs mx-auto">
+                            Don't have account?
+                            <span x-on:click="toggleState" x-text="'SignUp'"
+                                class="cursor-pointer text-primary font-semibold"></span>
+                            </span>
+                        </div>
+                    </template>
+
+                    <template x-if="!isLoginView">
+                        <div class="text-xs mx-auto">
+                            Already have account?
+                            <span x-on:click="toggleState" class="cursor-pointer text-primary font-semibold">
+                                Login
+                            </span>
+                        </div>
+                    </template>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</dialog>

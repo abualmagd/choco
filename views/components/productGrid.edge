@@ -1,4 +1,4 @@
-<div class=" grid md:grid-cols-2 grid-cols-1 gap-14 justify-items-center w-full h-[500px]">
+<div class=" grid md:grid-cols-2 grid-cols-1 gap-14 justify-items-center w-full md:h-[500px]">
 
     <div class=" w-full h-full flex ">
 
@@ -7,7 +7,7 @@
         })
 
         @end
-        <div class=" flex flex-col  z-50 w-14 h-[420px] pl-1" x-data="{word:'hello'}">
+        <div class=" flex flex-col  z-50 w-14 h-[420px] pl-1" x-data="favoriteComponent({{product.id}})">
             <button x-on:click=" await navigator.share({
                   text: 'description',
                     url: 'http/speaksnaps.com',
@@ -22,12 +22,17 @@
                         stroke="#141414" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-            <button x-on:click="'like'" class="  bg-[#F2F2F2] rounded-md  p-2 mb-auto flex justify-center items-center">
-                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button x-on:click="addToWish()" x-bind:disabled="isLoading"
+                class="  bg-[#F2F2F2] rounded-md  p-2 mb-auto flex justify-center items-center">
+                <svg width="20" height="18" viewBox="0 0 20 18" xmlns="http://www.w3.org/2000/svg"
+                    :fill="isLiked ? '#EF4444' : 'none'">
                     <path
                         d="M16.2187 2.35763C13.9839 0.986868 12.0335 1.53927 10.8618 2.41918C10.3813 2.77998 10.1412 2.96037 9.99984 2.96037C9.8585 2.96037 9.61834 2.77998 9.13784 2.41918C7.96619 1.53927 6.01574 0.986868 3.78104 2.35763C0.848228 4.15663 0.184604 10.0916 6.94944 15.0987C8.23794 16.0523 8.88217 16.5292 9.99984 16.5292C11.1175 16.5292 11.7618 16.0523 13.0503 15.0987C19.8151 10.0916 19.1514 4.15663 16.2187 2.35763Z"
                         stroke="#141414" stroke-width="1.5" stroke-linecap="round" />
                 </svg>
+            </button>
+            <button x-on:click="window.openAuthModal()">
+                modal
             </button>
 
             <div class=" flex flex-col gap-2">
