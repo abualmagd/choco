@@ -10,23 +10,22 @@
                 :class="{'translate-x-full':isLoginView}">
                 <div
                     class="w-full flex flex-col  justify-between px-8 text-black h-full rounded-xl bg-gradient-to-br  from-primary to-primary/80">
-                    <h1 class=" text-xl mt-10  font-bold ">
-                        Start
-                        <br />
-                        Shopping easily with <br />
-                        our <span class="platform">platform.</span>
+                    <span class="text-2xl mt-10 font-bold">
+                        {{firstWord}}
+                    </span>
+                    <h1 class="mt-0 text-2xl  leading-snug w-52  font-bold ">
+                        {{loginHeading}}
                     </h1>
                     <p class="text-xs my-5">
-                        Shop smarter. Master your style with our curated collections and discover daily deals.
+                        {{loginParagraph}}
                     </p>
-                    <img alt="coding illustarion -programing learning" src="/public/assetes/images/logo.svg"
-                        class=" w-72  h-44 " />
+                    <img alt="coding illustarion -programing learning" src="{{logoImage}}" class=" w-72  h-44 " />
                 </div>
             </div>
             <div class="login flex flex-col  md:w-1/2 w-full py-5 justify-center items-center transition-all
                 duration-500 ease-linear " :class="{'md:-translate-x-full  md:pr-8':isLoginView,'pr-2':!isLoginView}">
                 <div class="flex flex-col  mx-auto justify-center mb-2">
-                    <img src="/public/assetes/images/logo.svg" width="80" height="80" alt="codefray logo learn coding and
+                    <img src="{{logoImage}}" width="80" height="80" alt="codefray logo learn coding and
                         master web development" />
                 </div>
 
@@ -47,12 +46,44 @@
                         please create your account
                     </p>
                 </template>
-                <form @submit.prevent="LoginWithEmail" class=" flex flex-col my-3 w-full gap-3">
+                <form @submit.prevent="isLoginView?LoginWithEmail:RegisterUser"
+                    class=" flex flex-col my-3 w-full gap-3">
                     <input type="email" name="email" id="email" x-model="email" required placeholder="Email adress"
-                        class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full" />
-                    <input type="password" name="password" id="password" x-model="password" required
                         class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full"
-                        placeholder="Password must be 6 digits" />
+                        autocomplete="email" />
+                    <div class=" flex border rounded-md p-2  items-center h-10">
+                        <input :type="showPassword ? 'text' : 'password'" name="password" id="password"
+                            x-model="password" required class="input border-none  outline-none bg-transparent w-full"
+                            placeholder="Password must be 6 digits" autocomplete="current-password" />
+                        <div x-on:click="toggleShowPassword"
+                            class=" flex items-center justify-center cursor-pointer h-4 w-4">
+                            <svg x-show="showPassword" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M3.61399 4.21063C3.17804 3.87156 2.54976 3.9501 2.21069 4.38604C1.87162 4.82199 1.95016 5.45027 2.38611 5.78934L4.66386 7.56093C3.78436 8.54531 3.03065 9.68043 2.41854 10.896L2.39686 10.9389C2.30554 11.1189 2.18764 11.3514 2.1349 11.6381C2.09295 11.8661 2.09295 12.1339 2.1349 12.3618C2.18764 12.6485 2.30554 12.881 2.39686 13.0611L2.41854 13.104C4.35823 16.956 7.71985 20 12.0001 20C14.2313 20 16.2129 19.1728 17.8736 17.8352L20.3861 19.7893C20.8221 20.1284 21.4503 20.0499 21.7894 19.6139C22.1285 19.178 22.0499 18.5497 21.614 18.2106L3.61399 4.21063ZM16.2411 16.5654L14.4434 15.1672C13.7676 15.6894 12.9201 16 12.0001 16C9.79092 16 8.00006 14.2091 8.00006 12C8.00006 11.4353 8.11706 10.898 8.32814 10.4109L6.24467 8.79044C5.46659 9.63971 4.77931 10.6547 4.20485 11.7955C4.17614 11.8525 4.15487 11.8948 4.13694 11.9316C4.12114 11.964 4.11132 11.9853 4.10491 12C4.11132 12.0147 4.12114 12.036 4.13694 12.0684C4.15487 12.1052 4.17614 12.1474 4.20485 12.2045C5.9597 15.6894 8.76726 18 12.0001 18C13.5314 18 14.9673 17.4815 16.2411 16.5654ZM10.0187 11.7258C10.0064 11.8154 10.0001 11.907 10.0001 12C10.0001 13.1046 10.8955 14 12.0001 14C12.2667 14 12.5212 13.9478 12.7538 13.8531L10.0187 11.7258Z"
+                                    fill="#0F1729" />
+                                <path
+                                    d="M10.9506 8.13908L15.9995 12.0661C15.9999 12.0441 16.0001 12.022 16.0001 12C16.0001 9.79085 14.2092 7.99999 12.0001 7.99999C11.6369 7.99999 11.285 8.04838 10.9506 8.13908Z"
+                                    fill="#0F1729" />
+                                <path
+                                    d="M19.7953 12.2045C19.4494 12.8913 19.0626 13.5326 18.6397 14.1195L20.2175 15.3467C20.7288 14.6456 21.1849 13.8917 21.5816 13.104L21.6033 13.0611C21.6946 12.881 21.8125 12.6485 21.8652 12.3618C21.9072 12.1339 21.9072 11.8661 21.8652 11.6381C21.8125 11.3514 21.6946 11.1189 21.6033 10.9389L21.5816 10.896C19.6419 7.04402 16.2803 3.99998 12.0001 3.99998C10.2848 3.99998 8.71714 4.48881 7.32934 5.32257L9.05854 6.66751C9.98229 6.23476 10.9696 5.99998 12.0001 5.99998C15.2329 5.99998 18.0404 8.31058 19.7953 11.7955C19.824 11.8525 19.8453 11.8948 19.8632 11.9316C19.879 11.964 19.8888 11.9853 19.8952 12C19.8888 12.0147 19.879 12.036 19.8632 12.0684C19.8453 12.1052 19.824 12.1474 19.7953 12.2045Z"
+                                    fill="#0F1729" />
+                            </svg>
+                            <svg x-show="!showPassword" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round"
+                                stroke-linejoin="miter">
+                                <path d="M2,12S5,4,12,4s10,8,10,8-2,8-10,8S2,12,2,12Z"></path>
+                                <circle cx="12" cy="12" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <input x-show="!isLoginView" type="tel" name="phone" id="phone" x-model="phone"
+                        class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full"
+                        placeholder="Phone" />
+                    <input x-show="!isLoginView" type="text" name="name" id="name" x-model="name"
+                        class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full"
+                        placeholder="Name" />
                     <a href="/" class=" text-xs text-gray-300 ml-auto" x-show="isLoginView">
                         forget password
                     </a>

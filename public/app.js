@@ -75,6 +75,16 @@ document.addEventListener("alpine:init", () => {
     async addToWish() {
       this.isLoading = true;
       try {
+        if (this.isLiked) {
+          await removeFromWishList(productId);
+
+          this.isLiked = false;
+          notify("product removed from wishlist");
+          if (this.likedList.includes(productId)) {
+            const filtered = this.likedList.filter((e) => e !== productId);
+            localStorage.setItem("likedList", JSON.stringify(filtered));
+          }
+        }
         await addToWishList({
           productId: productId,
         });
@@ -86,8 +96,13 @@ document.addEventListener("alpine:init", () => {
           localStorage.setItem("likedList", JSON.stringify(this.likedList));
         }
       } catch (error) {
-        notify(error, true);
-        this.isLoading = false;
+        if (error == "Error: Unauthorized") {
+          window.openAuthModal();
+          this.isLoading = false;
+        } else {
+          notify(error, true);
+          this.isLoading = false;
+        }
       }
     },
   }));
@@ -96,7 +111,10 @@ document.addEventListener("alpine:init", () => {
     isLoginView: true,
     email: null,
     password: null,
+    name: null,
+    phone: null,
     promise: "waiting",
+    showPassword: false,
 
     init() {
       window.openAuthModal = () => {
@@ -111,6 +129,10 @@ document.addEventListener("alpine:init", () => {
       this.isLoginView = !this.isLoginView;
     },
 
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword;
+    },
+
     async LoginWithEmail() {
       this.promise = "loading";
       try {
@@ -120,6 +142,26 @@ document.addEventListener("alpine:init", () => {
         });
         this.promise = "done";
         notify("logined seccussfully");
+        this.$refs.dialog.close();
+      } catch (error) {
+        notify(error, true);
+        this.promise = "done";
+      } finally {
+        this.promise = "waiting";
+      }
+    },
+
+    async RegisterUser() {
+      this.promise = "loading";
+      try {
+        await registerEmail({
+          email: this.email,
+          password: this.password,
+          name: this.name,
+          phone: this.phone,
+        });
+        this.promise = "done";
+        notify("registerd seccussfully");
         this.$refs.dialog.close();
       } catch (error) {
         notify(error, true);
@@ -183,10 +225,35 @@ window.addToWishList = async (data) => {
       method: "POST",
       credentials: "include",
     });
-    console.log(response);
+
     if (!response.ok) {
       if (response.statusText === "Unauthorized") {
-        throw new Error("You shoud login first");
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error("Failed to add to wishlist");
+      }
+    }
+    return response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+window.removeFromWishList = async (id) => {
+  try {
+    const response = await fetch(`/api/wishItems/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key":
+          "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE",
+      },
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      if (response.statusText === "Unauthorized") {
+        throw new Error("Unauthorized");
       } else {
         throw new Error("Failed to add to wishlist");
       }
@@ -209,7 +276,7 @@ window.loginEmail = async (data) => {
       method: "POST",
       credentials: "include",
     });
-    console.log(response);
+
     if (!response.ok) {
       if (response.status === 401) throw new Error("wrong email or password");
       throw new Error("Failed to login");
@@ -217,5 +284,48 @@ window.loginEmail = async (data) => {
     return response.json();
   } catch (error) {
     throw error;
+  }
+};
+
+window.registerEmail = async (data) => {
+  try {
+    const response = await fetch("/api/auth/register", {
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key":
+          "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE",
+      },
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      if (response.status === 401)
+        throw new Error("user may be registered before");
+      throw new Error("Failed to register");
+    }
+    return response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+window.logoutUser = async () => {
+  console.log("log out");
+  try {
+    await fetch("/api/auth/logout", {
+      body: JSON.stringify({}),
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key":
+          "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE",
+      },
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (error) {
+    window.notify(error);
+    console.log(error, " from logout");
   }
 };

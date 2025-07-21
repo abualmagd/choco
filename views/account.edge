@@ -1,0 +1,18 @@
+@layout('components/layout/app')
+
+@set('title', 'Styllish')
+
+@section('content')
+<div x-data="">
+    @if(user)
+    <button x-on:click="window.logoutUser()">
+        logout {{user.id}}
+    </button>
+    @else
+    <button x-on:click="window.openAuthModal()">
+        log in
+    </button>
+    @end
+
+</div>
+@end

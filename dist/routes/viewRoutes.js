@@ -87,5 +87,18 @@ const viewRoutes = async (fastify, opt) => {
             return reply.send(error);
         }
     });
+    fastify.get("/account", async (request, reply) => {
+        const userId = request.session.user?.id;
+        if (!userId) {
+            return reply.view("account", { user: null });
+        }
+        const user = await fastify.prisma.user.findUnique({
+            where: { id: userId },
+        });
+        if (!user) {
+            return reply.view("account", { user: null });
+        }
+        return reply.view("account", { user: user });
+    });
 };
 exports.viewRoutes = viewRoutes;
