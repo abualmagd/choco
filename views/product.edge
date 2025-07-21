@@ -1,6 +1,18 @@
 @layout('components/layout/app')
 
-@set('title', 'Styllish')
+@set('title', 'Styllish'+ "-"+ data.product.slug)
+
+@set('seotags', {
+description:data.product.seoDescription,
+canonical: "/products/"+data.product.slug,
+ogTitle:data.product.seoTitle,
+ogDescription:data.product.seoDescription,
+ogImage: data.product.images,
+ogUrl:"/products/"+data.product.slug,
+twitterSite:'@mywebsite',
+twitterCreator:'@myusername',
+robots:'index, follow'
+})
 
 
 @section('content')

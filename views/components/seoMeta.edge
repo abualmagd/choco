@@ -1,0 +1,53 @@
+@set('title', title || 'Default Site Title')
+@set('description', description || 'Default meta description')
+@set('keywords', keywords || '')
+@set('canonical', canonical || '')
+@set('ogTitle', ogTitle || title || 'Default Site Title')
+@set('ogDescription', ogDescription || description || 'Default meta description')
+@set('ogImage', ogImage || '')
+@set('ogUrl', ogUrl || '')
+@set('twitterCard', twitterCard || 'summary_large_image')
+@set('twitterSite', twitterSite || '')
+@set('twitterCreator', twitterCreator || '')
+@set('robots', robots || 'index, follow')
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+
+@if(keywords)
+<meta name="keywords" content="{{ keywords }}">
+@endif
+
+@if(canonical)
+<link rel="canonical" href="{{ canonical }}">
+@endif
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ ogTitle }}">
+<meta property="og:description" content="{{ ogDescription }}">
+@if(ogUrl)
+<meta property="og:url" content="{{ ogUrl }}">
+@endif
+@if(ogImage)
+<meta property="og:image" content="{{ ogImage }}">
+@endif
+
+<!-- Twitter -->
+<meta name="twitter:card" content="{{ twitterCard }}">
+@if(twitterSite)
+<meta name="twitter:site" content="{{ twitterSite }}">
+@endif
+@if(twitterCreator)
+<meta name="twitter:creator" content="{{ twitterCreator }}">
+@endif
+<meta name="twitter:title" content="{{ ogTitle }}">
+<meta name="twitter:description" content="{{ ogDescription }}">
+@if(ogImage)
+<meta name="twitter:image" content="{{ ogImage }}">
+@endif
+
+<!-- Robots -->
+<meta name="robots" content="{{ robots }}">

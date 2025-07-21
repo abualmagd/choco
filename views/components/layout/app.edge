@@ -2,13 +2,25 @@
 <html>
 
 <head>
-  <title>{{ title }}</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/public/styles/app.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
+  @!component('components/seoMeta', {
+  title: title,
+  description: seotags?.description??'This is a detailed description of my awesome page for SEO purposes',
+  keywords:seotags?.keywords?? 'adonisjs, edge, seo, meta tags',
+  canonical:seotags?.canonical?? 'https://example.com/my-awesome-page',
+  ogTitle:seotags?.ogTitle?? 'My Awesome Page - Share This!',
+  ogDescription:seotags?.ogDescription?? 'Check out this awesome content you might like!',
+  ogImage:seotags?.ogImage?? 'https://example.com/images/share-image.jpg',
+  ogUrl:seotags?.ogUrl?? 'https://example.com/my-awesome-page',
+  twitterSite:seotags?.twitterSite?? '@mywebsite',
+  twitterCreator:seotags?.twitterCreator?? '@myusername',
+  robots:seotags?.robots?? 'index, follow'
+  })
 
   <style>
     /* Container styling */
@@ -51,9 +63,9 @@
     @!component('../components/header',{tag:"Online Shop",
     links:[
     { title: 'Home', href: '/' },
-    { title: 'Men', href: '/men' },
-    { title: 'Women', href: '/women' },
-    { title: 'Trends', href: '/trends' },
+    { title: 'Men', href: '/category/men' },
+    { title: 'Women', href: '/category/women' },
+    { title: 'Trends', href: '/category/trends' },
     { title: 'Collections', href: '/collections' },
     { title: 'Sale', href: '/sale' },
     { title: 'Blog', href: '/blog' }

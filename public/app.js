@@ -143,6 +143,7 @@ document.addEventListener("alpine:init", () => {
         this.promise = "done";
         notify("logined seccussfully");
         this.$refs.dialog.close();
+        setTimeout(window.location.reload(), 2000);
       } catch (error) {
         notify(error, true);
         this.promise = "done";
@@ -324,6 +325,7 @@ window.logoutUser = async () => {
       method: "POST",
       credentials: "include",
     });
+    window.location.reload();
   } catch (error) {
     window.notify(error);
     console.log(error, " from logout");

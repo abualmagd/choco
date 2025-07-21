@@ -100,5 +100,9 @@ const viewRoutes = async (fastify, opt) => {
         }
         return reply.view("account", { user: user });
     });
+    fastify.get("/category/:slug", async (request, reply) => {
+        const { slug } = request.params;
+        return reply.view("category", { category: slug });
+    });
 };
 exports.viewRoutes = viewRoutes;
