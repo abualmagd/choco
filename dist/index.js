@@ -25,6 +25,7 @@ const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("@fastify/cors"));
 const rate_limit_1 = __importDefault(require("@fastify/rate-limit"));
 const responseClasses_1 = require("./utils/responseClasses");
+const userRoutes_1 = require("./routes/userRoutes");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -69,6 +70,7 @@ const start = async () => {
         await server.register(orderItems_1.orderItemsRoutes, { prefix: "/api/" });
         await server.register(wishlistItems_1.wishItemsRoutes, { prefix: "/api/" });
         await server.register(discountRoutes_1.discountRoutes, { prefix: "/api/" });
+        await server.register(userRoutes_1.userRoutes, { prefix: "/api/" });
         await server.register(viewRoutes_1.viewRoutes);
         await server.register(edge_1.EdgePlugin);
         await server.register(cookie_1.default);

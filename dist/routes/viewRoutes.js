@@ -94,6 +94,9 @@ const viewRoutes = async (fastify, opt) => {
         }
         const user = await fastify.prisma.user.findUnique({
             where: { id: userId },
+            include: {
+                addresses: true,
+            },
         });
         if (!user) {
             return reply.view("account", { user: null });

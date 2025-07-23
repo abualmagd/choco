@@ -24,7 +24,7 @@ import path from "path";
 import fastifyCors from "@fastify/cors";
 import fastifyRateLimit from "@fastify/rate-limit";
 import { ResError } from "./utils/responseClasses";
-import fastifyHelmet from "@fastify/helmet";
+import { userRoutes } from "./routes/userRoutes";
 
 dotenv.config();
 
@@ -76,8 +76,8 @@ const start = async () => {
     await server.register(orderItemsRoutes, { prefix: "/api/" });
     await server.register(wishItemsRoutes, { prefix: "/api/" });
     await server.register(discountRoutes, { prefix: "/api/" });
+    await server.register(userRoutes, { prefix: "/api/" });
     await server.register(viewRoutes);
-
     await server.register(EdgePlugin);
     await server.register(fastifyCookie);
     await server.register(fastifySession, sessionOption);

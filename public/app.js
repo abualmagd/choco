@@ -1,4 +1,5 @@
 document.addEventListener("alpine:init", () => {
+  console.log("alpine started ");
   Alpine.store("productGallery", {
     instance: null,
     setInstance(instance) {
@@ -172,6 +173,10 @@ document.addEventListener("alpine:init", () => {
       }
     },
   }));
+
+  Alpine.data("accountComponent", window.accountComponent);
+
+  Alpine.data("adressComponent", window.adressComponent);
 });
 
 window.API_KEY = '{{ env("API_KEY_1") }}';

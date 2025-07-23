@@ -68,7 +68,6 @@ model Address {
   street      String
   city        String
   state       String
-  zipCode     String
   country     String
   isDefault   Boolean   @default(false)
   user        User      @relation(fields: [userId], references: [id])
