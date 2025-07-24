@@ -1,4 +1,4 @@
-<div x-data="addressComponent({{ address}})" class=" mt-10">
+<div x-data="addressComponent({{address}})" class=" mt-10 border rounded-md p-4">
     <div class=" flex mb-4 justify-between">
         <h3 x-text="'address:'" class=" capitalize font-bold"></h3>
         <button x-on:click="id?toggleEditable:showInputs" x-text="id?'Edit Address':'Add new Address'"
@@ -8,40 +8,42 @@
 
     <form class=" grid md:grid-cols-2 grid-cols-1 gap-6" x-show="id?'true':show" @submit.prevent="updateAddress">
         <div class="mb-6">
-            <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label ::for="'country-'+id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Country</label>
-            <input name="country" type="text" id="country" value="country" x-model="country" x-bind:readonly="!editable"
+            <input name="country" type="text" :id="'country-'+id" value="country" x-model="country"
+                x-bind:readonly="!editable"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required />
         </div>
         <div class="mb-6">
-            <label for="state" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label :for="'state-'+id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 State</label>
-            <input type="text" name="state" id="state" value="state" x-model="state" x-bind:readonly="!editable"
+            <input type="text" name="state" :id="'state-'+id" value="state" x-model="state" x-bind:readonly="!editable"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required />
         </div>
         <div class="mb-6">
-            <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label :for="'city-'+id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 City</label>
-            <input type="text" id="city" name="city" value="city" x-model="city" x-bind:readonly="!editable"
+            <input type="text" :id="'city-'+id" name="city" value="city" x-model="city" x-bind:readonly="!editable"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required />
         </div>
 
         <div class="mb-6">
-            <label for="street" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label :for="'street-'+id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Street</label>
-            <input type="text" id="street" value="street" x-model="street" x-bind:readonly="!editable"
+            <input type="text" :id="'street-'+id" value="street" x-model="street" x-bind:readonly="!editable"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required />
         </div>
 
 
         <div class="mb-6  w-20  flex flex-row-reverse justify-center items-center ">
-            <label for="isDefault" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label :for="'isDefault-'+id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 isDefault</label>
-            <input type="checkbox" id="isDefault" value="isDefault" x-model="isDefault" x-bind:readonly="!editable"
+            <input type="checkbox" :id="'isDefault-'+id" value="isDefault" x-model="isDefault"
+                x-bind:readonly="!editable"
                 class="bg-gray-50 mb-2 cursor-pointer border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
         <template x-if="editable">

@@ -1,0 +1,24 @@
+@layout('components/layout/app')
+
+@set('title', 'Styllish'+ "-"+ cart)
+
+
+
+
+@section('content')
+
+@if(!data)
+<p>{{data}}</p>
+@else
+<div>
+    cart items here
+    <p>{{JSON.stringify(data)}}</p>
+</div>
+
+
+
+
+
+@end
+
+@end

@@ -3,7 +3,7 @@
 @set('title', 'Styllish')
 
 @section('content')
-<div x-data="accountComponent({{JSON.stringify(user)}})">
+<div x-data="accountComponent({{JSON.stringify(user)}})" class=" lg:w-full w-[90%] mx-auto">
     @if(user)
     <div class=" first-sectn flex flex-row justify-between items-end mb-4  w-full ">
         <img class="w-20 h-20 rounded-full" src="/public/assetes/images/shoes.jpg" alt="Rounded avatar">
@@ -36,9 +36,11 @@
         <button type="submit" x-show="editable"
             class="text-white h-10 mx-auto bg-blue-700 w-52 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
     </form>
-    <template x-for="address in user.addresses">
+    <template x-for="(address,index) in user.addresses">
+
         @component('components/newAdress', {
         address:'address',
+        key:index
         })
         @end
     </template>
@@ -50,16 +52,21 @@
 
 
 
+    <div class=" w-full text-center">
+        <button x-on:click="window.logoutUser()"
+            class="text-white h-10 my-10 bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
+            Log out
+        </button>
+    </div>
 
-    <button x-on:click="window.logoutUser()"
-        class="text-white h-10 my-10 bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
-        Log out
-    </button>
     @else
-    <button x-on:click="window.openAuthModal()"
-        class="text-white h-10 my-10 bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
-        Log in
-    </button>
+    <div class=" w-full text-center">
+        <button x-on:click="window.openAuthModal()"
+            class="text-white h-10 my-10   bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
+            Log in
+        </button>
+    </div>
+
     @end
 
 </div>
