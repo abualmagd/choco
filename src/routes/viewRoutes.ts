@@ -128,11 +128,20 @@ export const viewRoutes: FastifyPluginAsync = async (
 
   fastify.get("/cart", async (request, reply) => {
     const id = request.session.user?.id;
-
+    if (!id) {
+      return reply.redirect("/login?backto=cart");
+    }
     const cart = await fastify.prisma.cart.findUnique({
       where: { userId: id },
       include: {
-        items: true,
+        items: {
+          select: {
+            quantity: true,
+            id: true,
+            product: true,
+            variant: true,
+          },
+        },
       },
     });
     //console.log("cart", cart);
@@ -140,5 +149,9 @@ export const viewRoutes: FastifyPluginAsync = async (
       return reply.view("cart", { data: null });
     }
     return reply.view("cart", { data: cart });
+  });
+
+  fastify.get("/login", async (request, reply) => {
+    return reply.view("login");
   });
 };

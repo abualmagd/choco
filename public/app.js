@@ -24,6 +24,11 @@ document.addEventListener("alpine:init", () => {
       this.count = parseInt(this.count) + 1;
       localStorage.setItem("cartCount", this.count);
     },
+
+    clearItemCart() {
+      this.count = parseInt(this.count) - 1;
+      localStorage.setItem("cartCount", this.count);
+    },
   });
 
   Alpine.data("cartComponent", (productId) => ({
@@ -144,7 +149,11 @@ document.addEventListener("alpine:init", () => {
         this.promise = "done";
         notify("logined seccussfully");
         this.$refs.dialog.close();
-        setTimeout(window.location.reload(), 2000);
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const backto = urlParams.get("backto") ?? "";
+        const url = window.location.origin + "/" + backto;
+        setTimeout(window.location.replace(url), 2000);
       } catch (error) {
         notify(error, true);
         this.promise = "done";
@@ -177,6 +186,8 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("accountComponent", window.accountComponent);
 
   Alpine.data("adressComponent", window.adressComponent);
+
+  Alpine.data("itemCartComponent", window.itemCartComponent);
 });
 
 window.API_KEY = '{{ env("API_KEY_1") }}';

@@ -1,0 +1,48 @@
+<div class=" rounded h-28 mx-auto bg-slate-200 mb-5 items-center md:px-6 px-2  max-w-full w-[700px]  flex justify-between border-b-2"
+    x-data="itemCartComponent({{item}})">
+
+    @if(item.product!==null)
+    <div class=" rounded-full h-20 w-20 overflow-hidden bg-white border-2 border-black ">
+        <img :src="product.images?product.images[0]:'/public/assetes/images/shoes.jpg'"
+            class=" object-fill w-full h-full" />
+    </div>
+    <span x-text="product.slug??'product name'" class="flex max-w-18 h-8 overflow-hidden"></span>
+
+    <div class=" border-2 border-gray-200 flex md:w-28 w-20 h-10 items-center  justify-between">
+        <button x-on:click="icreamentQuantity" class=" text-2xl ml-2">+</button>
+        <p x-text="quantity" class=" text-2xl"></p>
+        <button x-on:click="decreamentQuantity" class=" text-2xl mr-2">-</button>
+    </div>
+
+    <span x-text="product.price??'00'">
+
+    </span>
+    <span x-text="computeTotal">
+
+    </span>
+    @else
+    <div class=" rounded-full h-20 w-20 overflow-hidden bg-white border-2 border-black ">
+        <img :src="variant.images?product.images[0]:'/public/assetes/images/shoes.jpg'"
+            class=" object-fill w-full h-full" />
+    </div>
+    <span x-text="variant.slug??'variant name'" class="flex max-w-18 h-8 overflow-hidden"></span>
+
+    <div class=" border-2 border-gray-200 flex md:w-28 w-20 h-10 items-center  justify-between">
+        <button x-on:click="icreamentQuantity" class=" text-2xl ml-2">+</button>
+        <p x-text="quantity" class=" text-2xl"></p>
+        <button x-on:click="decreamentQuantity" class=" text-2xl mr-2">-</button>
+    </div>
+
+    <span x-text="variant.price??'00'">
+
+    </span>
+    <span x-text="computeTotal">
+
+    </span>
+    @end
+
+
+    <button @click="removeItem">
+        X
+    </button>
+</div>

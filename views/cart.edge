@@ -8,11 +8,22 @@
 @section('content')
 
 @if(!data)
-<p>{{data}}</p>
+<div class=" flex w-full justify-center mt-6 font-bold">
+    <p>No items please choose products first <a href="/" class=" underline text-green-400">back to shopping</a></p>
+</div>
 @else
 <div>
-    cart items here
-    <p>{{JSON.stringify(data)}}</p>
+
+    @each(item in data.items)
+    @component('components/cartItem', {
+    item:JSON.stringify(item)
+    })
+    @end
+    @end
+    <div class="total-cart w-full flex border-t-2 mt-2 h-24 items-center justify-end justify-items-end">
+        <span>total: </span>
+        <span x-text="total"></span>
+    </div>
 </div>
 
 

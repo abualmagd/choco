@@ -48,6 +48,29 @@ export const cartRoutes: FastifyPluginAsync = async (
       try {
         const { itemId } = request.params;
         const { quantity } = request.query as { quantity: string };
+
+        //check valid stock or not
+        const item = await fastify.prisma.cartItem.findUnique({
+          where: { id: parseInt(itemId) },
+          include: {
+            product: true,
+            variant: true,
+          },
+        });
+        if (item?.product) {
+          if (item.product.inventoryQuantity < parseInt(quantity)) {
+            return reply
+              .status(500)
+              .send(new ResError(500, "invalid stock", "ivalid stock"));
+          }
+        } else {
+          if (item?.variant?.inventoryQuantity ?? 0 < parseInt(quantity)) {
+            return reply
+              .status(500)
+              .send(new ResError(500, "invalid stock", "ivalid stock"));
+          }
+        }
+
         const cartItem = await fastify.prisma.cartItem.update({
           where: { id: parseInt(itemId) },
           data: {

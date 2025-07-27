@@ -48,12 +48,12 @@
                 </template>
                 <form @submit.prevent="isLoginView?LoginWithEmail:RegisterUser"
                     class=" flex flex-col my-3 w-full gap-3">
-                    <input type="email" name="email" id="email" x-model="email" required placeholder="Email adress"
+                    <input type="email" name="email" x-model="email" required placeholder="Email adress"
                         class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full"
                         autocomplete="email" />
                     <div class=" flex border rounded-md p-2  items-center h-10">
-                        <input :type="showPassword ? 'text' : 'password'" name="password" id="password"
-                            x-model="password" required class="input border-none  outline-none bg-transparent w-full"
+                        <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password" required
+                            class="input border-none  outline-none bg-transparent w-full"
                             placeholder="Password must be 6 digits" autocomplete="current-password" />
                         <div x-on:click="toggleShowPassword"
                             class=" flex items-center justify-center cursor-pointer h-4 w-4">
@@ -78,10 +78,10 @@
                         </div>
                     </div>
 
-                    <input x-show="!isLoginView" type="tel" name="phone" id="phone" x-model="phone"
+                    <input x-show="!isLoginView" type="tel" name="phone" x-model="phone"
                         class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full"
                         placeholder="Phone" />
-                    <input x-show="!isLoginView" type="text" name="name" id="name" x-model="name"
+                    <input x-show="!isLoginView" type="text" name="name" x-model="name"
                         class="input border rounded-md p-2  h-10  outline-none bg-transparent w-full"
                         placeholder="Name" />
                     <a href="/" class=" text-xs text-gray-300 ml-auto" x-show="isLoginView">
