@@ -64,7 +64,7 @@
         <p class=" text-red-400 text-2xl" x-text="error" x-show="error"></p>
 
         <div class=" flex w-full gap-3">
-            <button
+            <button @click="buyNow()"
                 class=" capitalize flex-1 bg-blue-800 shadow-md rounded-md h-10 text-white font-semibold flex items-center justify-center">buy
                 now</button>
             <button x-on:click="addToCart()" x-bind:disabled="isLoading" x-text="isLoading?'adding...':'add to cart'"

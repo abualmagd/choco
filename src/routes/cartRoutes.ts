@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { CustomResponse, ResError } from "../utils/responseClasses";
 import { hashPassword } from "../authentication/auth";
+import { isAuthenticate } from "../authentication/middleware";
 
 export const cartRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
@@ -26,6 +27,66 @@ export const cartRoutes: FastifyPluginAsync = async (
       return reply.send(error);
     }
   });
+
+  //get cart total
+  fastify.get(
+    "/cart/total",
+    { preHandler: isAuthenticate },
+    async (request, reply) => {
+      const id = request.session.user?.id;
+      const cartItems = await fastify.prisma.cart.findUnique({
+        where: { userId: id },
+        include: {
+          items: {
+            select: {
+              quantity: true,
+              id: true,
+              product: true,
+              variant: true,
+            },
+          },
+        },
+      });
+      let total = 0;
+      if (cartItems) {
+        for (let i = 0; i < cartItems.items.length; i++) {
+          const activeDisccout = await fastify.prisma.discount.findFirst({
+            where: {
+              products: {
+                some: {
+                  id:
+                    cartItems.items[i].product.id ??
+                    cartItems.items[i].variant?.productId,
+                },
+              },
+              isActive: true,
+            },
+          });
+
+          if (cartItems.items[i].product) {
+            const price =
+              cartItems.items[i].quantity *
+              Number(cartItems.items[i].product.price);
+            total += price; //* (100 - Number(activeDisccout?.value));
+          } else {
+            const price =
+              cartItems.items[i].quantity *
+              Number(cartItems.items[i].variant?.price);
+            total += price; //* (100 - Number(activeDisccout?.value));
+          }
+        }
+
+        return reply.send(
+          new CustomResponse(
+            {
+              total: total,
+            },
+            null
+          )
+        );
+      }
+    }
+  );
 
   //create cart for user
   fastify.post("/cart", async (request, reply) => {

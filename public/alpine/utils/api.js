@@ -121,8 +121,7 @@ window.removeCartItem = async (id) => {
 
 // to backend return cart total price
 window.cartTotalPrice = async () => {
-  const res = await fetch(`/api/cart`, {
-    body: JSON.stringify({}),
+  const res = await fetch(`/api/cart/total`, {
     headers: {
       "Content-Type": "application/json",
       "x-api-key":
@@ -135,14 +134,6 @@ window.cartTotalPrice = async () => {
     throw Error(res.statusText);
   } else {
     const data = await res.json();
-    let total;
-    for (item in data.items) {
-      const pr = item.product
-        ? item.quantity * item.product.price
-        : item.quantity * item.variant.price;
-      total += pr;
-    }
-
-    return total;
+    return data.data.total;
   }
 };

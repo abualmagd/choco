@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cartRoutes = void 0;
 const responseClasses_1 = require("../utils/responseClasses");
 const auth_1 = require("../authentication/auth");
+const middleware_1 = require("../authentication/middleware");
 const cartRoutes = async (fastify, opt) => {
     //GET /api/cart - Get user's cart
     fastify.get("/cart", async (request, reply) => {
@@ -22,6 +23,52 @@ const cartRoutes = async (fastify, opt) => {
         }
         catch (error) {
             return reply.send(error);
+        }
+    });
+    //get cart total
+    fastify.get("/cart/total", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
+        const id = request.session.user?.id;
+        const cartItems = await fastify.prisma.cart.findUnique({
+            where: { userId: id },
+            include: {
+                items: {
+                    select: {
+                        quantity: true,
+                        id: true,
+                        product: true,
+                        variant: true,
+                    },
+                },
+            },
+        });
+        let total = 0;
+        if (cartItems) {
+            for (let i = 0; i < cartItems.items.length; i++) {
+                const activeDisccout = await fastify.prisma.discount.findFirst({
+                    where: {
+                        products: {
+                            some: {
+                                id: cartItems.items[i].product.id ??
+                                    cartItems.items[i].variant?.productId,
+                            },
+                        },
+                        isActive: true,
+                    },
+                });
+                if (cartItems.items[i].product) {
+                    const price = cartItems.items[i].quantity *
+                        Number(cartItems.items[i].product.price);
+                    total += price; //* (100 - Number(activeDisccout?.value));
+                }
+                else {
+                    const price = cartItems.items[i].quantity *
+                        Number(cartItems.items[i].variant?.price);
+                    total += price; //* (100 - Number(activeDisccout?.value));
+                }
+            }
+            return reply.send(new responseClasses_1.CustomResponse({
+                total: total,
+            }, null));
         }
     });
     //create cart for user

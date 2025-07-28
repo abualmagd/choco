@@ -675,6 +675,11 @@ video {
   margin-bottom: 1.5rem;
 }
 
+.mx-2{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
 .-mt-4{
   margin-top: -1rem;
 }
@@ -952,6 +957,10 @@ video {
 
 .w-full{
   width: 100%;
+}
+
+.min-w-36{
+  min-width: 9rem;
 }
 
 .max-w-16{
@@ -1408,6 +1417,14 @@ video {
   padding-top: 5rem;
 }
 
+.pb-2{
+  padding-bottom: 0.5rem;
+}
+
+.pr-1{
+  padding-right: 0.25rem;
+}
+
 .text-center{
   text-align: center;
 }
@@ -1669,6 +1686,11 @@ video {
 .hover\:bg-gray-800:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-gray-600:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:underline:hover{

@@ -15,9 +15,11 @@ document.addEventListener("alpine:init", () => {
 
   Alpine.store("cart", {
     count: 0,
+    total: 0,
 
     init() {
       this.count = parseInt(localStorage.getItem("cartCount")) || 0;
+      this.asyncCartTotal();
     },
 
     updateCart() {
@@ -28,6 +30,14 @@ document.addEventListener("alpine:init", () => {
     clearItemCart() {
       this.count = parseInt(this.count) - 1;
       localStorage.setItem("cartCount", this.count);
+    },
+    async asyncCartTotal() {
+      try {
+        const total = await window.cartTotalPrice();
+        this.total = total;
+      } catch (error) {
+        window.notify(error, true);
+      }
     },
   });
 
@@ -57,6 +67,12 @@ document.addEventListener("alpine:init", () => {
       } finally {
         this.isLoading = false;
       }
+    },
+    async buyNow() {
+      this.addToCart();
+      setTimeout(() => {
+        window.location.replace("/cart");
+      }, 3000);
     },
   }));
 

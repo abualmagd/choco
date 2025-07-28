@@ -10,6 +10,7 @@ window.itemCartComponent = (item) => ({
     try {
       await window.updateItemQuatity(this.id, this.quantity);
       window.notify("qauntity updated well");
+      this.$store.cart.asyncCartTotal();
     } catch (error) {
       window.notify(error);
     }
@@ -23,6 +24,7 @@ window.itemCartComponent = (item) => ({
       try {
         await window.updateItemQuatity(this.id, this.quantity);
         window.notify("qauntity updated well");
+        this.$store.cart.asyncCartTotal();
       } catch (error) {
         window.notify(error, true);
       }
@@ -34,6 +36,7 @@ window.itemCartComponent = (item) => ({
       await window.removeCartItem(item.id);
       window.notify("item deleted well ");
       this.$store.cart.clearItemCart();
+      this.$store.cart.asyncCartTotal();
       setTimeout(window.location.reload(), 4000);
     } catch (error) {
       window.notify(error, true);

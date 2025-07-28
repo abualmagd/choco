@@ -6,7 +6,8 @@
         <img :src="product.images?product.images[0]:'/public/assetes/images/shoes.jpg'"
             class=" object-fill w-full h-full" />
     </div>
-    <span x-text="product.slug??'product name'" class="flex max-w-18 h-8 overflow-hidden"></span>
+    <a :href="'/products/'+product.slug" target="_blank" x-text="product.slug??'product name'"
+        class="flex max-w-18 h-8 overflow-hidden"></a>
 
     <div class=" border-2 border-gray-200 flex md:w-28 w-20 h-10 items-center  justify-between">
         <button x-on:click="icreamentQuantity" class=" text-2xl ml-2">+</button>
@@ -17,7 +18,7 @@
     <span x-text="product.price??'00'">
 
     </span>
-    <span x-text="computeTotal">
+    <span x-text="computeTotal" class=" md:flex hidden">
 
     </span>
     @else
@@ -36,7 +37,7 @@
     <span x-text="variant.price??'00'">
 
     </span>
-    <span x-text="computeTotal">
+    <span x-text="computeTotal" class=" md:flex hidden">
 
     </span>
     @end
