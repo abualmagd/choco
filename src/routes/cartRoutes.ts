@@ -50,30 +50,30 @@ export const cartRoutes: FastifyPluginAsync = async (
       let total = 0;
       if (cartItems) {
         for (let i = 0; i < cartItems.items.length; i++) {
-          const activeDisccout = await fastify.prisma.discount.findFirst({
-            where: {
-              products: {
-                some: {
-                  id:
-                    cartItems.items[i].product.id ??
-                    cartItems.items[i].variant?.productId,
-                },
-              },
-              isActive: true,
-            },
-          });
+          const activeDiscount: any = await fastify.prisma.$queryRaw`
+            SELECT * FROM Discount d
+            JOIN _discounttoproduct dp ON d.id = dp.A
+            WHERE dp.B = ${
+              cartItems.items[i].product.id ??
+              cartItems.items[i].variant?.productId
+            }
+            AND d.isActive = true
+            AND (d.maxUses IS NULL OR d.maxUses > d.usedCount)
+            LIMIT 1
+          `;
 
-          if (cartItems.items[i].product) {
-            const price =
-              cartItems.items[i].quantity *
-              Number(cartItems.items[i].product.price);
-            total += price; //* (100 - Number(activeDisccout?.value));
-          } else {
-            const price =
-              cartItems.items[i].quantity *
-              Number(cartItems.items[i].variant?.price);
-            total += price; //* (100 - Number(activeDisccout?.value));
-          }
+          const price =
+            cartItems.items[i].quantity *
+            Number(
+              cartItems.items[i].product?.price ??
+                cartItems.items[i].variant?.price
+            );
+
+          const discountValue = activeDiscount[0]?.value
+            ? Number(activeDiscount[0].value)
+            : 0;
+          console.log("disccount: ", activeDiscount[0]?.value);
+          total += price * (1 - discountValue / 100);
         }
 
         return reply.send(
