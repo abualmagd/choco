@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <Sidebar />
       <main className="flex-1 flex ">
         <div
-          className=" sm:w-60
+          className=" sm:w-[25rem] md:w-[22rem]
           w-0 "
         ></div>
         {children}
