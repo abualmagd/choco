@@ -25,6 +25,8 @@ import fastifyCors from "@fastify/cors";
 import fastifyRateLimit from "@fastify/rate-limit";
 import { ResError } from "./utils/responseClasses";
 import { userRoutes } from "./routes/userRoutes";
+import { FileRoutes } from "./routes/fileRoutes";
+import fastifyMultipart from "fastify-multipart";
 
 dotenv.config();
 
@@ -35,7 +37,7 @@ const server = fastify({
 const start = async () => {
   try {
     await server.register(fastifyCors, {
-      origin: [" http://[::1]:3000"],
+      origin: [" http://[::1]:3000", "http://localhost:5173"],
       methods: ["GET", "POST", "DELETE", "PUT"],
       allowedHeaders: ["Content-Type", "Authorization", "X-API-KEY"],
       credentials: true,
@@ -67,6 +69,12 @@ const start = async () => {
       prefix: "/public/", // optional: default '/'
     });
 
+    await server.register(fastifyMultipart, {
+      limits: {
+        fileSize: Number(process.env.MAX_FILE_SIZE),
+        files: 10,
+      },
+    });
     await server.register(prismaPlugin);
     await server.register(productRoutes, { prefix: "/api/" });
     await server.register(categoryRoutes, { prefix: "/api/" });
@@ -77,6 +85,7 @@ const start = async () => {
     await server.register(wishItemsRoutes, { prefix: "/api/" });
     await server.register(discountRoutes, { prefix: "/api/" });
     await server.register(userRoutes, { prefix: "/api/" });
+    await server.register(FileRoutes, { prefix: "/api/" });
     await server.register(viewRoutes);
     await server.register(EdgePlugin);
     await server.register(fastifyCookie);

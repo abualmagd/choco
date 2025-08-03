@@ -40,7 +40,7 @@ const categoryRoutes = async (fastify, option) => {
             const { slug, name, description, image, isActive, parentId } = request.body;
             const { id } = request.params;
             const category = await fastify.prisma.category.update({
-                where: { id: id },
+                where: { id: parseInt(id) },
                 data: {
                     slug: slug,
                     name: name,

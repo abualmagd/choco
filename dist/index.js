@@ -26,6 +26,8 @@ const cors_1 = __importDefault(require("@fastify/cors"));
 const rate_limit_1 = __importDefault(require("@fastify/rate-limit"));
 const responseClasses_1 = require("./utils/responseClasses");
 const userRoutes_1 = require("./routes/userRoutes");
+const fileRoutes_1 = require("./routes/fileRoutes");
+const fastify_multipart_1 = __importDefault(require("fastify-multipart"));
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -33,7 +35,7 @@ const server = (0, fastify_1.default)({
 const start = async () => {
     try {
         await server.register(cors_1.default, {
-            origin: [" http://[::1]:3000"],
+            origin: [" http://[::1]:3000", "http://localhost:5173"],
             methods: ["GET", "POST", "DELETE", "PUT"],
             allowedHeaders: ["Content-Type", "Authorization", "X-API-KEY"],
             credentials: true,
@@ -61,6 +63,12 @@ const start = async () => {
             root: path_1.default.join(process.cwd(), "public"),
             prefix: "/public/", // optional: default '/'
         });
+        await server.register(fastify_multipart_1.default, {
+            limits: {
+                fileSize: Number(process.env.MAX_FILE_SIZE),
+                files: 10,
+            },
+        });
         await server.register(prisma_1.default);
         await server.register(productRoutes_1.productRoutes, { prefix: "/api/" });
         await server.register(categoryRoutes_1.categoryRoutes, { prefix: "/api/" });
@@ -71,6 +79,7 @@ const start = async () => {
         await server.register(wishlistItems_1.wishItemsRoutes, { prefix: "/api/" });
         await server.register(discountRoutes_1.discountRoutes, { prefix: "/api/" });
         await server.register(userRoutes_1.userRoutes, { prefix: "/api/" });
+        await server.register(fileRoutes_1.FileRoutes, { prefix: "/api/" });
         await server.register(viewRoutes_1.viewRoutes);
         await server.register(edge_1.EdgePlugin);
         await server.register(cookie_1.default);

@@ -56,14 +56,14 @@ export const categoryRoutes: FastifyPluginAsync = async (
       isActive: boolean;
       parentId: number;
     };
-    Params: { id: number };
+    Params: { id: string };
   }>("/categories/:id", { preHandler: isAdminAuth }, async (request, reply) => {
     try {
       const { slug, name, description, image, isActive, parentId } =
         request.body;
       const { id } = request.params;
       const category = await fastify.prisma.category.update({
-        where: { id: id },
+        where: { id: parseInt(id) },
         data: {
           slug: slug,
           name: name,

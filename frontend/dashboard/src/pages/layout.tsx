@@ -3,11 +3,11 @@ import Sidebar from "../components/sidebar";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className=" flex w-full h-full">
+    <div className=" flex w-full h-full relative">
       <Sidebar />
-      <main className="flex-1 flex ">
+      <main className="flex-1 flex  mt-5 ">
         <div
-          className=" sm:w-[25rem] md:w-[22rem]
+          className="sm:w-[16rem]
           w-0 "
         ></div>
         {children}
