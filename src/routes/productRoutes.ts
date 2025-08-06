@@ -32,9 +32,98 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
     "/products",
     { preHandler: isAdminAuth },
     async (request, reply) => {
+      const {
+        name,
+        slug,
+        description,
+        price,
+        compareAtPrice,
+        costPrice,
+        sku,
+        brand,
+        trackInventory,
+        inventoryQuantity,
+        allowBackorder,
+        weight,
+        height,
+        width,
+        length,
+        isActive,
+        isFeatured,
+        isDigital,
+        downloadUrl,
+        seoTitle,
+        seoDescription,
+        images,
+        categoryId,
+        color,
+        size,
+        categories,
+      } = request.body as {
+        images: Prisma.ProductImageCreateManyInput;
+        categories: Array<Prisma.CategoryWhereUniqueInput>;
+        categoryId: number;
+        inventoryQuantity: string;
+        name: string;
+        slug: string;
+        description: string;
+        price: number;
+        compareAtPrice: number;
+        costPrice: number;
+        sku: string;
+        brand: string;
+        trackInventory: boolean | undefined;
+        allowBackorder: boolean | undefined;
+        weight: number | undefined;
+        height: number | undefined;
+        width: number | undefined;
+        length: number | undefined;
+        isActive: boolean | undefined;
+        isFeatured: boolean | undefined;
+        isDigital: boolean | undefined;
+        downloadUrl: string | undefined;
+        seoTitle: string | undefined;
+        seoDescription: string | undefined;
+        color: string | undefined;
+        size: string | undefined;
+      };
       try {
         const newProduct = await fastify.prisma.product.create({
-          data: request.body as Prisma.ProductCreateInput,
+          data: {
+            optionValues: {
+              color,
+              size,
+            },
+            name,
+            slug,
+            description,
+            price,
+            compareAtPrice,
+            costPrice,
+            sku,
+            brand,
+            trackInventory,
+            allowBackorder,
+            weight,
+            height,
+            width,
+            length,
+            isActive,
+            isFeatured,
+            isDigital,
+            downloadUrl,
+            seoTitle,
+            seoDescription,
+            inventoryQuantity: parseInt(inventoryQuantity),
+            categories: {
+              connect: categories ?? [],
+            },
+            images: {
+              createMany: {
+                data: images ?? [],
+              },
+            },
+          },
         });
         return reply.status(201).send(newProduct);
       } catch (error) {
@@ -119,13 +208,92 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
   //update product for admin only
   fastify.put<{ Params: { id: string } }>(
     "/products/:id",
-    { preHandler: isModeratorAuth },
+    //{ preHandler: isModeratorAuth },
     async (request, reply) => {
       try {
         const productId = parseInt(request.params.id, 10);
-        const updatedData = (await request.body) as Prisma.ProductUpdateInput;
+        const {
+          name,
+          slug,
+          description,
+          price,
+          compareAtPrice,
+          costPrice,
+          sku,
+          brand,
+          trackInventory,
+          inventoryQuantity,
+          allowBackorder,
+          weight,
+          height,
+          width,
+          length,
+          isActive,
+          isFeatured,
+          isDigital,
+          downloadUrl,
+          seoTitle,
+          seoDescription,
+          categories,
+          size,
+          color,
+        } = request.body as {
+          categories: Array<Prisma.CategoryWhereUniqueInput>;
+          inventoryQuantity: string;
+          name: string;
+          slug: string;
+          description: string;
+          price: number;
+          compareAtPrice: number;
+          costPrice: number;
+          sku: string;
+          brand: string;
+          trackInventory: boolean | undefined;
+          allowBackorder: boolean | undefined;
+          weight: number | undefined;
+          height: number | undefined;
+          width: number | undefined;
+          length: number | undefined;
+          isActive: boolean | undefined;
+          isFeatured: boolean | undefined;
+          isDigital: boolean | undefined;
+          downloadUrl: string | undefined;
+          seoTitle: string | undefined;
+          seoDescription: string | undefined;
+          size: string | undefined;
+          color: string | undefined;
+        };
         const updatedProduct = await fastify.prisma.product.update({
-          data: updatedData,
+          data: {
+            name,
+            slug,
+            description,
+            price,
+            compareAtPrice,
+            costPrice,
+            sku,
+            brand,
+            trackInventory,
+            inventoryQuantity: parseInt(inventoryQuantity),
+            allowBackorder,
+            weight,
+            height,
+            width,
+            length,
+            isActive,
+            isFeatured,
+            isDigital,
+            downloadUrl,
+            seoTitle,
+            seoDescription,
+            optionValues: {
+              color: color,
+              size: size,
+            },
+            categories: {
+              set: categories,
+            },
+          },
           where: {
             id: productId,
           },

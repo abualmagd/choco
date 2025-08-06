@@ -27,6 +27,7 @@ import { ResError } from "./utils/responseClasses";
 import { userRoutes } from "./routes/userRoutes";
 import { FileRoutes } from "./routes/fileRoutes";
 import fastifyMultipart from "fastify-multipart";
+import fastifyStatic from "@fastify/static";
 
 dotenv.config();
 
@@ -37,7 +38,12 @@ const server = fastify({
 const start = async () => {
   try {
     await server.register(fastifyCors, {
-      origin: [" http://[::1]:3000", "http://localhost:5173"],
+      origin: [
+        " http://[::1]:3000",
+        "http://[::1]:3000/*",
+        "http://localhost:5173",
+        "http://localhost:3000",
+      ],
       methods: ["GET", "POST", "DELETE", "PUT"],
       allowedHeaders: ["Content-Type", "Authorization", "X-API-KEY"],
       credentials: true,
@@ -74,6 +80,21 @@ const start = async () => {
         fileSize: Number(process.env.MAX_FILE_SIZE),
         files: 10,
       },
+    });
+
+    server.register(fastifyStatic, {
+      root: path.join(process.cwd(), "dashboard"),
+      prefix: "/dashboard/",
+      decorateReply: false,
+    });
+
+    // Serve index.html for all /dashboard routes
+    server.get("/dashboard*", (req, reply) => {
+      reply.sendFile("index.html", path.join(process.cwd(), "dashboard"));
+    });
+
+    server.get("/dashboard/:any", (req, reply) => {
+      reply.sendFile("index.html", path.join(process.cwd(), "dashboard"));
     });
     await server.register(prismaPlugin);
     await server.register(productRoutes, { prefix: "/api/" });

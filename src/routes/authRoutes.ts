@@ -15,6 +15,7 @@ export const authRouters: FastifyPluginAsync = async (
       email: string;
       password: string;
     };
+
     try {
       const user = await fastify.prisma.user.findUnique({
         where: {

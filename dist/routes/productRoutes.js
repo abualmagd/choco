@@ -22,9 +22,44 @@ const productRoutes = async (fastify, opt) => {
     });
     //create one product must be admin
     fastify.post("/products", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+        const { name, slug, description, price, compareAtPrice, costPrice, sku, brand, trackInventory, inventoryQuantity, allowBackorder, weight, height, width, length, isActive, isFeatured, isDigital, downloadUrl, seoTitle, seoDescription, images, categoryId, color, size, categories, } = request.body;
         try {
             const newProduct = await fastify.prisma.product.create({
-                data: request.body,
+                data: {
+                    optionValues: {
+                        color,
+                        size,
+                    },
+                    name,
+                    slug,
+                    description,
+                    price,
+                    compareAtPrice,
+                    costPrice,
+                    sku,
+                    brand,
+                    trackInventory,
+                    allowBackorder,
+                    weight,
+                    height,
+                    width,
+                    length,
+                    isActive,
+                    isFeatured,
+                    isDigital,
+                    downloadUrl,
+                    seoTitle,
+                    seoDescription,
+                    inventoryQuantity: parseInt(inventoryQuantity),
+                    categories: {
+                        connect: categories ?? [],
+                    },
+                    images: {
+                        createMany: {
+                            data: images ?? [],
+                        },
+                    },
+                },
             });
             return reply.status(201).send(newProduct);
         }
@@ -94,12 +129,43 @@ const productRoutes = async (fastify, opt) => {
         }
     });
     //update product for admin only
-    fastify.put("/products/:id", { preHandler: middleware_1.isModeratorAuth }, async (request, reply) => {
+    fastify.put("/products/:id", 
+    //{ preHandler: isModeratorAuth },
+    async (request, reply) => {
         try {
             const productId = parseInt(request.params.id, 10);
-            const updatedData = (await request.body);
+            const { name, slug, description, price, compareAtPrice, costPrice, sku, brand, trackInventory, inventoryQuantity, allowBackorder, weight, height, width, length, isActive, isFeatured, isDigital, downloadUrl, seoTitle, seoDescription, categories, size, color, } = request.body;
             const updatedProduct = await fastify.prisma.product.update({
-                data: updatedData,
+                data: {
+                    name,
+                    slug,
+                    description,
+                    price,
+                    compareAtPrice,
+                    costPrice,
+                    sku,
+                    brand,
+                    trackInventory,
+                    inventoryQuantity: parseInt(inventoryQuantity),
+                    allowBackorder,
+                    weight,
+                    height,
+                    width,
+                    length,
+                    isActive,
+                    isFeatured,
+                    isDigital,
+                    downloadUrl,
+                    seoTitle,
+                    seoDescription,
+                    optionValues: {
+                        color: color,
+                        size: size,
+                    },
+                    categories: {
+                        set: categories,
+                    },
+                },
                 where: {
                     id: productId,
                 },
