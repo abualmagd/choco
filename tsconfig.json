@@ -111,5 +111,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["src", "types", "edge-loader.js"],
-  "exclude": ["frontend"]
+  "exclude": ["frontend", "alpine"]
 }

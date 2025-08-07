@@ -4,10 +4,17 @@
 <head>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--  
   <link rel="stylesheet" href="/public/styles/app.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <link rel="stylesheet" href="/public/assets/css/app.css" />
+  <script type="module" src="/public/assets/alpine/app.js"></script>
+
+
   @!component('components/seoMeta', {
   title: title,
   description: seotags?.description??'This is a detailed description of my awesome page for SEO purposes',
@@ -109,12 +116,14 @@
   <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-grid@0.4.1/dist/js/splide-extension-grid.min.js"></script>
-  <script src="/public/app.js" type="text/javascript"></script>
+  <!-- 
+    <script src="/public/app.js" type="text/javascript"></script>
   <script src="/public/alpine/components/accountComponent.js"></script>
   <script src="/public/alpine/components/adressComponent.js"></script>
   <script src="/public/alpine/components/itemComponent.js"></script>
   <script src="/public/alpine/utils/api.js"></script>
   <script src="/public/alpine/utils/services.js"></script>
+   -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </body>
