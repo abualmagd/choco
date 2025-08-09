@@ -10,6 +10,7 @@ export const authRouters: FastifyPluginAsync = async (
   fastify: FastifyInstance,
   opt: any
 ) => {
+  //login user
   fastify.post("/login", async (request, reply) => {
     const { email, password } = request.body as {
       email: string;

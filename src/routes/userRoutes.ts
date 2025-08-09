@@ -1,11 +1,14 @@
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { ResError } from "../utils/responseClasses";
-import { isAuthenticate } from "../authentication/middleware";
+import { isAdminAuth, isAuthenticate } from "../authentication/middleware";
+import { hashPassword } from "../authentication/auth";
+import { Role } from "@prisma/client";
 
 export const userRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
   opt: any
 ) => {
+  //update user by id
   fastify.post(
     "user/update/:id",
     { preHandler: isAuthenticate },
@@ -30,6 +33,7 @@ export const userRoutes: FastifyPluginAsync = async (
     }
   );
 
+  //get user by id
   fastify.get("user/:id", async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -98,6 +102,46 @@ export const userRoutes: FastifyPluginAsync = async (
         return reply.send(address);
       } catch (error) {
         reply.send(error);
+      }
+    }
+  );
+
+  //create user by admin
+  fastify.post(
+    "user/create",
+    //{ preHandler: isAdminAuth },
+    async (request, reply) => {
+      try {
+        const { email, password, name, phone, role } = request.body as {
+          email: string;
+          password: string;
+          name: string;
+          phone: string;
+          role: string;
+        };
+        const user = await fastify.prisma.user.create({
+          data: {
+            email: email,
+            password: await hashPassword(password),
+            name: name,
+            phone: phone,
+            role: role as Role,
+          },
+        });
+        if (user) {
+          return reply.send({
+            success: true,
+            message: "Created user successfully",
+          });
+        }
+
+        return reply.status(500).send({
+          error: "server error",
+          message: "Create user failed",
+          code: 500,
+        });
+      } catch (error) {
+        return reply.send(error);
       }
     }
   );

@@ -8,6 +8,7 @@ const emailServices_1 = require("../services/emailServices");
 const node_crypto_1 = require("node:crypto");
 const middleware_1 = require("../authentication/middleware");
 const authRouters = async (fastify, opt) => {
+    //login user
     fastify.post("/login", async (request, reply) => {
         const { email, password } = request.body;
         try {

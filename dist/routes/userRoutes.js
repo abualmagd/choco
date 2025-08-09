@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRoutes = void 0;
 const responseClasses_1 = require("../utils/responseClasses");
 const middleware_1 = require("../authentication/middleware");
+const auth_1 = require("../authentication/auth");
 const userRoutes = async (fastify, opt) => {
+    //update user by id
     fastify.post("user/update/:id", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
         try {
             const { id } = request.params;
@@ -23,6 +25,7 @@ const userRoutes = async (fastify, opt) => {
             reply.send(error);
         }
     });
+    //get user by id
     fastify.get("user/:id", async (request, reply) => {
         try {
             const { id } = request.params;
@@ -82,6 +85,37 @@ const userRoutes = async (fastify, opt) => {
         }
         catch (error) {
             reply.send(error);
+        }
+    });
+    //create user by admin
+    fastify.post("user/create", 
+    //{ preHandler: isAdminAuth },
+    async (request, reply) => {
+        try {
+            const { email, password, name, phone, role } = request.body;
+            const user = await fastify.prisma.user.create({
+                data: {
+                    email: email,
+                    password: await (0, auth_1.hashPassword)(password),
+                    name: name,
+                    phone: phone,
+                    role: role,
+                },
+            });
+            if (user) {
+                return reply.send({
+                    success: true,
+                    message: "Created user successfully",
+                });
+            }
+            return reply.status(500).send({
+                error: "server error",
+                message: "Create user failed",
+                code: 500,
+            });
+        }
+        catch (error) {
+            return reply.send(error);
         }
     });
 };
