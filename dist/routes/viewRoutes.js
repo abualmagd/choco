@@ -8,7 +8,7 @@ const viewRoutes = async (fastify, opt) => {
             return reply.view("home", { username: "Ismail" });
         }
         catch (error) {
-            return reply.send(error);
+            return reply.view("errorPage", { error: error });
         }
     });
     fastify.get("/products/:slug", async (request, reply) => {
@@ -25,7 +25,7 @@ const viewRoutes = async (fastify, opt) => {
                 },
             });
             if (!product) {
-                return reply.send(new responseClasses_1.ResError(404, " no product with this slug", " not found"));
+                return reply.view("notFound");
             }
             const reviewStats = await fastify.prisma.review.groupBy({
                 by: ["rating"],
@@ -84,7 +84,7 @@ const viewRoutes = async (fastify, opt) => {
             return reply.view("product", { data: res.data });
         }
         catch (error) {
-            return reply.send(error);
+            return reply.view("errorPage", { error: error });
         }
     });
     fastify.get("/account", async (request, reply) => {
@@ -105,7 +105,20 @@ const viewRoutes = async (fastify, opt) => {
     });
     fastify.get("/category/:slug", async (request, reply) => {
         const { slug } = request.params;
-        return reply.view("category", { category: slug });
+        try {
+            const category = await fastify.prisma.category.findUnique({
+                where: {
+                    slug: slug,
+                },
+            });
+            if (!category) {
+                return reply.view("notFound");
+            }
+            return reply.view("category", { category: category });
+        }
+        catch (error) {
+            return reply.view("errorPage", { error: error });
+        }
     });
     fastify.get("/cart", async (request, reply) => {
         const id = request.session.user?.id;

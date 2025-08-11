@@ -17,7 +17,7 @@ const categoryRoutes = async (fastify, option) => {
     //create category
     fastify.post("/categories", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
         try {
-            const { slug, name, description, image, isActive, parentId } = request.body;
+            const { slug, name, description, image, isActive, parentId, children } = request.body;
             const categories = await fastify.prisma.category.create({
                 data: {
                     slug: slug,
@@ -25,7 +25,10 @@ const categoryRoutes = async (fastify, option) => {
                     description: description,
                     image: image,
                     isActive: isActive ?? true,
-                    parentId: parentId ?? null,
+                    parentId: parseInt(parentId) ?? null,
+                    children: {
+                        connect: children,
+                    },
                 },
             });
             return reply.send(categories);
@@ -35,9 +38,11 @@ const categoryRoutes = async (fastify, option) => {
         }
     });
     //update category
-    fastify.put("/categories/:id", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+    fastify.put("/categories/:id", 
+    //{ preHandler: isAdminAuth },
+    async (request, reply) => {
         try {
-            const { slug, name, description, image, isActive, parentId } = request.body;
+            const { slug, name, description, image, isActive, parentId, children } = request.body;
             const { id } = request.params;
             const category = await fastify.prisma.category.update({
                 where: { id: parseInt(id) },
@@ -47,7 +52,10 @@ const categoryRoutes = async (fastify, option) => {
                     description: description,
                     image: image,
                     isActive: isActive,
-                    parentId: parentId,
+                    parentId: parseInt(parentId),
+                    children: {
+                        set: children,
+                    },
                 },
             });
             return reply.send(category);
@@ -91,6 +99,9 @@ const categoryRoutes = async (fastify, option) => {
                             createdAt: "desc",
                         },
                     },
+                    children: {
+                        take: 10,
+                    },
                 },
             });
             if (!category) {
@@ -111,6 +122,9 @@ const categoryRoutes = async (fastify, option) => {
             const category = await fastify.prisma.category.findUnique({
                 where: {
                     id: parseInt(id),
+                },
+                include: {
+                    children: true,
                 },
             });
             if (!category) {

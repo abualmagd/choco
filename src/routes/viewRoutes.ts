@@ -9,7 +9,7 @@ export const viewRoutes: FastifyPluginAsync = async (
     try {
       return reply.view("home", { username: "Ismail" });
     } catch (error) {
-      return reply.send(error);
+      return reply.view("errorPage", { error: error });
     }
   });
 
@@ -27,9 +27,7 @@ export const viewRoutes: FastifyPluginAsync = async (
         },
       });
       if (!product) {
-        return reply.send(
-          new ResError(404, " no product with this slug", " not found")
-        );
+        return reply.view("notFound");
       }
       const reviewStats = await fastify.prisma.review.groupBy({
         by: ["rating"],
@@ -97,7 +95,7 @@ export const viewRoutes: FastifyPluginAsync = async (
 
       return reply.view("product", { data: res.data });
     } catch (error) {
-      return reply.send(error);
+      return reply.view("errorPage", { error: error });
     }
   });
 
@@ -123,7 +121,20 @@ export const viewRoutes: FastifyPluginAsync = async (
   fastify.get("/category/:slug", async (request, reply) => {
     const { slug } = request.params as { slug: string };
 
-    return reply.view("category", { category: slug });
+    try {
+      const category = await fastify.prisma.category.findUnique({
+        where: {
+          slug: slug,
+        },
+      });
+
+      if (!category) {
+        return reply.view("notFound");
+      }
+      return reply.view("category", { category: category });
+    } catch (error) {
+      return reply.view("errorPage", { error: error });
+    }
   });
 
   fastify.get("/cart", async (request, reply) => {

@@ -14,7 +14,7 @@ const productRoutes = async (fastify, opt) => {
                 skip: skip,
                 take: pagesize ? parseInt(pagesize) : 25,
             });
-            return reply.send({ data: products });
+            return reply.send(products);
         }
         catch (error) {
             return reply.send(error).status(500);
@@ -76,7 +76,7 @@ const productRoutes = async (fastify, opt) => {
                     discounts: true,
                 },
             });
-            return reply.send({ data: products });
+            return reply.send(products);
         }
         catch (error) {
             return reply.send(error).status(500);

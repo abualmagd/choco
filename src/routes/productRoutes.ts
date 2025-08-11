@@ -21,7 +21,7 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
         skip: skip,
         take: pagesize ? parseInt(pagesize) : 25,
       });
-      return reply.send({ data: products });
+      return reply.send(products);
     } catch (error) {
       return reply.send(error).status(500);
     }
@@ -143,7 +143,7 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
             discounts: true,
           },
         });
-        return reply.send({ data: products });
+        return reply.send(products);
       } catch (error) {
         return reply.send(error).status(500);
       }

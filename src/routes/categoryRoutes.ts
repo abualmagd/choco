@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { isAdminAuth } from "../authentication/middleware";
 import { ResError } from "../utils/responseClasses";
+import { Category } from "@prisma/client";
 
 export const categoryRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
@@ -24,11 +25,12 @@ export const categoryRoutes: FastifyPluginAsync = async (
       description: string;
       image: string;
       isActive: boolean;
-      parentId: number;
+      parentId: undefined | string;
+      children: Array<Category>;
     };
   }>("/categories", { preHandler: isAdminAuth }, async (request, reply) => {
     try {
-      const { slug, name, description, image, isActive, parentId } =
+      const { slug, name, description, image, isActive, parentId, children } =
         request.body;
       const categories = await fastify.prisma.category.create({
         data: {
@@ -37,7 +39,10 @@ export const categoryRoutes: FastifyPluginAsync = async (
           description: description,
           image: image,
           isActive: isActive ?? true,
-          parentId: parentId ?? null,
+          parentId: parseInt(parentId!) ?? null,
+          children: {
+            connect: children,
+          },
         },
       });
       return reply.send(categories);
@@ -54,30 +59,38 @@ export const categoryRoutes: FastifyPluginAsync = async (
       description: string;
       image: string;
       isActive: boolean;
-      parentId: number;
+      parentId: string;
+      children: Array<Category>;
     };
     Params: { id: string };
-  }>("/categories/:id", { preHandler: isAdminAuth }, async (request, reply) => {
-    try {
-      const { slug, name, description, image, isActive, parentId } =
-        request.body;
-      const { id } = request.params;
-      const category = await fastify.prisma.category.update({
-        where: { id: parseInt(id) },
-        data: {
-          slug: slug,
-          name: name,
-          description: description,
-          image: image,
-          isActive: isActive,
-          parentId: parentId,
-        },
-      });
-      return reply.send(category);
-    } catch (error) {
-      return reply.send(error);
+  }>(
+    "/categories/:id",
+    //{ preHandler: isAdminAuth },
+    async (request, reply) => {
+      try {
+        const { slug, name, description, image, isActive, parentId, children } =
+          request.body;
+        const { id } = request.params;
+        const category = await fastify.prisma.category.update({
+          where: { id: parseInt(id) },
+          data: {
+            slug: slug,
+            name: name,
+            description: description,
+            image: image,
+            isActive: isActive,
+            parentId: parseInt(parentId),
+            children: {
+              set: children,
+            },
+          },
+        });
+        return reply.send(category);
+      } catch (error) {
+        return reply.send(error);
+      }
     }
-  });
+  );
 
   //delete category
   fastify.delete<{ Params: { id: number } }>(
@@ -123,6 +136,9 @@ export const categoryRoutes: FastifyPluginAsync = async (
               createdAt: "desc",
             },
           },
+          children: {
+            take: 10,
+          },
         },
       });
       if (!category) {
@@ -148,6 +164,9 @@ export const categoryRoutes: FastifyPluginAsync = async (
       const category = await fastify.prisma.category.findUnique({
         where: {
           id: parseInt(id),
+        },
+        include: {
+          children: true,
         },
       });
       if (!category) {
