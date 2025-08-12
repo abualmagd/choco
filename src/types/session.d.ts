@@ -27,3 +27,10 @@ declare module "fastify" {
     view(template: string, data?: Record<string, any>): void;
   }
 }
+
+//refreshSiteSettings
+declare module "fastify" {
+  interface FastifyInstance {
+    refreshSiteSettings: Function;
+  }
+}
