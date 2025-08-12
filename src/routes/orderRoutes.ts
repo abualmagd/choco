@@ -188,9 +188,9 @@ export const orderRoutes: FastifyPluginAsync = async (
     }
   );
 
-  //GET /api/admin/orders - List all orders (admin)
+  //GET /api/admin/orders - List all orders (admin) with query
   fastify.get(
-    "/admin/orders",
+    "/admin/orders/query",
     { preHandler: isAdminAuth },
     async (request, reply) => {
       try {
@@ -216,6 +216,28 @@ export const orderRoutes: FastifyPluginAsync = async (
           where: {
             status: status,
           },
+        });
+        return reply.send(orders);
+      } catch (error) {
+        return reply.send(error);
+      }
+    }
+  );
+
+  //get all orders with pagination
+  fastify.get(
+    "/admin/orders",
+    { preHandler: isAdminAuth },
+    async (request, reply) => {
+      try {
+        const { page, ...restQuery } = request.query as {
+          page: string;
+        };
+
+        const orders = await fastify.prisma.order.findMany({
+          skip: 20 * parseInt(page),
+          take: 20,
+          where: restQuery,
         });
         return reply.send(orders);
       } catch (error) {

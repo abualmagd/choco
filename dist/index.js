@@ -29,6 +29,7 @@ const userRoutes_1 = require("./routes/userRoutes");
 const fileRoutes_1 = require("./routes/fileRoutes");
 const fastify_multipart_1 = __importDefault(require("fastify-multipart"));
 const static_1 = __importDefault(require("@fastify/static"));
+const settingsRoute_1 = require("./routes/settingsRoute");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -98,6 +99,7 @@ const start = async () => {
         await server.register(discountRoutes_1.discountRoutes, { prefix: "/api/" });
         await server.register(userRoutes_1.userRoutes, { prefix: "/api/" });
         await server.register(fileRoutes_1.FileRoutes, { prefix: "/api/" });
+        await server.register(settingsRoute_1.SettingsRoute, { prefix: "/api" });
         await server.register(viewRoutes_1.viewRoutes);
         await server.register(edge_1.EdgePlugin);
         await server.register(cookie_1.default);

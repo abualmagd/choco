@@ -126,7 +126,7 @@ export const cartTotalPrice = async () => {
     throw Error(res.statusText);
   } else {
     const data = await res.json();
-    return data.data.total;
+    return data.data;
   }
 };
 

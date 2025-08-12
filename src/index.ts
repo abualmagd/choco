@@ -28,6 +28,7 @@ import { userRoutes } from "./routes/userRoutes";
 import { FileRoutes } from "./routes/fileRoutes";
 import fastifyMultipart from "fastify-multipart";
 import fastifyStatic from "@fastify/static";
+import { SettingsRoute } from "./routes/settingsRoute";
 
 dotenv.config();
 
@@ -107,6 +108,7 @@ const start = async () => {
     await server.register(discountRoutes, { prefix: "/api/" });
     await server.register(userRoutes, { prefix: "/api/" });
     await server.register(FileRoutes, { prefix: "/api/" });
+    await server.register(SettingsRoute, { prefix: "/api" });
     await server.register(viewRoutes);
     await server.register(EdgePlugin);
     await server.register(fastifyCookie);

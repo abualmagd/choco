@@ -15,8 +15,12 @@ exports.EdgePlugin = (0, fastify_plugin_1.default)(async (fastify, opt) => {
         });
         edgeInstance.mount(path_1.default.join(process.cwd(), "views")); // Adjust path as needed
     }
+    const siteSettings = await fastify.prisma.siteSettings.findMany();
     fastify.decorateReply("view", async function (template, state) {
-        const html = await edgeInstance.render(template, state);
+        const html = await edgeInstance.render(template, {
+            ...state,
+            settings: siteSettings,
+        });
         this.header("content-type", "text/html; charset=utf-8");
         this.send(html);
     });

@@ -3786,9 +3786,10 @@ var _services = require("../utils/services");
 exports.default = {
     count: 0,
     total: 0,
+    discount: 0,
     init () {
         this.count = parseInt(localStorage.getItem("cartCount")) || 0;
-    // this.asyncCartTotal();
+        if (this.count !== 0) this.asyncCartTotal();
     },
     updateCart () {
         this.count = parseInt(this.count) + 1;
@@ -3800,10 +3801,11 @@ exports.default = {
     },
     async asyncCartTotal () {
         try {
-            const total = await (0, _api.cartTotalPrice)();
-            this.total = total;
+            const data = await (0, _api.cartTotalPrice)();
+            this.total = data.total;
+            this.discount = data.discount;
         } catch (error) {
-            (0, _services.notify)(error, true);
+        // notify(error, true);
         }
     }
 };
@@ -3933,7 +3935,7 @@ const cartTotalPrice = async ()=>{
     if (!res.ok) throw Error(res.statusText);
     else {
         const data = await res.json();
-        return data.data.total;
+        return data.data;
     }
 };
 const addToCartApi = async function AddToCart(data) {
@@ -4073,6 +4075,7 @@ const notify = (message, error = false)=>{
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _api = require("../utils/api");
+var _services = require("../utils/services");
 exports.default = (productId)=>({
         count: 1,
         size: 8,
@@ -4082,14 +4085,13 @@ exports.default = (productId)=>({
         productId: productId,
         async addToCart () {
             this.isLoading = true;
-            console.info("id", productId);
             try {
                 await (0, _api.addToCartApi)({
                     productId: this.productId,
                     qauntity: this.count
                 });
                 Alpine.store("cart").updateCart();
-                notify(" product added to your cart");
+                (0, _services.notify)(" product added to your cart");
                 this.isLoading = false;
             } catch (error) {
                 this.error = error;
@@ -4106,7 +4108,7 @@ exports.default = (productId)=>({
         }
     });
 
-},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hwEGz":[function(require,module,exports,__globalThis) {
+},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/services":"fXQWd"}],"hwEGz":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _api = require("../utils/api");

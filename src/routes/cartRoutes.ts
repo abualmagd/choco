@@ -48,6 +48,7 @@ export const cartRoutes: FastifyPluginAsync = async (
         },
       });
       let total = 0;
+      let discount = 0;
       if (cartItems) {
         for (let i = 0; i < cartItems.items.length; i++) {
           const activeDiscount: any = await fastify.prisma.$queryRaw`
@@ -74,12 +75,14 @@ export const cartRoutes: FastifyPluginAsync = async (
             : 0;
           console.log("disccount: ", activeDiscount[0]?.value);
           total += price * (1 - discountValue / 100);
+          discount += price * (discountValue / 100);
         }
 
         return reply.send(
           new CustomResponse(
             {
               total: total,
+              discount: discount,
             },
             null
           )

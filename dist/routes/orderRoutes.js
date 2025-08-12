@@ -138,8 +138,8 @@ const orderRoutes = async (fastify, opt) => {
             return reply.send(error);
         }
     });
-    //GET /api/admin/orders - List all orders (admin)
-    fastify.get("/admin/orders", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+    //GET /api/admin/orders - List all orders (admin) with query
+    fastify.get("/admin/orders/query", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
         try {
             const query = request.query;
             const orders = await fastify.prisma.order.findMany({
@@ -159,6 +159,21 @@ const orderRoutes = async (fastify, opt) => {
                 where: {
                     status: status,
                 },
+            });
+            return reply.send(orders);
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
+    //get all orders with pagination
+    fastify.get("/admin/orders", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+        try {
+            const { page, ...restQuery } = request.query;
+            const orders = await fastify.prisma.order.findMany({
+                skip: 20 * parseInt(page),
+                take: 20,
+                where: restQuery,
             });
             return reply.send(orders);
         }

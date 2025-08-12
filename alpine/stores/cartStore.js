@@ -4,10 +4,13 @@ import { notify } from "../utils/services";
 export default {
   count: 0,
   total: 0,
+  discount: 0,
 
   init() {
     this.count = parseInt(localStorage.getItem("cartCount")) || 0;
-    // this.asyncCartTotal();
+    if (this.count !== 0) {
+      this.asyncCartTotal();
+    }
   },
 
   updateCart() {
@@ -21,10 +24,11 @@ export default {
   },
   async asyncCartTotal() {
     try {
-      const total = await cartTotalPrice();
-      this.total = total;
+      const data = await cartTotalPrice();
+      this.total = data.total;
+      this.discount = data.discount;
     } catch (error) {
-      notify(error, true);
+      // notify(error, true);
     }
   },
 };

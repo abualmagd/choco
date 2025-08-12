@@ -8,11 +8,10 @@ const productRoutes = async (fastify, opt) => {
     fastify.get("/products", async (request, reply) => {
         try {
             //  return reply.send(typeof request.query);
-            const { page, pagesize } = request.query;
-            const skip = page ? (parseInt(page) - 1) * parseInt(pagesize ?? "25") : 0;
+            const { page } = request.query;
             const products = await fastify.prisma.product.findMany({
-                skip: skip,
-                take: pagesize ? parseInt(pagesize) : 25,
+                skip: 20 * parseInt(page),
+                take: 20,
             });
             return reply.send(products);
         }
@@ -362,6 +361,27 @@ const productRoutes = async (fastify, opt) => {
         }
         catch (error) {
             return reply.send(error);
+        }
+    });
+    //add discount to product must be admin
+    fastify.put("/products/discount", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+        const { productId, discountId } = request.body;
+        try {
+            const newProduct = await fastify.prisma.product.update({
+                where: { id: parseInt(productId) },
+                data: {
+                    discounts: {
+                        connect: { id: parseInt(discountId) },
+                    },
+                },
+                include: {
+                    discounts: true,
+                },
+            });
+            return reply.status(201).send(newProduct);
+        }
+        catch (error) {
+            return reply.status(409).send(error);
         }
     });
 };

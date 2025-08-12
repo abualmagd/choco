@@ -118,5 +118,24 @@ const userRoutes = async (fastify, opt) => {
             return reply.send(error);
         }
     });
+    //get all users with pagination
+    fastify.get("users", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+        try {
+            const { page } = request.query ?? "0";
+            const user = await fastify.prisma.user.findMany({
+                take: 20,
+                skip: 20 * parseInt(page),
+            });
+            if (!user) {
+                return reply
+                    .status(500)
+                    .send(new responseClasses_1.ResError(500, "failed to find user", "failed"));
+            }
+            return reply.send(user);
+        }
+        catch (error) {
+            reply.send(error);
+        }
+    });
 };
 exports.userRoutes = userRoutes;

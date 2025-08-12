@@ -7,7 +7,11 @@ const categoryRoutes = async (fastify, option) => {
     //get all categories
     fastify.get("/categories", async (request, reply) => {
         try {
-            const categories = await fastify.prisma.category.findMany();
+            const { page } = request.query;
+            const categories = await fastify.prisma.category.findMany({
+                skip: 20 * parseInt(page),
+                take: 20,
+            });
             return reply.send(categories);
         }
         catch (error) {

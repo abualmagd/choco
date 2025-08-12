@@ -1,4 +1,5 @@
 import { addToCartApi } from "../utils/api";
+import { notify } from "../utils/services";
 
 export default (productId) => ({
   count: 1,
@@ -10,7 +11,6 @@ export default (productId) => ({
 
   async addToCart() {
     this.isLoading = true;
-    console.info("id", productId);
     try {
       await addToCartApi({
         productId: this.productId,
