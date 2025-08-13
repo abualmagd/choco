@@ -1,8 +1,14 @@
-@set('tag', tag||'Online Shop')
+@set('tag', settings.slogan||'Online Shop')
 @set('links',links||[{title:'home',href:'/home'},{title:'about',href:'/about'}])
 <header class="header flex justify-between relative w-full items-center mt-4 mb-10" x-data="{open:false}">
     <div class="logo flex flex-col justify-center">
-        <img src="/public/assetes/images/logo.svg" loading="lazy" width="120" height="40" />
+        @if(settings.logoImage)
+        <img src="{{settings.logoImage}}" loading="lazy" width="120" height="40" />
+
+        @else
+        <p class=" text-2xl font-bold  drop-shadow-xl ml-5 font-mono capitalize bg-transparent m-3">{{settings.title}}
+        </p>
+        @end
         <span class="ml-5 -mt-4">{{tag||"Online Shop"}}</span>
     </div>
     <nav class="flex  gap-4">

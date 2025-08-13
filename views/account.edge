@@ -1,6 +1,6 @@
 @layout('components/layout/app')
 
-@set('title', 'Styllish')
+@set('title', settings.title)
 
 @section('content')
 <div x-data="accountComponent({{JSON.stringify(user)}})" class=" lg:w-full w-[90%] mx-auto">

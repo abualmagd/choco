@@ -686,9 +686,12 @@ var _itemComponent = require("./components/itemComponent");
 var _itemComponentDefault = parcelHelpers.interopDefault(_itemComponent);
 var _cartComponent = require("./components/cartComponent");
 var _cartComponentDefault = parcelHelpers.interopDefault(_cartComponent);
+var _orderStore = require("./stores/orderStore");
+var _orderStoreDefault = parcelHelpers.interopDefault(_orderStore);
 window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).store("productGallery", (0, _productGalleryStoreDefault.default));
 (0, _alpinejsDefault.default).store("cart", (0, _cartStoreDefault.default));
+(0, _alpinejsDefault.default).store("order", (0, _orderStoreDefault.default));
 (0, _alpinejsDefault.default).data("cartComponent", (0, _cartComponentDefault.default));
 (0, _alpinejsDefault.default).data("favoriteComponent", (0, _favoriteComponentDefault.default));
 (0, _alpinejsDefault.default).data("authModalComponent", (0, _authModalComponentDefault.default));
@@ -697,7 +700,7 @@ window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).data("itemCartComponent", (0, _itemComponentDefault.default));
 (0, _alpinejsDefault.default).start();
 
-},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"69hXP":[function(require,module,exports,__globalThis) {
+},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo"}],"69hXP":[function(require,module,exports,__globalThis) {
 // packages/alpinejs/src/scheduler.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -3826,6 +3829,7 @@ parcelHelpers.export(exports, "removeFromWishList", ()=>removeFromWishList);
 parcelHelpers.export(exports, "loginEmail", ()=>loginEmail);
 parcelHelpers.export(exports, "registerEmail", ()=>registerEmail);
 parcelHelpers.export(exports, "logoutUser", ()=>logoutUser);
+parcelHelpers.export(exports, "createOrder", ()=>createOrder);
 var _services = require("./services");
 const updateUserData = async (data, id)=>{
     try {
@@ -4052,11 +4056,34 @@ const logoutUser = async ()=>{
         (0, _services.notify)(error);
     }
 };
+const createOrder = async (data)=>{
+    try {
+        const response = await fetch("/api/order-items", {
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE"
+            },
+            method: "POST",
+            credentials: "include"
+        });
+        console.log(response);
+        if (!response.ok) {
+            if (response.statusText === "Unauthorized") throw new Error("Unauthorized");
+            else throw new Error("Failed to add to wishlist");
+        }
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
 
 },{"./services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXQWd":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "notify", ()=>notify);
+parcelHelpers.export(exports, "convertCartItemToOrderItem", ()=>convertCartItemToOrderItem);
+parcelHelpers.export(exports, "generatRandomNumber", ()=>generatRandomNumber);
 const notify = (message, error = false)=>{
     Toastify({
         text: message,
@@ -4069,6 +4096,18 @@ const notify = (message, error = false)=>{
             background: error ? "linear-gradient(to right, #c62336, #f94845)" : "linear-gradient(to right, #3fea2c, #31c47f)"
         }
     }).showToast();
+};
+const convertCartItemToOrderItem = (cartItem)=>{
+    return {
+        productId: cartItem.product?.id,
+        variantId: cartItem.variant?.id,
+        price: cartItem.product.price,
+        quantity: cartItem.quantity,
+        total: cartItem.quantity * cartItem.product.price
+    };
+};
+const generatRandomNumber = ()=>{
+    return Math.floor(100000 + Math.random() * 900000).toString() + Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eC9Vh":[function(require,module,exports,__globalThis) {
@@ -4375,6 +4414,41 @@ exports.default = (item)=>({
             else return (this.quantity * this.variant.price) ?? 0;
         }
     });
+
+},{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i2voo":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _api = require("../utils/api");
+var _services = require("../utils/services");
+exports.default = {
+    updateOrder () {
+        console.log("order items: ", (0, _services.generatRandomNumber)());
+    },
+    async createUserOrder (cart) {
+        try {
+            const orderItems = cart.items.map((item)=>{
+                return (0, _services.convertCartItemToOrderItem)(item);
+            });
+            //console.log("order creating: start");
+            const r = (0, _services.generatRandomNumber)();
+            const data = {
+                paymentMethod: "",
+                orderNumber: r,
+                subtotal: Alpine.store("cart").total,
+                tax: "0",
+                shipping: "0",
+                discount: Alpine.store("cart").discount,
+                total: Alpine.store("cart").total,
+                items: orderItems
+            };
+            const order = await (0, _api.createOrder)(data);
+            window.location.replace("/checkout/" + order.id);
+        } catch (error) {
+            console.log("error", error);
+            (0, _services.notify)(String(error), true);
+        }
+    }
+};
 
 },{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
 

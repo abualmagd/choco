@@ -147,5 +147,26 @@ const viewRoutes = async (fastify, opt) => {
     fastify.get("/login", async (request, reply) => {
         return reply.view("login");
     });
+    fastify.get("/checkout/:id", async (request, reply) => {
+        const { id } = request.params;
+        const order = await fastify.prisma.order.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+            include: {
+                items: {
+                    include: {
+                        product: true,
+                    },
+                },
+                user: {
+                    include: {
+                        addresses: true,
+                    },
+                },
+            },
+        });
+        return reply.view("checkout", { order: order });
+    });
 };
 exports.viewRoutes = viewRoutes;

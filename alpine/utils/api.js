@@ -261,3 +261,28 @@ export const logoutUser = async () => {
     notify(error);
   }
 };
+
+export const createOrder = async (data) => {
+  try {
+    const response = await fetch("/api/order-items", {
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY_1,
+      },
+      method: "POST",
+      credentials: "include",
+    });
+    console.log(response);
+    if (!response.ok) {
+      if (response.statusText === "Unauthorized") {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error("Failed to add to wishlist");
+      }
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};

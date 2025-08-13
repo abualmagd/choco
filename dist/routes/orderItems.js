@@ -16,6 +16,42 @@ const orderItemsRoutes = async (fastify, opt) => {
             return reply.send(error);
         }
     });
+    fastify.post("/order-items", async (request, reply) => {
+        try {
+            /* const userCart=await fastify.prisma.cart.findFirst({
+              where:{userId:request.session.user?.id},
+              include:{
+                items:true
+              }
+            })
+            if(!userCart){
+              
+            }*/
+            const { paymentMethod, orderNumber, subtotal, tax, shipping, discount, total, items, } = request.body;
+            const orderItems = await fastify.prisma.order.create({
+                data: {
+                    orderNumber: orderNumber,
+                    subtotal,
+                    tax,
+                    shipping,
+                    discount,
+                    total,
+                    userId: request.session.user?.id,
+                    paymentMethod: paymentMethod,
+                    items: {
+                        create: items,
+                    },
+                },
+                include: {
+                    items: true,
+                },
+            });
+            return reply.send(orderItems);
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
     //create one orderItem
     fastify.post("/orderItem", async (request, reply) => {
         try {

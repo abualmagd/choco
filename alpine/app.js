@@ -7,12 +7,15 @@ import accountComponent from "./components/accountComponent";
 import adressComponent from "./components/adressComponent";
 import itemComponent from "./components/itemComponent";
 import cartComponent from "./components/cartComponent";
+import orderStore from "./stores/orderStore";
 
 window.Alpine = Alpine;
 
 Alpine.store("productGallery", productGalleryStore);
 
 Alpine.store("cart", cartStore);
+
+Alpine.store("order", orderStore);
 
 Alpine.data("cartComponent", cartComponent);
 

@@ -1,0 +1,60 @@
+@layout('components/layout/app')
+
+@set('title', settings.title+ "-"+ "order")
+
+
+
+
+@section('content')
+<div class=" flex-1">
+    <!-- order prices-->
+    <ul class=" flex flex-col w-full p-3 shadow-md rounded">
+        <li class=" bg-gray-100 h-10 rounded my-2 flex  items-center pl-3 justify-between">
+            <p>Cart Total</p>
+            <p class=" w-40">Price</p>
+        </li>
+
+        <li class="  border-b-2 h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Subtotal:</p>
+            <p class=" w-40">{{order.subtotal}}</p>
+        </li>
+
+
+        <li class="  border-b-2 h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Shipping:</p>
+            <p class=" w-40">{{order.shipping}}</p>
+        </li>
+
+        <li class="  border-b-2 h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Tax:</p>
+            <p class=" w-40">{{order.tax}}</p>
+        </li>
+
+        <li class="   h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Total:</p>
+            <p class=" w-40"> <span class=" capitalize">{{settings.currencyLogo}} </span>{{order.total}}</p>
+        </li>
+    </ul>
+
+    <!-- order items-->
+    <ul class=" flex flex-col w-full p-3 shadow-md rounded">
+        @each((item,index) in order.items)
+        <li class=" bg-gray-100 h-14 rounded my-2 flex  items-center pl-3 justify-between">
+            <div class="">{{order.items[index].product.name||order.items[1].variant.name}}</div>
+            <div class=" flex flex-col">
+                <p class=" text-gray-400 text-sm capitalize">quantity</p>
+                <p>{{order.items[index].quantity}}</p>
+            </div>
+            <div class=" w-40 flex flex-col">
+                <p class=" text-gray-400 text-sm capitalize">Price</p>
+                <p>{{order.items[index].price}}</p>
+            </div>
+        </li>
+        @end
+    </ul>
+    user order :
+    <p>
+        {{JSON.stringify(order)}}
+    </p>
+</div>
+@end

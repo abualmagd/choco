@@ -21,6 +21,7 @@ const SettingsRoute = async (fastify, opt) => {
             const setts = await fastify.prisma.siteSettings.createMany({
                 data: body,
             });
+            fastify.refreshSiteSettings();
             return reply.send(setts);
         }
         catch (error) {
@@ -39,6 +40,7 @@ const SettingsRoute = async (fastify, opt) => {
                     key: key,
                 },
             });
+            fastify.refreshSiteSettings();
             return reply.send(setts);
         }
         catch (error) {
@@ -54,6 +56,7 @@ const SettingsRoute = async (fastify, opt) => {
                     key,
                 },
             });
+            fastify.refreshSiteSettings();
             return reply.send(new responseClasses_1.CustomResponse("key deleted", null));
         }
         catch (error) {

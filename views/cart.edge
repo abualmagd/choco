@@ -1,6 +1,6 @@
 @layout('components/layout/app')
 
-@set('title', 'Styllish'+ "-"+ cart)
+@set('title', settings.title+ "-"+ "cart")
 
 
 
@@ -21,24 +21,30 @@
     })
     @end
     @end
-    <div x-data=""
-        class="total-cart gap-3 flex-col max-w-full pr-1 w-[700px] mx-auto flex border-t-2 mt-2 h-24 justify-end justify-items-end items-end">
-        <div class=" flex">
-            <span class=" text-xl font-bold mr-1">discount: </span>
-            <span x-text="$store.cart.discount" class="text-xl text-gray-500"></span>
-        </div>
-        <div class=" flex">
-            <span class=" text-xl font-bold mr-1">total: </span>
-            <span x-text="$store.cart.total" class="text-xl text-gray-500"></span>
-        </div>
+    <div x-data="">
 
+
+        <div x-data=""
+            class="total-cart gap-2  flex-col max-w-full pr-1 w-[700px] mx-auto flex border-t-2 mt-2 h-24 justify-end justify-items-end items-end">
+            <div class=" flex ">
+                <span class=" text-xl font-bold mr-1 text-gray-400">discount: </span>
+                <span x-text="$store.cart.discount" class="text-xl text-green-500"></span>
+            </div>
+            <div class=" flex">
+                <span class=" text-xl font-bold mr-1">total: </span>
+                <span x-text="$store.cart.total" class="text-xl text-gray-500"></span>
+            </div>
+
+        </div>
+        <div class="max-w-full mt-3 w-[700px] mx-auto pr-1 flex justify-end items-center">
+            <button @click="$store.order.createUserOrder({{JSON.stringify(data)}})"
+                class="text-white h-10 bg-black min-w-36 flex justify-center items-center  hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-lg  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Checkout
+            </button>
+
+        </div>
     </div>
-    <div class="max-w-full w-[700px] mx-auto pr-1 flex justify-end items-center">
-        <button
-            class="text-white h-10 bg-black min-w-36 flex justify-center items-center  hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-lg  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Checkout
-        </button>
-    </div>
+
 </div>
 
 

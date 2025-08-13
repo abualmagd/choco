@@ -13,3 +13,20 @@ export const notify = (message, error = false) => {
     },
   }).showToast();
 };
+
+export const convertCartItemToOrderItem = (cartItem) => {
+  return {
+    productId: cartItem.product?.id,
+    variantId: cartItem.variant?.id,
+    price: cartItem.product.price,
+    quantity: cartItem.quantity,
+    total: cartItem.quantity * cartItem.product.price,
+  };
+};
+
+export const generatRandomNumber = () => {
+  return (
+    Math.floor(100000 + Math.random() * 900000).toString() +
+    Math.floor(100000 + Math.random() * 900000).toString()
+  );
+};
