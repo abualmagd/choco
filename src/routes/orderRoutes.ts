@@ -94,9 +94,8 @@ export const orderRoutes: FastifyPluginAsync = async (
   );
 
   //PUT /api/orders/:id/cancel - Cancel order
-
   fastify.put<{ Params: { id: string } }>(
-    "/orders/:id",
+    "/admin/orders/cancel/:id",
     async (request, reply) => {
       try {
         const { id } = request.params;
@@ -114,6 +113,37 @@ export const orderRoutes: FastifyPluginAsync = async (
               new ResError(
                 500,
                 ` error in cancelling order with id = ${id}`,
+                "failed"
+              )
+            );
+        }
+
+        return reply.send(order);
+      } catch (error) {
+        return reply.send(error);
+      }
+    }
+  );
+
+  //PUT /api/orders/:id/update order
+  fastify.put<{ Params: { id: string } }>(
+    "/orders/:id",
+    async (request, reply) => {
+      try {
+        const { id } = request.params;
+        const data = request.body as Prisma.OrderUpdateInput;
+        const order = await fastify.prisma.order.update({
+          where: { id: parseInt(id) },
+          data: data,
+        });
+
+        if (!order) {
+          return reply
+            .status(500)
+            .send(
+              new ResError(
+                500,
+                ` error in updating order with id = ${id}`,
                 "failed"
               )
             );

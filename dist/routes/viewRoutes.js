@@ -166,6 +166,9 @@ const viewRoutes = async (fastify, opt) => {
                 },
             },
         });
+        if (order?.userId !== request.session.user?.id) {
+            return reply.view("errorPage", { error: "Not Allowed" });
+        }
         return reply.view("checkout", { order: order });
     });
 };

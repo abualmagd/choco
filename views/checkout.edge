@@ -6,7 +6,7 @@
 
 
 @section('content')
-<div class=" flex-1">
+<div class=" flex-1" x-data="checkoutComponent({{JSON.stringify(order)}})">
     <!-- order prices-->
     <ul class=" flex flex-col w-full p-3 shadow-md rounded">
         <li class=" bg-gray-100 h-10 rounded my-2 flex  items-center pl-3 justify-between">
@@ -37,10 +37,12 @@
     </ul>
 
     <!-- order items-->
-    <ul class=" flex flex-col w-full p-3 shadow-md rounded">
+    <ul class=" flex flex-col w-full p-3 shadow-md rounded my-4">
         @each((item,index) in order.items)
-        <li class=" bg-gray-100 h-14 rounded my-2 flex  items-center pl-3 justify-between">
-            <div class="">{{order.items[index].product.name||order.items[1].variant.name}}</div>
+        <li
+            class="  h-14 rounded my-2 flex  items-center pl-3 justify-between {{index?'bg-transparent':'bg-gray-100'}} ">
+            <a target="_blank" href="{{" /products/"+order.items[index].product.slug||order.items[1].variant.slug}}"
+                class=" cursor-pointer">{{order.items[index].product.name||order.items[1].variant.name}}</a>
             <div class=" flex flex-col">
                 <p class=" text-gray-400 text-sm capitalize">quantity</p>
                 <p>{{order.items[index].quantity}}</p>
@@ -52,7 +54,53 @@
         </li>
         @end
     </ul>
+
+    <div class="flex flex-col w-full p-3 shadow-md rounded">
+        <h2 class=" text-xl font-bold">Shipping address</h2>
+        @if(order.user.addresses[0])
+
+        <template x-for=" address in addresses">
+            <p>{{order.user.addresses[0]}}</p>
+        </template>
+
+
+        @else
+        @component('components/newAdress', {
+        address:null,
+        key:1
+        })
+        @end
+        @end
+
+        <div class="payment-method flex flex-col gap-3 my-3 w-52">
+            <h3 class=" font-bold text-lg capitalize">
+                payment method:
+            </h3>
+            <select :value="shippingMethod" x-on:change="(e)=>updateShippingMethod(e.target.value)"
+                class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-52 ">
+                <option value="null">
+                    --
+                </option>
+                <option>
+                    on delivery
+                </option>
+                <option>
+                    Visa card
+                </option>
+            </select>
+        </div>
+
+        <div class="max-w-full mt-3 w-[700px] mx-auto pr-1 flex justify-center items-center">
+            <button @click="$store.order.updateOrder({{JSON.stringify(data)}})"
+                class="text-white h-10 bg-black min-w-52 flex justify-center items-center  hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-lg  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Checkout
+            </button>
+
+        </div>
+    </div>
+
     user order :
+
     <p>
         {{JSON.stringify(order)}}
     </p>

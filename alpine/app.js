@@ -8,6 +8,7 @@ import adressComponent from "./components/adressComponent";
 import itemComponent from "./components/itemComponent";
 import cartComponent from "./components/cartComponent";
 import orderStore from "./stores/orderStore";
+import checkoutComponent from "./components/checkoutComponent";
 
 window.Alpine = Alpine;
 
@@ -28,5 +29,7 @@ Alpine.data("accountComponent", accountComponent);
 Alpine.data("adressComponent", adressComponent);
 
 Alpine.data("itemCartComponent", itemComponent);
+
+Alpine.data("checkoutComponent", checkoutComponent);
 
 Alpine.start();

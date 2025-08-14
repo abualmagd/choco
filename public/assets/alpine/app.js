@@ -688,6 +688,8 @@ var _cartComponent = require("./components/cartComponent");
 var _cartComponentDefault = parcelHelpers.interopDefault(_cartComponent);
 var _orderStore = require("./stores/orderStore");
 var _orderStoreDefault = parcelHelpers.interopDefault(_orderStore);
+var _checkoutComponent = require("./components/checkoutComponent");
+var _checkoutComponentDefault = parcelHelpers.interopDefault(_checkoutComponent);
 window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).store("productGallery", (0, _productGalleryStoreDefault.default));
 (0, _alpinejsDefault.default).store("cart", (0, _cartStoreDefault.default));
@@ -698,9 +700,10 @@ window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).data("accountComponent", (0, _accountComponentDefault.default));
 (0, _alpinejsDefault.default).data("adressComponent", (0, _adressComponentDefault.default));
 (0, _alpinejsDefault.default).data("itemCartComponent", (0, _itemComponentDefault.default));
+(0, _alpinejsDefault.default).data("checkoutComponent", (0, _checkoutComponentDefault.default));
 (0, _alpinejsDefault.default).start();
 
-},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo"}],"69hXP":[function(require,module,exports,__globalThis) {
+},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo","./components/checkoutComponent":"fcqeV"}],"69hXP":[function(require,module,exports,__globalThis) {
 // packages/alpinejs/src/scheduler.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -3830,6 +3833,7 @@ parcelHelpers.export(exports, "loginEmail", ()=>loginEmail);
 parcelHelpers.export(exports, "registerEmail", ()=>registerEmail);
 parcelHelpers.export(exports, "logoutUser", ()=>logoutUser);
 parcelHelpers.export(exports, "createOrder", ()=>createOrder);
+parcelHelpers.export(exports, "updateOrderById", ()=>updateOrderById);
 var _services = require("./services");
 const updateUserData = async (data, id)=>{
     try {
@@ -4065,6 +4069,27 @@ const createOrder = async (data)=>{
                 "x-api-key": "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE"
             },
             method: "POST",
+            credentials: "include"
+        });
+        console.log(response);
+        if (!response.ok) {
+            if (response.statusText === "Unauthorized") throw new Error("Unauthorized");
+            else throw new Error("Failed to add to wishlist");
+        }
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+const updateOrderById = async (id, data)=>{
+    try {
+        const response = await fetch("/api/orders" + id, {
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE"
+            },
+            method: "PUT",
             credentials: "include"
         });
         console.log(response);
@@ -4450,6 +4475,45 @@ exports.default = {
     }
 };
 
-},{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
+},{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fcqeV":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _api = require("../utils/api");
+exports.default = (order)=>({
+        id: order.id,
+        paymentMethod: order.paymentMethod ?? "Card",
+        shipping: order.shipping ?? "0",
+        discount: order.discount ?? "0",
+        addresses: order.user.addresses,
+        shippingAddressId: order.shippingAddressId,
+        paymentMethod: null,
+        shippingMethod: null,
+        async updateOrderAddress (shippingAddressId) {
+            await (0, _api.updateOrderById)(this.id, {
+                shippingAddressId: shippingAddressId
+            });
+            this.shippingAddressId = shippingAddressId;
+        },
+        async updatePaymentMethod (paymentMethod1) {
+            //updateOrder
+            await (0, _api.updateOrderById)(this.id, {
+                paymentMethod: paymentMethod1
+            });
+            this.paymentMethod = paymentMethod1;
+        },
+        async updateShippingMethod (shippingMethod) {
+            //updateOrder
+            console.log("shipp: ", shippingMethod);
+            await (0, _api.updateOrderById)(this.id, {
+                shippingMethod: shippingMethod
+            });
+            this.paymentMethod = paymentMethod;
+        },
+        updadteUserAdresses () {
+            window.location.reload();
+        }
+    });
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/api":"f2P3u"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
 
 //# sourceMappingURL=app.js.map

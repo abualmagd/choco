@@ -76,7 +76,7 @@ const orderRoutes = async (fastify, opt) => {
         }
     });
     //PUT /api/orders/:id/cancel - Cancel order
-    fastify.put("/orders/:id", async (request, reply) => {
+    fastify.put("/admin/orders/cancel/:id", async (request, reply) => {
         try {
             const { id } = request.params;
             const order = await fastify.prisma.order.update({
@@ -89,6 +89,26 @@ const orderRoutes = async (fastify, opt) => {
                 return reply
                     .status(500)
                     .send(new responseClasses_1.ResError(500, ` error in cancelling order with id = ${id}`, "failed"));
+            }
+            return reply.send(order);
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
+    //PUT /api/orders/:id/update order
+    fastify.put("/orders/:id", async (request, reply) => {
+        try {
+            const { id } = request.params;
+            const data = request.body;
+            const order = await fastify.prisma.order.update({
+                where: { id: parseInt(id) },
+                data: data,
+            });
+            if (!order) {
+                return reply
+                    .status(500)
+                    .send(new responseClasses_1.ResError(500, ` error in updating order with id = ${id}`, "failed"));
             }
             return reply.send(order);
         }

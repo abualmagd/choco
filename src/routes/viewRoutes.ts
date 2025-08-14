@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginAsync, FastifyReply } from "fastify";
 import { CustomResponse, ResError } from "../utils/responseClasses";
+import { error } from "node:console";
 
 export const viewRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
@@ -186,6 +187,9 @@ export const viewRoutes: FastifyPluginAsync = async (
       },
     });
 
+    if (order?.userId !== request.session.user?.id) {
+      return reply.view("errorPage", { error: "Not Allowed" });
+    }
     return reply.view("checkout", { order: order });
   });
 };
