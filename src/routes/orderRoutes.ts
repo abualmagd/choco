@@ -131,10 +131,16 @@ export const orderRoutes: FastifyPluginAsync = async (
     async (request, reply) => {
       try {
         const { id } = request.params;
-        const data = request.body as Prisma.OrderUpdateInput;
+        const { shippingAddressId, data } = request.body as {
+          shippingAddressId: string;
+          data: any;
+        };
         const order = await fastify.prisma.order.update({
           where: { id: parseInt(id) },
-          data: data,
+          data: {
+            ...data,
+            shippingAddressId: parseInt(shippingAddressId),
+          },
         });
 
         if (!order) {

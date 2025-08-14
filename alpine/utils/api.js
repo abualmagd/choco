@@ -289,7 +289,7 @@ export const createOrder = async (data) => {
 
 export const updateOrderById = async (id, data) => {
   try {
-    const response = await fetch("/api/orders" + id, {
+    const response = await fetch("/api/orders/" + id, {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",

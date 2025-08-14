@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
-import { CustomResponse } from "../utils/responseClasses";
+import { CustomResponse, ResError } from "../utils/responseClasses";
 
 export const orderItemsRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
@@ -21,15 +21,19 @@ export const orderItemsRoutes: FastifyPluginAsync = async (
 
   fastify.post("/order-items", async (request, reply) => {
     try {
-      /* const userCart=await fastify.prisma.cart.findFirst({
-        where:{userId:request.session.user?.id},
-        include:{
-          items:true
-        }
-      })
-      if(!userCart){
-        
-      }*/
+      const user = await fastify.prisma.user.findUnique({
+        where: { id: request.session.user?.id },
+        include: {
+          addresses: {
+            where: { isDefault: true },
+          },
+        },
+      });
+      if (!user) {
+        return reply
+          .status(404)
+          .send(new ResError(404, "unauthorized", "unauthorized"));
+      }
       const {
         paymentMethod,
         orderNumber,
@@ -59,6 +63,8 @@ export const orderItemsRoutes: FastifyPluginAsync = async (
           total,
           userId: request.session.user?.id!,
           paymentMethod: paymentMethod,
+          phone: user.phone,
+          shippingAddressId: user.addresses[0].id ?? null,
           items: {
             create: items,
           },

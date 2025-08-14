@@ -58,12 +58,16 @@
     <div class="flex flex-col w-full p-3 shadow-md rounded">
         <h2 class=" text-xl font-bold">Shipping address</h2>
         @if(order.user.addresses[0])
+        <div x-model="shippingAddressId" class=" flex flex-col ga-6">
+            <p>choose address</p>
+            <template x-for=" address in addresses">
+                <label>
+                    <input type="radio" name="address" :value="address.id" x-model="shippingAddressId" />
+                    <span x-text="butterifyAddress(address)"></span>
+                </label>
 
-        <template x-for=" address in addresses">
-            <p>{{order.user.addresses[0]}}</p>
-        </template>
-
-
+            </template>
+        </div>
         @else
         @component('components/newAdress', {
         address:null,
@@ -72,37 +76,41 @@
         @end
         @end
 
+
+        <div x-data class=" payment-method flex flex-col gap-1 px-2 my-6 w-52">
+            <h3 class=" font-bold text-lg capitalize">
+                your phone:
+            </h3><input type="tel" x-model="phone" maxlength="11" pattern="01[01259][0-9]{8}"
+                class=" outline-none border-none bg-gray-200 rounded px-3 py-1" />
+        </div>
+
         <div class="payment-method flex flex-col gap-3 my-3 w-52">
             <h3 class=" font-bold text-lg capitalize">
                 payment method:
             </h3>
-            <select :value="shippingMethod" x-on:change="(e)=>updateShippingMethod(e.target.value)"
-                class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-52 ">
+            <select x-model="paymentMethod" class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-52 ">
                 <option value="null">
                     --
                 </option>
-                <option>
-                    on delivery
+                <option value="delivery">
+                    Cash on delivery
                 </option>
-                <option>
+                <option value="card">
                     Visa card
                 </option>
             </select>
         </div>
 
         <div class="max-w-full mt-3 w-[700px] mx-auto pr-1 flex justify-center items-center">
-            <button @click="$store.order.updateOrder({{JSON.stringify(data)}})"
+            <button @click="updateMyOrder"
                 class="text-white h-10 bg-black min-w-52 flex justify-center items-center  hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-lg  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Checkout
             </button>
 
         </div>
     </div>
-
-    user order :
-
     <p>
-        {{JSON.stringify(order)}}
+        {{JSON.stringify(order.user)}}
     </p>
 </div>
 @end

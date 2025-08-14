@@ -2,34 +2,34 @@ import { updateOrderById } from "../utils/api";
 
 export default (order) => ({
   id: order.id,
-  paymentMethod: order.paymentMethod ?? "Card",
   shipping: order.shipping ?? "0",
   discount: order.discount ?? "0",
   addresses: order.user.addresses,
+  phone: order.phone,
   shippingAddressId: order.shippingAddressId,
-  paymentMethod: null,
-  shippingMethod: null,
+  paymentMethod: order.paymentMethod ?? null,
+  shippingMethod: order.shippingMethod ?? null,
 
-  async updateOrderAddress(shippingAddressId) {
+  async updateMyOrder() {
+    console.log(this.paymentMethod);
     await updateOrderById(this.id, {
-      shippingAddressId: shippingAddressId,
+      phone: this.phone,
+      shippingAddressId: this.shippingAddressId,
+      paymentMethod: this.paymentMethod,
+      shippingMethod: this.shippingMethod,
     });
-    this.shippingAddressId = shippingAddressId;
   },
-  async updatePaymentMethod(paymentMethod) {
-    //updateOrder
-    await updateOrderById(this.id, {
-      paymentMethod: paymentMethod,
-    });
-    this.paymentMethod = paymentMethod;
-  },
-  async updateShippingMethod(shippingMethod) {
-    //updateOrder
-    console.log("shipp: ", shippingMethod);
-    await updateOrderById(this.id, {
-      shippingMethod: shippingMethod,
-    });
-    this.paymentMethod = paymentMethod;
+
+  butterifyAddress(address) {
+    return (
+      address.country +
+      ", " +
+      address.city +
+      ", " +
+      address.street +
+      ", " +
+      address.state
+    );
   },
 
   updadteUserAdresses() {

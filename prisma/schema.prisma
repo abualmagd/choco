@@ -236,6 +236,7 @@ model Order {
   shipping    Decimal
   discount    Decimal
   total       Decimal
+  phone       String?
   status      OrderStatus @default(PENDING)
   shippingAddress Address? @relation(fields: [shippingAddressId], references: [id])
   shippingAddressId Int?

@@ -4083,7 +4083,7 @@ const createOrder = async (data)=>{
 };
 const updateOrderById = async (id, data)=>{
     try {
-        const response = await fetch("/api/orders" + id, {
+        const response = await fetch("/api/orders/" + id, {
             body: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json",
@@ -4481,39 +4481,30 @@ parcelHelpers.defineInteropFlag(exports);
 var _api = require("../utils/api");
 exports.default = (order)=>({
         id: order.id,
-        paymentMethod: order.paymentMethod ?? "Card",
         shipping: order.shipping ?? "0",
         discount: order.discount ?? "0",
         addresses: order.user.addresses,
+        phone: order.phone,
         shippingAddressId: order.shippingAddressId,
-        paymentMethod: null,
-        shippingMethod: null,
-        async updateOrderAddress (shippingAddressId) {
+        paymentMethod: order.paymentMethod ?? null,
+        shippingMethod: order.shippingMethod ?? null,
+        async updateMyOrder () {
+            console.log(this.paymentMethod);
             await (0, _api.updateOrderById)(this.id, {
-                shippingAddressId: shippingAddressId
+                phone: this.phone,
+                shippingAddressId: this.shippingAddressId,
+                paymentMethod: this.paymentMethod,
+                shippingMethod: this.shippingMethod
             });
-            this.shippingAddressId = shippingAddressId;
         },
-        async updatePaymentMethod (paymentMethod1) {
-            //updateOrder
-            await (0, _api.updateOrderById)(this.id, {
-                paymentMethod: paymentMethod1
-            });
-            this.paymentMethod = paymentMethod1;
-        },
-        async updateShippingMethod (shippingMethod) {
-            //updateOrder
-            console.log("shipp: ", shippingMethod);
-            await (0, _api.updateOrderById)(this.id, {
-                shippingMethod: shippingMethod
-            });
-            this.paymentMethod = paymentMethod;
+        butterifyAddress (address) {
+            return address.country + ", " + address.city + ", " + address.street + ", " + address.state;
         },
         updadteUserAdresses () {
             window.location.reload();
         }
     });
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/api":"f2P3u"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
+},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
 
 //# sourceMappingURL=app.js.map

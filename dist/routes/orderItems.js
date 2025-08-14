@@ -18,15 +18,19 @@ const orderItemsRoutes = async (fastify, opt) => {
     });
     fastify.post("/order-items", async (request, reply) => {
         try {
-            /* const userCart=await fastify.prisma.cart.findFirst({
-              where:{userId:request.session.user?.id},
-              include:{
-                items:true
-              }
-            })
-            if(!userCart){
-              
-            }*/
+            const user = await fastify.prisma.user.findUnique({
+                where: { id: request.session.user?.id },
+                include: {
+                    addresses: {
+                        where: { isDefault: true },
+                    },
+                },
+            });
+            if (!user) {
+                return reply
+                    .status(404)
+                    .send(new responseClasses_1.ResError(404, "unauthorized", "unauthorized"));
+            }
             const { paymentMethod, orderNumber, subtotal, tax, shipping, discount, total, items, } = request.body;
             const orderItems = await fastify.prisma.order.create({
                 data: {
@@ -38,6 +42,8 @@ const orderItemsRoutes = async (fastify, opt) => {
                     total,
                     userId: request.session.user?.id,
                     paymentMethod: paymentMethod,
+                    phone: user.phone,
+                    shippingAddressId: user.addresses[0].id ?? null,
                     items: {
                         create: items,
                     },
