@@ -1,0 +1,19 @@
+@layout('components/layout/app')
+
+@set('title', 'Styllish')
+
+
+
+@section('content')
+@if(wishItems.length===0)
+<div class=" text-2xl font-bold">No wish Items chosen yet </div>
+@end
+
+<div class=" flex w-full gap-6 ">
+    @each(item in wishItems)
+    <div class=" wish-item ">
+        {JSON.stringify(item)}
+    </div>
+    @end
+</div>
+@end

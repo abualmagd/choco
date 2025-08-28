@@ -29,7 +29,9 @@ product:data.product
 @!component('components/productDetails', {
 data:data
 })
-
+@!component('components/writeReview',{
+id:data.product.id
+})
 
 @!component('components/featured', {
 title:'similar products',

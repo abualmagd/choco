@@ -1,15 +1,14 @@
 @layout('components/layout/app')
 
-@set('title', 'Styllish')
 
 @section('content')
 
-@if(category.products.length===0)
-<div class=" text-2xl font-bold">No products in this category yet </div>
+@if(products.length===0)
+<div class=" text-2xl font-bold">No collections in this category yet </div>
 @end
 
-<div class=" flex w-full gap-6 ">
-    @each(product in category.products)
+<div class=" grid lg:grid-cols-2 grid-cols-1 justify-center h-full w-full gap-6 ">
+    @each(product in products)
     @!component('components/cubicCard', {
     id:product.id,
     slug:product.slug,
@@ -20,9 +19,6 @@
     })
     @end
 </div>
-
-
-
 
 
 @end

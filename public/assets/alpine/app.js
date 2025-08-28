@@ -690,6 +690,8 @@ var _orderStore = require("./stores/orderStore");
 var _orderStoreDefault = parcelHelpers.interopDefault(_orderStore);
 var _checkoutComponent = require("./components/checkoutComponent");
 var _checkoutComponentDefault = parcelHelpers.interopDefault(_checkoutComponent);
+var _reviewingComponent = require("./components/reviewingComponent");
+var _reviewingComponentDefault = parcelHelpers.interopDefault(_reviewingComponent);
 window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).store("productGallery", (0, _productGalleryStoreDefault.default));
 (0, _alpinejsDefault.default).store("cart", (0, _cartStoreDefault.default));
@@ -701,9 +703,10 @@ window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).data("adressComponent", (0, _adressComponentDefault.default));
 (0, _alpinejsDefault.default).data("itemCartComponent", (0, _itemComponentDefault.default));
 (0, _alpinejsDefault.default).data("checkoutComponent", (0, _checkoutComponentDefault.default));
+(0, _alpinejsDefault.default).data("reviewingComponent", (0, _reviewingComponentDefault.default));
 (0, _alpinejsDefault.default).start();
 
-},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo","./components/checkoutComponent":"fcqeV"}],"69hXP":[function(require,module,exports,__globalThis) {
+},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo","./components/checkoutComponent":"fcqeV","./components/reviewingComponent":"cwHAh"}],"69hXP":[function(require,module,exports,__globalThis) {
 // packages/alpinejs/src/scheduler.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -3802,7 +3805,7 @@ exports.default = {
         localStorage.setItem("cartCount", this.count);
     },
     clearItemCart () {
-        this.count = parseInt(this.count) - 1;
+        if (this.count !== 0) this.count = parseInt(this.count) - 1;
         localStorage.setItem("cartCount", this.count);
     },
     async asyncCartTotal () {
@@ -3834,6 +3837,7 @@ parcelHelpers.export(exports, "registerEmail", ()=>registerEmail);
 parcelHelpers.export(exports, "logoutUser", ()=>logoutUser);
 parcelHelpers.export(exports, "createOrder", ()=>createOrder);
 parcelHelpers.export(exports, "updateOrderById", ()=>updateOrderById);
+parcelHelpers.export(exports, "createReview", ()=>createReview);
 var _services = require("./services");
 const updateUserData = async (data, id)=>{
     try {
@@ -4096,6 +4100,27 @@ const updateOrderById = async (id, data)=>{
         if (!response.ok) {
             if (response.statusText === "Unauthorized") throw new Error("Unauthorized");
             else throw new Error("Failed to add to wishlist");
+        }
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+const createReview = async (id, data)=>{
+    try {
+        const response = await fetch(`/api/products/${id}/reviews`, {
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE"
+            },
+            method: "POST",
+            credentials: "include"
+        });
+        console.log(response);
+        if (!response.ok) {
+            if (response.statusText === "Unauthorized") throw new Error("Unauthorized");
+            else throw new Error("Failed to create reviews " + response.text);
         }
         return await response.json();
     } catch (error) {
@@ -4505,6 +4530,42 @@ exports.default = (order)=>({
         }
     });
 
-},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
+},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cwHAh":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _api = require("../utils/api");
+var _services = require("../utils/services");
+exports.default = (productId)=>({
+        rating: 0,
+        show: false,
+        content: "",
+        title: "",
+        hover: 0,
+        toggleComponent () {
+            this.show = !this.show;
+        },
+        updateHover (rate) {
+            this.hover = rate;
+        },
+        updateRating (rate) {
+            this.rating = rate;
+        },
+        async createUserReview () {
+            if (this.rating === 0 || this.content === "" || this.title === "") (0, _services.notify)("complete all fields", true);
+            else try {
+                await (0, _api.createReview)(productId, {
+                    title: this.title,
+                    rating: this.rating,
+                    comment: this.content
+                });
+                (0, _services.notify)("review created", false);
+                this.show = false;
+            } catch (error) {
+                (0, _services.notify)(String(error), true);
+            }
+        }
+    });
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/api":"f2P3u","../utils/services":"fXQWd"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
 
 //# sourceMappingURL=app.js.map

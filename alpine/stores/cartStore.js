@@ -19,7 +19,7 @@ export default {
   },
 
   clearItemCart() {
-    this.count = parseInt(this.count) - 1;
+    if (this.count !== 0) this.count = parseInt(this.count) - 1;
     localStorage.setItem("cartCount", this.count);
   },
   async asyncCartTotal() {

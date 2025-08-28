@@ -127,6 +127,11 @@ export const viewRoutes: FastifyPluginAsync = async (
         where: {
           slug: slug,
         },
+        include: {
+          products: {
+            take: 30,
+          },
+        },
       });
 
       if (!category) {
@@ -191,5 +196,72 @@ export const viewRoutes: FastifyPluginAsync = async (
       return reply.view("errorPage", { error: "Not Allowed" });
     }
     return reply.view("checkout", { order: order });
+  });
+
+  fastify.get("/reviews/:id", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const review = await fastify.prisma.review.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!review) {
+      return reply.view("notFound");
+    }
+    return reply.view("review", { data: review });
+  });
+
+  fastify.get("/trends", async (request, reply) => {
+    const products = await fastify.prisma.product.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 30,
+    });
+
+    return reply.view("trend", { products: products });
+  });
+
+  //collections
+  fastify.get("/collections", async (request, reply) => {
+    const collections = await fastify.prisma.category.findMany({
+      take: 40,
+    });
+
+    return reply.view("collections", { collections: collections });
+  });
+
+  //sales
+  fastify.get("/sale", async (request, reply) => {
+    const currentDate = new Date();
+    const products = await fastify.prisma.product.findMany({
+      where: {
+        discounts: {
+          some: {
+            isActive: true,
+            startDate: {
+              lte: currentDate,
+            },
+            OR: [{ endDate: null }, { endDate: { gte: currentDate } }],
+          },
+        },
+      },
+    });
+    return reply.view("sale", { products: products });
+  });
+
+  //wishlist
+  fastify.get("/wish-list", async (request, reply) => {
+    const userd = request.session.user?.id;
+    if (!userd) {
+      return reply.view("login");
+    }
+    const wishItems = await fastify.prisma.wishlistItem.findMany({
+      where: { userId: userd },
+      include: {
+        product: true,
+        variant: true,
+      },
+    });
+    return reply.view("wishList", { wishItems: wishItems });
   });
 };

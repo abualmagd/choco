@@ -339,9 +339,9 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
     { preHandler: isAuthenticate },
     async (request, reply) => {
       try {
-        const productId = parseInt(request.params.id, 10);
+        const productId = parseInt(request.params.id);
         const { title, rating, comment } = request.body;
-        const userId = 1; //'getUserId()'
+        const userId = request.session.user?.id;
         // Validate rating (1-5 stars)
         if (rating < 1 || rating > 5) {
           return reply.status(400).send({
@@ -355,7 +355,7 @@ export const productRoutes: FastifyPluginAsync = async (fastify, opt: any) => {
             productId: productId,
             rating: rating,
             comment: comment,
-            userId: userId,
+            userId: userId!,
           },
           include: {
             user: {

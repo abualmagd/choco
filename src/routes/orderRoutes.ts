@@ -2,29 +2,39 @@ import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { ResError } from "../utils/responseClasses";
 import { OrderStatus, Prisma } from "@prisma/client";
 import { createOrderInvoice } from "../services/invoiceServices";
-import { isAdminAuth, isModeratorAuth } from "../authentication/middleware";
+import {
+  isAdminAuth,
+  isAuthenticate,
+  isModeratorAuth,
+} from "../authentication/middleware";
 
 export const orderRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
   opt: any
 ) => {
   //GET /api/orders - Get user's orders
-  fastify.get("/orders", async (request, reply) => {
-    try {
-      if (!request.session.user?.id) {
-        return reply
-          .status(400)
-          .send(new ResError(400, " please sign in again", " Unauthorized "));
+  fastify.get(
+    "/orders",
+    { preHandler: isAdminAuth },
+    async (request, reply) => {
+      try {
+        if (!request.session.user?.id) {
+          return reply
+            .status(400)
+            .send(new ResError(400, " please sign in again", " Unauthorized "));
+        }
+        const { page } = (request.query as { page: string }) ?? "0";
+        const orders = await fastify.prisma.order.findMany({
+          where: { userId: request.session.user?.id },
+          skip: 20 * parseInt(page),
+          take: 20,
+        });
+        return reply.send(orders);
+      } catch (error) {
+        return reply.send(error);
       }
-
-      const orders = await fastify.prisma.order.findMany({
-        where: { userId: request.session.user?.id },
-      });
-      return reply.send(orders);
-    } catch (error) {
-      return reply.send(error);
     }
-  });
+  );
 
   //POST /api/orders - Create new order
 
@@ -57,21 +67,21 @@ export const orderRoutes: FastifyPluginAsync = async (
   });
 
   //GET /api/orders/:id - Get order details
-  fastify.get<{ Params: { id: string } }>(
+  fastify.get(
     "/orders/:id",
+    //{preHandler:isAuthenticate},
     async (request, reply) => {
       try {
-        if (!request.session.user?.id) {
-          return reply
-            .status(400)
-            .send(new ResError(400, " please sign in again", " Unauthorized "));
-        }
-
-        const { id } = request.params;
+        const { id } = request.params as { id: string };
         const order = await fastify.prisma.order.findUnique({
           where: { id: parseInt(id) },
           include: {
-            items: true,
+            items: {
+              include: {
+                product: true,
+                variant: true,
+              },
+            },
           },
         });
         if (!order) {
@@ -263,7 +273,7 @@ export const orderRoutes: FastifyPluginAsync = async (
   //get all orders with pagination
   fastify.get(
     "/admin/orders",
-    { preHandler: isAdminAuth },
+    // { preHandler: isAdminAuth },
     async (request, reply) => {
       try {
         const { page, ...restQuery } = request.query as {

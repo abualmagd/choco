@@ -1,0 +1,41 @@
+@layout('components/layout/app')
+
+@set('title', 'Styllish')
+
+@set('seotags', {
+description:data.comment,
+canonical: "/reviews/"+data.id,
+ogTitle:data.title,
+ogDescription:data.comment,
+robots:'index, follow'
+})
+
+
+@section('content')
+
+
+
+<div class="flex flex-col my-8">
+
+    <div class=" w-96 flex flex-col">
+        <div class=" h-5"></div>
+        @!component('components/ratingStars', {
+        rating:data.rating
+        })
+        <div class=" h-5"></div>
+        <p type="text"
+            class="  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            {{data.title}}
+        </p>
+        <div class=" h-5"></div>
+        <p
+            class="  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            {{data.comment}}
+        </p>
+        <div class=" h-5"></div>
+
+    </div>
+
+</div>
+
+@end

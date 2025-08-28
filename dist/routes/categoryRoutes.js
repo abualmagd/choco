@@ -9,7 +9,7 @@ const categoryRoutes = async (fastify, option) => {
         try {
             const { page } = request.query;
             const categories = await fastify.prisma.category.findMany({
-                skip: 20 * parseInt(page),
+                skip: 20 * parseInt(page ?? 0),
                 take: 20,
             });
             return reply.send(categories);

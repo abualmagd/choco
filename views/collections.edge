@@ -1,0 +1,27 @@
+@layout('components/layout/app')
+
+
+@section('content')
+
+@if(collections.length===0)
+<div class=" text-2xl font-bold">No collections in this category yet </div>
+@end
+
+<div class=" grid lg:grid-cols-2 grid-cols-1 justify-center h-full w-full gap-6 ">
+    @each(category in collections)
+    @!component('components/card', {
+    title:category.name??' ',
+    cardImage:category.image??'/public/assetes/images/shoes2.jpg',
+    action:{
+    link:'/category/'+category.slug,
+    word:'shop now'
+    }
+    })
+    @end
+</div>
+
+
+
+
+
+@end

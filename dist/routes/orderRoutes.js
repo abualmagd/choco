@@ -6,15 +6,18 @@ const invoiceServices_1 = require("../services/invoiceServices");
 const middleware_1 = require("../authentication/middleware");
 const orderRoutes = async (fastify, opt) => {
     //GET /api/orders - Get user's orders
-    fastify.get("/orders", async (request, reply) => {
+    fastify.get("/orders", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
         try {
             if (!request.session.user?.id) {
                 return reply
                     .status(400)
                     .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
             }
+            const { page } = request.query ?? "0";
             const orders = await fastify.prisma.order.findMany({
                 where: { userId: request.session.user?.id },
+                skip: 20 * parseInt(page),
+                take: 20,
             });
             return reply.send(orders);
         }
@@ -50,18 +53,20 @@ const orderRoutes = async (fastify, opt) => {
         }
     });
     //GET /api/orders/:id - Get order details
-    fastify.get("/orders/:id", async (request, reply) => {
+    fastify.get("/orders/:id", 
+    //{preHandler:isAuthenticate},
+    async (request, reply) => {
         try {
-            if (!request.session.user?.id) {
-                return reply
-                    .status(400)
-                    .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
-            }
             const { id } = request.params;
             const order = await fastify.prisma.order.findUnique({
                 where: { id: parseInt(id) },
                 include: {
-                    items: true,
+                    items: {
+                        include: {
+                            product: true,
+                            variant: true,
+                        },
+                    },
                 },
             });
             if (!order) {
@@ -190,7 +195,9 @@ const orderRoutes = async (fastify, opt) => {
         }
     });
     //get all orders with pagination
-    fastify.get("/admin/orders", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+    fastify.get("/admin/orders", 
+    // { preHandler: isAdminAuth },
+    async (request, reply) => {
         try {
             const { page, ...restQuery } = request.query;
             const orders = await fastify.prisma.order.findMany({

@@ -311,3 +311,28 @@ export const updateOrderById = async (id, data) => {
     throw error;
   }
 };
+
+export const createReview = async (id, data) => {
+  try {
+    const response = await fetch(`/api/products/${id}/reviews`, {
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY_1,
+      },
+      method: "POST",
+      credentials: "include",
+    });
+    console.log(response);
+    if (!response.ok) {
+      if (response.statusText === "Unauthorized") {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error("Failed to create reviews " + response.text);
+      }
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};

@@ -198,9 +198,9 @@ const productRoutes = async (fastify, opt) => {
     //create review for product //authenticated user only
     fastify.post("/products/:id/reviews", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
         try {
-            const productId = parseInt(request.params.id, 10);
+            const productId = parseInt(request.params.id);
             const { title, rating, comment } = request.body;
-            const userId = 1; //'getUserId()'
+            const userId = request.session.user?.id;
             // Validate rating (1-5 stars)
             if (rating < 1 || rating > 5) {
                 return reply.status(400).send({

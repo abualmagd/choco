@@ -1,0 +1,35 @@
+<div class="flex flex-col my-8" x-data="reviewingComponent({{id}})">
+    <button @click="toggleComponent" class=" shadow-md rounded-md hover:scale-105 px-3 py-1 w-44 bg-gray-200">Review
+        this product</button>
+
+
+
+    <div class=" w-96 flex flex-col" x-show="show">
+        <div class=" h-5"></div>
+        <ul class=" flex w-24 my-2">
+            <template x-for=" item in [1,2,3,4,5]">
+                <li :class="(hover||rating)>=item?'text-green-500':'text-gray-300' " @click="updateRating(item)"
+                    x-on:mouseover="updateHover(item)" x-on:mouseout="updateHover(0)">
+                    <svg class="w-4 h-4 cursor-pointer me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 22 20">
+                        <path
+                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                </li>
+            </template>
+
+
+        </ul>
+        <div class=" h-5"></div>
+        <input type="text" x-model="title"
+            class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
+        <div class=" h-5"></div>
+        <textarea x-model="content"
+            class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+        <div class=" h-5"></div>
+        <button @click="createUserReview"
+            class=" bg-yellow-200 rounded-md px-5 hover:shadow-md hover:bg-yellow-400 py-2 capitalize">
+            submit</button>
+    </div>
+
+</div>

@@ -8,7 +8,11 @@ const SettingsRoute = async (fastify, opt) => {
     fastify.get("/admin/settings", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
         try {
             const setts = await fastify.prisma.siteSettings.findMany();
-            return reply.send(setts);
+            const settings = setts.reduce((obj, { key, value }) => {
+                obj[key] = value;
+                return obj;
+            }, {});
+            return reply.send(settings);
         }
         catch (error) {
             return reply.send(error);
@@ -28,7 +32,7 @@ const SettingsRoute = async (fastify, opt) => {
             return reply.send(error);
         }
     });
-    //update settings keys
+    //update settings key
     fastify.put("/admin/settings", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
         try {
             const { key, value } = request.body;
@@ -40,6 +44,30 @@ const SettingsRoute = async (fastify, opt) => {
                     key: key,
                 },
             });
+            fastify.refreshSiteSettings();
+            return reply.send(setts);
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
+    //update many settings keys
+    fastify.put("/admin/settings/many", { preHandler: middleware_1.isAdminAuth }, async (request, reply) => {
+        try {
+            // const { key, value } = request.body as { key: string; value: string };
+            const data = request.body;
+            let setts = {};
+            for (let index = 0; index < data.length; index++) {
+                const setting = await fastify.prisma.siteSettings.update({
+                    data: {
+                        value: data[index].value,
+                    },
+                    where: {
+                        key: data[index].key,
+                    },
+                });
+                setts = { ...setts, setting };
+            }
             fastify.refreshSiteSettings();
             return reply.send(setts);
         }
