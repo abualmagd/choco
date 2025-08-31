@@ -15,6 +15,7 @@ declare module "@fastify/session" {
 }
 
 import { OAuth2Namespace } from "@fastify/oauth2";
+import { Translations } from "./fastify-session";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -32,5 +33,13 @@ declare module "fastify" {
 declare module "fastify" {
   interface FastifyInstance {
     refreshSiteSettings: Function;
+    translations: Translations;
+    getTranslations: (lang?: string) => Record<string, string>;
+  }
+}
+
+declare module "fastify" {
+  interface FastifyRequest {
+    getUserLang: () => Promise<string>;
   }
 }

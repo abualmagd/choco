@@ -26,6 +26,21 @@ exports.EdgePlugin = (0, fastify_plugin_1.default)(async (fastify, opt) => {
     }
     const siteSettings = await fetchSettings(fastify);
     edgeInstance.global("settings", siteSettings);
+    fastify.addHook("preHandler", async (request, reply) => {
+        if (request.url.startsWith("/api/")) {
+            return; // Skip the hook for API routes
+        }
+        const lang = await request.getUserLang();
+        const translations = fastify.getTranslations(lang);
+        edgeInstance.global("locales", {
+            translations,
+            currentLanguage: lang,
+        });
+        edgeInstance.global("t", function (key) {
+            const translation = translations[key];
+            return translation[key] || key;
+        });
+    });
     fastify.decorateReply("view", async function (template, state) {
         const html = await edgeInstance.render(template, state);
         this.header("content-type", "text/html; charset=utf-8");

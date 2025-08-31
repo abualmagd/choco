@@ -31,6 +31,8 @@ const fastify_multipart_1 = __importDefault(require("fastify-multipart"));
 const static_1 = __importDefault(require("@fastify/static"));
 const settingsRoute_1 = require("./routes/settingsRoute");
 const analyticRoutes_1 = require("./routes/analyticRoutes");
+const i18n_1 = require("./plugins/i18n");
+const langRoutes_1 = require("./routes/langRoutes");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({
     logger: true,
@@ -89,6 +91,7 @@ const start = async () => {
         server.get("/dashboard/:any", (req, reply) => {
             reply.sendFile("index.html", path_1.default.join(process.cwd(), "dashboard"));
         });
+        await server.register(langRoutes_1.LangRoutes, { prefix: "/api/" });
         await server.register(prisma_1.default);
         await server.register(productRoutes_1.productRoutes, { prefix: "/api/" });
         await server.register(categoryRoutes_1.categoryRoutes, { prefix: "/api/" });
@@ -103,9 +106,10 @@ const start = async () => {
         await server.register(settingsRoute_1.SettingsRoute, { prefix: "/api" });
         await server.register(analyticRoutes_1.AnalyticRoutes, { prefix: "/api" });
         await server.register(viewRoutes_1.viewRoutes);
-        await server.register(edge_1.EdgePlugin);
         await server.register(cookie_1.default);
         await server.register(session_1.default, auth_1.sessionOption);
+        await server.register(i18n_1.i18nPlugin);
+        await server.register(edge_1.EdgePlugin);
         await server.register(oauth2_1.default, auth_1.oauthGoogleOption);
         await server.register(oauth2_1.default, auth_1.oauthFaceBookOption);
         await server.register(authRoutes_1.authRouters, {

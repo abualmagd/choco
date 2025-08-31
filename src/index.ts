@@ -30,6 +30,8 @@ import fastifyMultipart from "fastify-multipart";
 import fastifyStatic from "@fastify/static";
 import { SettingsRoute } from "./routes/settingsRoute";
 import { AnalyticRoutes } from "./routes/analyticRoutes";
+import { i18nPlugin } from "./plugins/i18n";
+import { LangRoutes } from "./routes/langRoutes";
 
 dotenv.config();
 
@@ -98,6 +100,7 @@ const start = async () => {
     server.get("/dashboard/:any", (req, reply) => {
       reply.sendFile("index.html", path.join(process.cwd(), "dashboard"));
     });
+    await server.register(LangRoutes, { prefix: "/api/" });
     await server.register(prismaPlugin);
     await server.register(productRoutes, { prefix: "/api/" });
     await server.register(categoryRoutes, { prefix: "/api/" });
@@ -112,9 +115,11 @@ const start = async () => {
     await server.register(SettingsRoute, { prefix: "/api" });
     await server.register(AnalyticRoutes, { prefix: "/api" });
     await server.register(viewRoutes);
-    await server.register(EdgePlugin);
     await server.register(fastifyCookie);
     await server.register(fastifySession, sessionOption);
+    await server.register(i18nPlugin);
+    await server.register(EdgePlugin);
+
     await server.register(fastifyOauth2, oauthGoogleOption);
     await server.register(fastifyOauth2, oauthFaceBookOption);
     await server.register(authRouters, {

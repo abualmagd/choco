@@ -45,5 +45,31 @@ const wishItemsRoutes = async (fastify, opt) => {
             return reply.send(error);
         }
     });
+    //delete wishlist item
+    fastify.delete("/wishItems/product/:id", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
+        try {
+            const { id } = request.params;
+            const userId = request.session.user?.id;
+            const item = await fastify.prisma.wishlistItem.findFirst({
+                where: {
+                    OR: [{ productId: parseInt(id) }, { variantId: parseInt(id) }],
+                    userId: userId,
+                },
+            });
+            console.log("userId", id);
+            if (item) {
+                await fastify.prisma.wishlistItem.delete({
+                    where: { id: item.id },
+                });
+            }
+            else {
+                return reply.send(new responseClasses_1.ResError(404, "not found", "error in removing from wishlist"));
+            }
+            return reply.send(new responseClasses_1.CustomResponse("wishlist item deleted well", null));
+        }
+        catch (error) {
+            return reply.send(error);
+        }
+    });
 };
 exports.wishItemsRoutes = wishItemsRoutes;

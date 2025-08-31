@@ -1,19 +1,42 @@
 @layout('components/layout/app')
 
-@set('title', 'Styllish')
+
 
 
 
 @section('content')
 @if(wishItems.length===0)
 <div class=" text-2xl font-bold">No wish Items chosen yet </div>
-@end
+@else
+
+
 
 <div class=" flex w-full gap-6 ">
     @each(item in wishItems)
-    <div class=" wish-item ">
-        {JSON.stringify(item)}
+
+    <div class=" wish-item  flex gap-6 flex-wrap" x-data="wishListComponent({{JSON.stringify(item)}})">
+
+
+        <div " class=" h-72 md:w-52 w-full flex flex-col">
+            <button class=" w-full bg-gray-300 shadow-md" x-on:click="removeItemWish">
+                remove
+            </button>
+            <img src="{{item.product&&item.product.images.length>0?item.product.images[0]:item.variant&&item.variant.images.length>0?item.variant.iamges[0]: 
+                " /public/assetes/images/holder.jpg" }}" alt="{{" product image"}}"
+                class=" md:w-60 w-full h-72 object-cover" />
+            <div class="card-data flex justify-between text-sm h-10 items-end">
+                <a href="/products/{{item.product?item.product.slug:item.variant.slug}}">
+                    {{item.product?item.product.name:item.variant.name||" "}}
+                </a>
+                <p>
+                    <span>{{settings.currencyLogo||'$'}}</span>
+                    {{item.product?item.product.price:item.variant.price||''}}
+                </p>
+            </div>
+        </div>
     </div>
     @end
 </div>
+
+@end
 @end

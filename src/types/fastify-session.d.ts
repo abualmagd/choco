@@ -10,3 +10,9 @@ declare module "@fastify/session" {
     };
   }
 }
+
+interface Translations {
+  [key: string]: {
+    [key: string]: string;
+  };
+}

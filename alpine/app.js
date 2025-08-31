@@ -10,6 +10,7 @@ import cartComponent from "./components/cartComponent";
 import orderStore from "./stores/orderStore";
 import checkoutComponent from "./components/checkoutComponent";
 import reviewingComponent from "./components/reviewingComponent";
+import wishListComponent from "./components/wishListComponent";
 
 window.Alpine = Alpine;
 
@@ -34,5 +35,7 @@ Alpine.data("itemCartComponent", itemComponent);
 Alpine.data("checkoutComponent", checkoutComponent);
 
 Alpine.data("reviewingComponent", reviewingComponent);
+
+Alpine.data("wishListComponent", wishListComponent);
 
 Alpine.start();

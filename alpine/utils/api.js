@@ -180,13 +180,14 @@ export const removeFromWishList = async (id) => {
   try {
     const response = await fetch(`/api/wishItems/${id}`, {
       headers: {
-        "Content-Type": "application/json",
+        //"Content-Type": "application/json",
         "x-api-key": process.env.API_KEY_1,
       },
       method: "DELETE",
       credentials: "include",
     });
 
+    console.log(response);
     if (!response.ok) {
       if (response.statusText === "Unauthorized") {
         throw new Error("Unauthorized");
@@ -332,6 +333,33 @@ export const createReview = async (id, data) => {
       }
     }
     return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+//remove wishlist by productId
+//"/wishItems/product/:id"
+export const removeFromWishListByProduct = async (id) => {
+  try {
+    const response = await fetch(`/api/wishItems/product/${id}`, {
+      headers: {
+        //"Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY_1,
+      },
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    console.log(response);
+    if (!response.ok) {
+      if (response.statusText === "Unauthorized") {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error("Failed to add to wishlist");
+      }
+    }
+    return response.json();
   } catch (error) {
     throw error;
   }

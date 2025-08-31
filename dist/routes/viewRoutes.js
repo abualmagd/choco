@@ -229,7 +229,11 @@ const viewRoutes = async (fastify, opt) => {
         const wishItems = await fastify.prisma.wishlistItem.findMany({
             where: { userId: userd },
             include: {
-                product: true,
+                product: {
+                    include: {
+                        images: true,
+                    },
+                },
                 variant: true,
             },
         });

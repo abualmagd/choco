@@ -1,4 +1,4 @@
-import { addToWishList, removeFromWishList } from "../utils/api";
+import { addToWishList, removeFromWishListByProduct } from "../utils/api";
 import { notify } from "../utils/services";
 
 export default (productId) => ({
@@ -23,24 +23,25 @@ export default (productId) => ({
     this.isLoading = true;
     try {
       if (this.isLiked) {
-        await removeFromWishList(productId);
+        await removeFromWishListByProduct(productId);
 
-        this.isLiked = false;
         notify("product removed from wishlist");
         if (this.likedList.includes(productId)) {
           const filtered = this.likedList.filter((e) => e !== productId);
           localStorage.setItem("likedList", JSON.stringify(filtered));
         }
-      }
-      await addToWishList({
-        productId: productId,
-      });
+        this.isLiked = false;
+      } else {
+        await addToWishList({
+          productId: productId,
+        });
 
-      this.isLiked = true;
-      notify("product added to wishlist");
-      if (!this.likedList.includes(productId)) {
-        this.likedList.push(productId);
-        localStorage.setItem("likedList", JSON.stringify(this.likedList));
+        this.isLiked = true;
+        notify("product added to wishlist");
+        if (!this.likedList.includes(productId)) {
+          this.likedList.push(productId);
+          localStorage.setItem("likedList", JSON.stringify(this.likedList));
+        }
       }
     } catch (error) {
       if (error == "Error: Unauthorized") {

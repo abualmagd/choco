@@ -1,5 +1,5 @@
 import fp from "fastify-plugin";
-import { FastifyInstance, FastifyPluginAsync } from "fastify";
+import { FastifyInstance, FastifyPluginAsync, FastifyRequest } from "fastify";
 import path from "path";
 import { Edge } from "edge.js";
 
@@ -25,7 +25,26 @@ export const EdgePlugin: FastifyPluginAsync = fp(
     }
 
     const siteSettings = await fetchSettings(fastify);
+
     edgeInstance.global("settings", siteSettings);
+
+    fastify.addHook("preHandler", async (request, reply) => {
+      if (request.url.startsWith("/api/")) {
+        return; // Skip the hook for API routes
+      }
+      const lang = await request.getUserLang();
+      const translations = fastify.getTranslations(lang);
+
+      edgeInstance.global("locales", {
+        translations,
+        currentLanguage: lang,
+      });
+
+      edgeInstance.global("t", function (key: any) {
+        const translation = translations[key];
+        return translation[key] || key;
+      });
+    });
 
     fastify.decorateReply(
       "view",
