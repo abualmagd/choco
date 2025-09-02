@@ -4109,7 +4109,7 @@ const updateOrderById = async (id, data)=>{
             method: "PUT",
             credentials: "include"
         });
-        console.log(response);
+        //console.log("response", await response.json());
         if (!response.ok) {
             if (response.statusText === "Unauthorized") throw new Error("Unauthorized");
             else throw new Error("Failed to add to wishlist");

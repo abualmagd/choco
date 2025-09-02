@@ -140,10 +140,11 @@ export const orderRoutes: FastifyPluginAsync = async (
   //PUT /api/orders/:id/update order
   fastify.put<{ Params: { id: string } }>(
     "/orders/:id",
+    { preHandler: isAuthenticate },
     async (request, reply) => {
       try {
         const { id } = request.params;
-        const { shippingAddressId, data } = request.body as {
+        const { shippingAddressId, ...data } = request.body as {
           shippingAddressId: string;
           data: any;
         };
@@ -324,5 +325,32 @@ export const orderRoutes: FastifyPluginAsync = async (
     // should be 606a8a1307d64caf4e2e9bb724738f115a8972c27eccb2a8acd9194c357e4bec
 
     return replay.send(new CustomResponse({ hash: hash }, null));
+  });
+
+  fastify.post("/order/webhook", async (request, reply) => {
+    //webhook signature
+
+    const bodyParser = require("body-parser");
+    const crypto = require("crypto");
+    const queryString = require("query-string");
+    const _ = require("underscore");
+    const { data, event } = request.body;
+    data.signatureKeys.sort();
+
+    const objectSignaturePayload = _.pick(data, data.signatureKeys);
+    const signaturePayload = queryString.stringify(objectSignaturePayload);
+    const signature = crypto
+
+      .createHmac("sha256", PaymentApiKey)
+
+      .update(signaturePayload)
+
+      .digest("hex");
+    const kashierSignature = request.header("x-kashier-signature");
+    if (kashierSignature === signature) {
+      console.log("valid signature");
+    } else {
+      console.log("invalid signature");
+    }
   });
 };

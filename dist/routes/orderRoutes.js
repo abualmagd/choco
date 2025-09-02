@@ -104,10 +104,10 @@ const orderRoutes = async (fastify, opt) => {
         }
     });
     //PUT /api/orders/:id/update order
-    fastify.put("/orders/:id", async (request, reply) => {
+    fastify.put("/orders/:id", { preHandler: middleware_1.isAuthenticate }, async (request, reply) => {
         try {
             const { id } = request.params;
-            const { shippingAddressId, data } = request.body;
+            const { shippingAddressId, ...data } = request.body;
             const order = await fastify.prisma.order.update({
                 where: { id: parseInt(id) },
                 data: {

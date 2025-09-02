@@ -268,4 +268,23 @@ export const viewRoutes: FastifyPluginAsync = async (
     });
     return reply.view("wishList", { wishItems: wishItems });
   });
+
+  fastify.get("/redirect", async (request, reply) => {
+    const { paymentStatus, merchantOrderId } = request.query as {
+      paymentStatus: string;
+      merchantOrderId: string;
+    };
+    if (paymentStatus === "SUCCESS") {
+      const order = await fastify.prisma.order.update({
+        where: { id: parseInt(merchantOrderId) },
+        data: {
+          status: "PROCESSING",
+        },
+      });
+
+      return reply.view("redirect", { order: order });
+    } else {
+      return reply.view("errorPage", { error: " payment failed" });
+    }
+  });
 };

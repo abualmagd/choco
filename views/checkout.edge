@@ -62,7 +62,8 @@
             <p>choose address</p>
             <template x-for=" address in addresses">
                 <label>
-                    <input type="radio" name="address" :value="address.id" x-model="shippingAddressId" />
+                    <input type="radio" name="address" :value="address.id" x-model="shippingAddressId"
+                        x-on:change="updateMyOrder" />
                     <span x-text="butterifyAddress(address)"></span>
                 </label>
 
@@ -80,15 +81,16 @@
         <div x-data class=" payment-method flex flex-col gap-1 px-2 my-6 w-52">
             <h3 class=" font-bold text-lg capitalize">
                 your phone:
-            </h3><input type="tel" x-model="phone" maxlength="11" pattern="01[01259][0-9]{8}"
-                class=" outline-none border-none bg-gray-200 rounded px-3 py-1" />
+            </h3><input type="tel" x-model="phone" x-on:change="updateMyOrder" maxlength="11"
+                pattern="01[01259][0-9]{8}" class=" outline-none border-none bg-gray-200 rounded px-3 py-1" />
         </div>
 
         <div class="payment-method flex flex-col gap-3 my-3 w-52">
             <h3 class=" font-bold text-lg capitalize">
                 payment method:
             </h3>
-            <select x-model="paymentMethod" class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-52 ">
+            <select x-model="paymentMethod" x-on:change="updateMyOrder"
+                class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-52 ">
                 <option value="null">
                     --
                 </option>
@@ -102,19 +104,22 @@
         </div>
 
         <div class="max-w-full gap-3 mt-3 w-[700px] mx-auto pr-1 flex justify-center items-center">
-            <button @click="updateMyOrder"
+            <button @click="updateMyOrder" x-show="paymentMethod !=='card'"
                 class="text-white h-10 bg-black min-w-52 flex justify-center items-center  hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-lg  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                update order data
+                checkout
             </button>
-            @!component('components/paymentCart', {
-            data:{
-            order:order,
-            user:order.user,
-            currency:settings.currency,
-            language:locales.currentLanguage,
-            hash:''
-            }
-            })
+            <div x-show="paymentMethod==='card'">
+                @!component('components/paymentCart', {
+                data:{
+                order:order,
+                user:order.user,
+                currency:settings.currency,
+                language:locales.currentLanguage,
+                hash:''
+                }
+                })
+            </div>
+
 
         </div>
     </div>
