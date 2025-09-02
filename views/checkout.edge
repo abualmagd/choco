@@ -101,24 +101,25 @@
             </select>
         </div>
 
-        <div class="max-w-full mt-3 w-[700px] mx-auto pr-1 flex justify-center items-center">
+        <div class="max-w-full gap-3 mt-3 w-[700px] mx-auto pr-1 flex justify-center items-center">
             <button @click="updateMyOrder"
                 class="text-white h-10 bg-black min-w-52 flex justify-center items-center  hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-lg  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Checkout
+                update order data
             </button>
+            @!component('components/paymentCart', {
+            data:{
+            order:order,
+            user:order.user,
+            currency:settings.currency,
+            language:locales.currentLanguage,
+            hash:''
+            }
+            })
 
         </div>
     </div>
 
 
-    @!component('components/paymentCart', {
-    data:{
-    order:order,
-    user:order.user,
-    currency:settings.currency,
-    language:locales.currentLanguage,
-    hash:''
-    }
-    })
+
 </div>
 @end

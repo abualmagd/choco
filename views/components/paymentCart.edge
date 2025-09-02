@@ -1,21 +1,16 @@
-<div x-data="paymentComponent({{JSON.stringify(data)}})" class=" h-full w-full bg-white">
-    <template x-if="hash">
-        <script id="kashier-iFrame" src="https://checkout.kashier.io/kashier-checkout.js" :data-amount="amount"
-            :data-hash="hash" :data-currency="currency" :data-orderId="orderId" :data-merchantId="merchantId"
-            :data-merchantRedirect="merchantRedirect" :data-serverWebhook="serverWebhook" :data-mode="mode"
-            :data-saveCard="saveCard" :data-customer="customer" :data-interactionSource="interactionSource"
-            :data-enable3DS="enable3DS" :data-manualCapture="manualCapture" :data-type="type"
-            data-allowedMethods="card, bank_installments, wallet, fawry" :data-failureRedirect="failureRedirect">
-
-            </script>
-    </template>
-
-    <div x-show="!hash && !error" class="flex items-center justify-center h-full">
+<div x-data="paymentComponent({{JSON.stringify(data)}})" class="h-full w-full bg-white">
+    <!-- Loading state -->
+    <div x-show="isLoading" class="flex items-center justify-center h-full">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
     </div>
 
-    <div x-show="error" class="flex items-center justify-center h-full text-red-600">
+    <!-- Error state -->
+    <div x-show="error && !isLoading" class="flex items-center justify-center h-full text-red-600">
         Error loading payment: <span x-text="error"></span>
     </div>
+
+    <!-- Kashier iframe (only show when hash is available) -->
+
+    <div x-show="hash && !isLoading" id="kashier-checkout-container"></div>
 
 </div>

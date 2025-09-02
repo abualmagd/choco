@@ -307,9 +307,10 @@ export const orderRoutes: FastifyPluginAsync = async (
         .send(new ResError(404, "not found ", " not found"));
     }
 
-    const mid = "MID-123-123";
-    const CustomerReference = "1"; // Your customer ID for saving the card
-    const amount = order?.total; // e.g., 22.00
+    const CustomerReference = order.userId; // Your customer ID for saving the card
+
+    const mid = "MID-25920-522"; // Your actual merchant ID
+    const amount = order.total; // Format to 2 decimal places
     const currency = currncy; // e.g., "EGP"
     const orderId = order?.id; // e.g., 99
     const secret = process.env.KASHIER_KEY;

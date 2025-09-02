@@ -4697,18 +4697,27 @@ var _api = require("../utils/api");
 exports.default = (data)=>({
         amount: data.order.total ?? 0,
         hash: null,
-        currency: data.currency,
-        orderId: data.order.id,
+        currency: data.currency || "EGP",
+        orderId: data.order.id.toString(),
         merchantId: "MID-25920-522",
-        merchantRedirect: encodeURIComponent("http://localhost.com/redirect"),
-        serverWebhook: encodeURIComponent("http://localhost.com/webhook"),
+        merchantRedirect: "http://localhost:3000/redirect",
+        serverWebhook: "http://localhost:3000/webhook",
         mode: "test",
-        metaData: encodeURIComponent(JSON.stringify(data.user)),
-        failureRedirect: false,
+        metaData: JSON.stringify({
+            order_id: data.order.id,
+            user_id: data.user?.id
+        }),
+        failureRedirect: "false",
         type: "external",
         display: data.language || "en",
-        manualCapture: false,
-        customer: JSON.stringify(data.user),
+        manualCapture: "false",
+        customer: JSON.stringify({
+            reference: data.user?.id?.toString() || "guest",
+            first_name: data.user?.firstName || "Guest",
+            last_name: data.user?.lastName || "User",
+            email: data.user?.email || "guest@example.com",
+            phone: data.user?.phone || ""
+        }),
         saveCard: "optional",
         interactionSource: "Ecommerce",
         enable3DS: "true",
@@ -4717,32 +4726,56 @@ exports.default = (data)=>({
         async init () {
             try {
                 const response = await (0, _api.getOrderHash)(this.orderId, this.currency);
-                this.hash = response.data.hash;
-                this.isLoading = false;
-                // Load Kashier script only after hash is ready
-                this.$nextTick(()=>{
-                //this.loadKashierScript();
-                });
+                if (response && response.data && response.data.hash) {
+                    this.hash = response.data.hash;
+                    this.isLoading = false;
+                    // Wait for next tick and initialize Kashier
+                    this.$nextTick(()=>{
+                        this.initializeKashier();
+                    });
+                } else throw new Error("Invalid hash response from server");
             } catch (error) {
-                this.error = error;
+                console.error("Error loading payment:", error);
+                this.error = error.message || "Failed to load payment";
                 this.isLoading = false;
             }
         },
-        loadKashierScript () {
-            // 1. Check if the script element already exists in the DOM. This is the most reliable method.
-            if (!document.getElementById("kashier-script")) {
-                const script = document.createElement("script");
-                script.id = "kashier-script";
-                script.src = "https://checkout.kashier.io/kashier-checkout.js";
-                script.onload = ()=>{
-                    console.log("Kashier script loaded successfully");
-                // No need to set a state variable, the DOM check is sufficient
-                };
-                script.onerror = ()=>{
-                    this.error = new Error("Failed to load Kashier script");
-                };
-                document.head.appendChild(script);
-            } else console.log("Kashier script already loaded, skipping.");
+        initializeKashier () {
+            if (!this.hash) return;
+            // Clean up any existing iframe
+            const container = document.getElementById("kashier-checkout-container");
+            if (!container) return;
+            container.innerHTML = "";
+            // Create the script element programmatically
+            const script = document.createElement("script");
+            script.id = "kashier-iFrame";
+            script.src = "https://payments.kashier.io/kashier-checkout.js";
+            // Set all data attributes
+            script.setAttribute("data-amount", this.amount);
+            script.setAttribute("data-hash", this.hash);
+            script.setAttribute("data-currency", this.currency);
+            script.setAttribute("data-orderId", this.orderId);
+            script.setAttribute("data-merchantId", this.merchantId);
+            script.setAttribute("data-merchantRedirect", this.merchantRedirect);
+            script.setAttribute("data-serverWebhook", this.serverWebhook);
+            script.setAttribute("data-mode", this.mode);
+            script.setAttribute("data-metaData", this.metaData);
+            script.setAttribute("data-failureRedirect", this.failureRedirect);
+            script.setAttribute("data-type", this.type);
+            script.setAttribute("data-display", this.display);
+            script.setAttribute("data-manualCapture", this.manualCapture);
+            script.setAttribute("data-customer", this.customer);
+            script.setAttribute("data-saveCard", this.saveCard);
+            script.setAttribute("data-interactionSource", this.interactionSource);
+            script.setAttribute("data-enable3DS", this.enable3DS);
+            script.setAttribute("data-allowedMethods", "card, bank_installments, wallet, fawry");
+            script.onload = ()=>{
+                console.log("Kashier script loaded successfully");
+            };
+            script.onerror = ()=>{
+                this.error = "Failed to load Kashier payment script";
+            };
+            container.appendChild(script);
         }
     });
 
