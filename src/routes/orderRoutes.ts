@@ -1,7 +1,9 @@
+import { CustomResponse } from "./../utils/responseClasses";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { ResError } from "../utils/responseClasses";
 import { OrderStatus, Prisma } from "@prisma/client";
 import { createOrderInvoice } from "../services/invoiceServices";
+import { createHmac } from "crypto";
 import {
   isAdminAuth,
   isAuthenticate,
@@ -291,4 +293,35 @@ export const orderRoutes: FastifyPluginAsync = async (
       }
     }
   );
+
+  fastify.get("hash/order/:id/currency/:currncy", async (request, replay) => {
+    const { id } = request.params as { id: string };
+    const { currncy } = request.params as { currncy: string };
+    const order = await fastify.prisma.order.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!order) {
+      return replay
+        .status(404)
+        .send(new ResError(404, "not found ", " not found"));
+    }
+
+    const mid = "MID-123-123";
+    const CustomerReference = "1"; // Your customer ID for saving the card
+    const amount = order?.total; // e.g., 22.00
+    const currency = currncy; // e.g., "EGP"
+    const orderId = order?.id; // e.g., 99
+    const secret = process.env.KASHIER_KEY;
+    const path = `/?payment=${mid}.${orderId}.${amount}.${currency}${
+      CustomerReference ? "." + CustomerReference : ""
+    }`;
+
+    const hash = createHmac("sha256", secret!).update(path).digest("hex");
+
+    // The result hash for /?payment=mid-0-1.99.20.EGP with secret 11111
+    // should be 606a8a1307d64caf4e2e9bb724738f115a8972c27eccb2a8acd9194c357e4bec
+
+    return replay.send(new CustomResponse({ hash: hash }, null));
+  });
 };

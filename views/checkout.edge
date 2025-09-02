@@ -109,8 +109,16 @@
 
         </div>
     </div>
-    <p>
-        {{JSON.stringify(order.user)}}
-    </p>
+
+
+    @!component('components/paymentCart', {
+    data:{
+    order:order,
+    user:order.user,
+    currency:settings.currency,
+    language:locales.currentLanguage,
+    hash:''
+    }
+    })
 </div>
 @end

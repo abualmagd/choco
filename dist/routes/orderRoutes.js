@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderRoutes = void 0;
-const responseClasses_1 = require("../utils/responseClasses");
+const responseClasses_1 = require("./../utils/responseClasses");
+const responseClasses_2 = require("../utils/responseClasses");
 const invoiceServices_1 = require("../services/invoiceServices");
+const crypto_1 = require("crypto");
 const middleware_1 = require("../authentication/middleware");
 const orderRoutes = async (fastify, opt) => {
     //GET /api/orders - Get user's orders
@@ -11,7 +13,7 @@ const orderRoutes = async (fastify, opt) => {
             if (!request.session.user?.id) {
                 return reply
                     .status(400)
-                    .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
+                    .send(new responseClasses_2.ResError(400, " please sign in again", " Unauthorized "));
             }
             const { page } = request.query ?? "0";
             const orders = await fastify.prisma.order.findMany({
@@ -44,7 +46,7 @@ const orderRoutes = async (fastify, opt) => {
             if (!order) {
                 return reply
                     .status(500)
-                    .send(new responseClasses_1.ResError(500, " error in creating order", "failed creation"));
+                    .send(new responseClasses_2.ResError(500, " error in creating order", "failed creation"));
             }
             return reply.send(order);
         }
@@ -72,7 +74,7 @@ const orderRoutes = async (fastify, opt) => {
             if (!order) {
                 return reply
                     .status(500)
-                    .send(new responseClasses_1.ResError(500, ` error in getting order with id = ${id}`, "failed"));
+                    .send(new responseClasses_2.ResError(500, ` error in getting order with id = ${id}`, "failed"));
             }
             return reply.send(order);
         }
@@ -93,7 +95,7 @@ const orderRoutes = async (fastify, opt) => {
             if (!order) {
                 return reply
                     .status(500)
-                    .send(new responseClasses_1.ResError(500, ` error in cancelling order with id = ${id}`, "failed"));
+                    .send(new responseClasses_2.ResError(500, ` error in cancelling order with id = ${id}`, "failed"));
             }
             return reply.send(order);
         }
@@ -116,7 +118,7 @@ const orderRoutes = async (fastify, opt) => {
             if (!order) {
                 return reply
                     .status(500)
-                    .send(new responseClasses_1.ResError(500, ` error in updating order with id = ${id}`, "failed"));
+                    .send(new responseClasses_2.ResError(500, ` error in updating order with id = ${id}`, "failed"));
             }
             return reply.send(order);
         }
@@ -130,14 +132,14 @@ const orderRoutes = async (fastify, opt) => {
             if (!request.session.user?.id) {
                 return reply
                     .status(400)
-                    .send(new responseClasses_1.ResError(400, " please sign in again", " Unauthorized "));
+                    .send(new responseClasses_2.ResError(400, " please sign in again", " Unauthorized "));
             }
             const { id } = request.params;
             const orderInvoice = await (0, invoiceServices_1.createOrderInvoice)();
             if (!orderInvoice) {
                 return reply
                     .status(500)
-                    .send(new responseClasses_1.ResError(500, ` error in getting orderInvoice `, "failed"));
+                    .send(new responseClasses_2.ResError(500, ` error in getting orderInvoice `, "failed"));
             }
             return reply.send(orderInvoice);
         }
@@ -158,7 +160,7 @@ const orderRoutes = async (fastify, opt) => {
             if (!order) {
                 return reply
                     .status(500)
-                    .send(new responseClasses_1.ResError(500, ` error in updating order with id = ${id}`, "failed"));
+                    .send(new responseClasses_2.ResError(500, ` error in updating order with id = ${id}`, "failed"));
             }
             return reply.send(order);
         }
@@ -210,6 +212,29 @@ const orderRoutes = async (fastify, opt) => {
         catch (error) {
             return reply.send(error);
         }
+    });
+    fastify.get("hash/order/:id/currency/:currncy", async (request, replay) => {
+        const { id } = request.params;
+        const { currncy } = request.params;
+        const order = await fastify.prisma.order.findUnique({
+            where: { id: parseInt(id) },
+        });
+        if (!order) {
+            return replay
+                .status(404)
+                .send(new responseClasses_2.ResError(404, "not found ", " not found"));
+        }
+        const mid = "MID-123-123";
+        const CustomerReference = "1"; // Your customer ID for saving the card
+        const amount = order?.total; // e.g., 22.00
+        const currency = currncy; // e.g., "EGP"
+        const orderId = order?.id; // e.g., 99
+        const secret = process.env.KASHIER_KEY;
+        const path = `/?payment=${mid}.${orderId}.${amount}.${currency}${CustomerReference ? "." + CustomerReference : ""}`;
+        const hash = (0, crypto_1.createHmac)("sha256", secret).update(path).digest("hex");
+        // The result hash for /?payment=mid-0-1.99.20.EGP with secret 11111
+        // should be 606a8a1307d64caf4e2e9bb724738f115a8972c27eccb2a8acd9194c357e4bec
+        return replay.send(new responseClasses_1.CustomResponse({ hash: hash }, null));
     });
 };
 exports.orderRoutes = orderRoutes;

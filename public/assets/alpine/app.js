@@ -694,6 +694,10 @@ var _reviewingComponent = require("./components/reviewingComponent");
 var _reviewingComponentDefault = parcelHelpers.interopDefault(_reviewingComponent);
 var _wishListComponent = require("./components/wishListComponent");
 var _wishListComponentDefault = parcelHelpers.interopDefault(_wishListComponent);
+var _languageComponent = require("./components/languageComponent");
+var _languageComponentDefault = parcelHelpers.interopDefault(_languageComponent);
+var _paymentComponent = require("./components/paymentComponent");
+var _paymentComponentDefault = parcelHelpers.interopDefault(_paymentComponent);
 window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).store("productGallery", (0, _productGalleryStoreDefault.default));
 (0, _alpinejsDefault.default).store("cart", (0, _cartStoreDefault.default));
@@ -707,9 +711,11 @@ window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).data("checkoutComponent", (0, _checkoutComponentDefault.default));
 (0, _alpinejsDefault.default).data("reviewingComponent", (0, _reviewingComponentDefault.default));
 (0, _alpinejsDefault.default).data("wishListComponent", (0, _wishListComponentDefault.default));
+(0, _alpinejsDefault.default).data("languageComponent", (0, _languageComponentDefault.default));
+(0, _alpinejsDefault.default).data("paymentComponent", (0, _paymentComponentDefault.default));
 (0, _alpinejsDefault.default).start();
 
-},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo","./components/checkoutComponent":"fcqeV","./components/reviewingComponent":"cwHAh","./components/wishListComponent":"cntIL"}],"69hXP":[function(require,module,exports,__globalThis) {
+},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo","./components/checkoutComponent":"fcqeV","./components/reviewingComponent":"cwHAh","./components/wishListComponent":"cntIL","./components/languageComponent":"4uwox","./components/paymentComponent":"RJ7cc"}],"69hXP":[function(require,module,exports,__globalThis) {
 // packages/alpinejs/src/scheduler.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -3842,6 +3848,8 @@ parcelHelpers.export(exports, "createOrder", ()=>createOrder);
 parcelHelpers.export(exports, "updateOrderById", ()=>updateOrderById);
 parcelHelpers.export(exports, "createReview", ()=>createReview);
 parcelHelpers.export(exports, "removeFromWishListByProduct", ()=>removeFromWishListByProduct);
+parcelHelpers.export(exports, "changeWebLang", ()=>changeWebLang);
+parcelHelpers.export(exports, "getOrderHash", ()=>getOrderHash);
 var _services = require("./services");
 const updateUserData = async (data, id)=>{
     try {
@@ -4152,6 +4160,40 @@ const removeFromWishListByProduct = async (id)=>{
         throw error;
     }
 };
+const changeWebLang = async (lang)=>{
+    try {
+        const response = await fetch(`/api/set-lang/${lang}`, {
+            headers: {
+                //"Content-Type": "application/json",
+                "x-api-key": "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE"
+            },
+            method: "GET",
+            credentials: "include"
+        });
+        console.log("res ", response);
+        if (!response.ok) throw new Error("Failed to change language");
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+async function getOrderHash(orderId, currency) {
+    //hash/order/:id/currency/:currncy
+    try {
+        const response = await fetch(`/api/hash/order/${orderId}/currency/${currency}`, {
+            headers: {
+                //"Content-Type": "application/json",
+                "x-api-key": "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE"
+            },
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) throw new Error("Failed to load order pleae reload the page");
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+}
 
 },{"./services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXQWd":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -4629,6 +4671,81 @@ exports.default = (item)=>({
         }
     });
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/services":"fXQWd","../utils/api":"f2P3u"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/services":"fXQWd","../utils/api":"f2P3u"}],"4uwox":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _api = require("../utils/api");
+var _services = require("../utils/services");
+exports.default = (locales)=>({
+        currentLang: locales.currentLanguage,
+        async changeMyLanguage () {
+            try {
+                console.log("changeing");
+                await (0, _api.changeWebLang)(this.currentLang);
+                window.location.reload();
+            } catch (error) {
+                console.log("err ", error);
+                (0, _services.notify)("error in change language" + error, true);
+            }
+        }
+    });
+
+},{"../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/api":"f2P3u"}],"RJ7cc":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _api = require("../utils/api");
+exports.default = (data)=>({
+        amount: data.order.total ?? 0,
+        hash: null,
+        currency: data.currency,
+        orderId: data.order.id,
+        merchantId: "MID-25920-522",
+        merchantRedirect: encodeURIComponent("http://localhost.com/redirect"),
+        serverWebhook: encodeURIComponent("http://localhost.com/webhook"),
+        mode: "test",
+        metaData: encodeURIComponent(JSON.stringify(data.user)),
+        failureRedirect: false,
+        type: "external",
+        display: data.language || "en",
+        manualCapture: false,
+        customer: JSON.stringify(data.user),
+        saveCard: "optional",
+        interactionSource: "Ecommerce",
+        enable3DS: "true",
+        error: null,
+        isLoading: true,
+        async init () {
+            try {
+                const response = await (0, _api.getOrderHash)(this.orderId, this.currency);
+                this.hash = response.data.hash;
+                this.isLoading = false;
+                // Load Kashier script only after hash is ready
+                this.$nextTick(()=>{
+                //this.loadKashierScript();
+                });
+            } catch (error) {
+                this.error = error;
+                this.isLoading = false;
+            }
+        },
+        loadKashierScript () {
+            // 1. Check if the script element already exists in the DOM. This is the most reliable method.
+            if (!document.getElementById("kashier-script")) {
+                const script = document.createElement("script");
+                script.id = "kashier-script";
+                script.src = "https://checkout.kashier.io/kashier-checkout.js";
+                script.onload = ()=>{
+                    console.log("Kashier script loaded successfully");
+                // No need to set a state variable, the DOM check is sufficient
+                };
+                script.onerror = ()=>{
+                    this.error = new Error("Failed to load Kashier script");
+                };
+                document.head.appendChild(script);
+            } else console.log("Kashier script already loaded, skipping.");
+        }
+    });
+
+},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
 
 //# sourceMappingURL=app.js.map

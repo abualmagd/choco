@@ -110,10 +110,10 @@
         <div>
             {{settings.title||''}} @copyright <span x-text="new Date().getFullYear()"></span>
         </div>
-        <div class="lango  flex gap-3">
-            <select value="ar" class=" bg-transparent capitalise">
+        <div class="lango  flex gap-3" x-data="languageComponent({{JSON.stringify(locales)}})">
+            <select class=" bg-transparent capitalise" x-model="currentLang" x-on:change="changeMyLanguage">
                 <option value="en">English</option>
-                <option value="ar">Arabic</option>
+                <option value="ar">عربي</option>
             </select>
         </div>
     </div>

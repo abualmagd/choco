@@ -30,7 +30,9 @@ export const EdgePlugin: FastifyPluginAsync = fp(
 
     fastify.addHook("preHandler", async (request, reply) => {
       if (request.url.startsWith("/api/")) {
+        console.log("passed hook");
         return; // Skip the hook for API routes
+      } else {
       }
       const lang = await request.getUserLang();
       const translations = fastify.getTranslations(lang);
@@ -42,7 +44,7 @@ export const EdgePlugin: FastifyPluginAsync = fp(
 
       edgeInstance.global("t", function (key: any) {
         const translation = translations[key];
-        return translation[key] || key;
+        return translation || key;
       });
     });
 

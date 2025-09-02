@@ -364,3 +364,51 @@ export const removeFromWishListByProduct = async (id) => {
     throw error;
   }
 };
+
+//changeWebLang
+
+export const changeWebLang = async (lang) => {
+  try {
+    const response = await fetch(`/api/set-lang/${lang}`, {
+      headers: {
+        //"Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY_1,
+      },
+      method: "GET",
+      credentials: "include",
+    });
+
+    console.log("res ", response);
+    if (!response.ok) {
+      throw new Error("Failed to change language");
+    }
+    return response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export async function getOrderHash(orderId, currency) {
+  //hash/order/:id/currency/:currncy
+
+  try {
+    const response = await fetch(
+      `/api/hash/order/${orderId}/currency/${currency}`,
+      {
+        headers: {
+          //"Content-Type": "application/json",
+          "x-api-key": process.env.API_KEY_1,
+        },
+        method: "GET",
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to load order pleae reload the page");
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}

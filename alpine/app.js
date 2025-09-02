@@ -11,6 +11,8 @@ import orderStore from "./stores/orderStore";
 import checkoutComponent from "./components/checkoutComponent";
 import reviewingComponent from "./components/reviewingComponent";
 import wishListComponent from "./components/wishListComponent";
+import languageComponent from "./components/languageComponent";
+import paymentComponent from "./components/paymentComponent";
 
 window.Alpine = Alpine;
 
@@ -37,5 +39,9 @@ Alpine.data("checkoutComponent", checkoutComponent);
 Alpine.data("reviewingComponent", reviewingComponent);
 
 Alpine.data("wishListComponent", wishListComponent);
+
+Alpine.data("languageComponent", languageComponent);
+
+Alpine.data("paymentComponent", paymentComponent);
 
 Alpine.start();

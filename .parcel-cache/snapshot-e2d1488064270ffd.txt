@@ -1,4 +1,4 @@
-17547
+17552
 110D:\commerces\choco\node_modules\@aws-sdk\client-s3\dist-types\ts3.4\commands\CreateMultipartUploadCommand.d.ts133987258573987009 0
 48D:\commerces\choco\node_modules\sucrase\register133964522433575444 1
 87D:\commerces\choco\node_modules\@smithy\shared-ini-file-loader\dist-es\getConfigData.js133987258463248168 0
@@ -20,7 +20,7 @@
 23D:\commerces\choco\dist133987726002648037 1
 40D:\commerces\choco\node_modules\@esbuild133972261205364673 1
 25D:\commerces\choco\locals134010961353275303 1
-29D:\commerces\choco\src\routes134008580989607104 1
+29D:\commerces\choco\src\routes134011061835730570 1
 54D:\commerces\choco\node_modules\lodash\_stackDelete.js133963101875675801 0
 74D:\commerces\choco\node_modules\supports-preserve-symlinks-flag\browser.js133964522421652029 0
 53D:\commerces\choco\node_modules\@types\node\test.d.ts133952578628849929 0
@@ -86,7 +86,7 @@
 98D:\commerces\choco\node_modules\@aws-sdk\region-config-resolver\dist-types\regionConfig\index.d.ts133987258521975001 0
 63D:\commerces\choco\node_modules\function-bind\implementation.js133964522422288981 0
 61D:\commerces\choco\node_modules\safe-stable-stringify\LICENSE133952578529291453 0
-49D:\commerces\choco\views\components\myFooter.edge133995459309276415 0
+49D:\commerces\choco\views\components\myFooter.edge134011867784518538 0
 57D:\commerces\choco\node_modules\semver\functions\rsort.js133952578534244748 0
 49D:\commerces\choco\node_modules\is-glob\README.md133952583871004827 0
 54D:\commerces\choco\node_modules\@lezer\lr\package.json133990776219197176 0
@@ -259,10 +259,12 @@
 73D:\commerces\choco\node_modules\sucrase\dist\esm\parser\traverser\lval.js133964522431308890 0
 53D:\commerces\choco\node_modules\flattie\dist\index.js133963101840558833 0
 61D:\commerces\choco\node_modules\signal-exit\dist\mjs\index.js133963493141882641 0
-47D:\commerces\choco\dist\routes\productRoutes.js134010973944742784 0
+47D:\commerces\choco\dist\routes\productRoutes.js134011856043023734 0
 53D:\commerces\choco\node_modules\lodash\_basePickBy.js133963101860809222 0
 43D:\commerces\choco\node_modules\any-promise133964522426784613 1
 52D:\commerces\choco\views\components\ratingStars.edge133971253248643711 0
+43D:\commerces\choco\src\routes\langRoutes.ts134011067575352417 0
+77D:\commerces\choco\node_modules\@smithy\util-body-length-browser\package.json133987258439345006 0
 62D:\commerces\choco\node_modules\type-fest\source\asyncify.d.ts133990776216920022 0
 70D:\commerces\choco\node_modules\@parcel\core\test\fixtures\main-global133990776296023555 1
 77D:\commerces\choco\node_modules\@fastify\ajv-compiler\test\standalone.test.js133983445723242440 0
@@ -307,7 +309,7 @@
 45D:\commerces\choco\node_modules\react-refresh133990776214589346 1
 70D:\commerces\choco\node_modules\tailwindcss\src\util\pseudoElements.js133964522450488771 0
 60D:\commerces\choco\node_modules\@smithy\types\dist-es\uri.js133987258571367606 0
-49D:\commerces\choco\src\types\fastify-session.d.ts133956135502949186 0
+49D:\commerces\choco\src\types\fastify-session.d.ts134011044856422265 0
 73D:\commerces\choco\node_modules\@poppinss\utils\build\src\isScriptFile.js133963101853758582 0
 55D:\commerces\choco\node_modules\string-width\index.d.ts133963493141771453 0
 74D:\commerces\choco\node_modules\caniuse-lite\data\features\transforms3d.js133963466070138331 0
@@ -447,7 +449,7 @@
 90D:\commerces\choco\node_modules\@parcel\package-manager\test\fixtures\has-foo\node_modules133990776268069663 1
 71D:\commerces\choco\node_modules\@fastify\rate-limit\store\RedisStore.js133970687881988378 0
 73D:\commerces\choco\node_modules\find-my-way\.github\workflows\node.js.yml133983445725981899 0
-38D:\commerces\choco\views\wishList.edge134010984942119623 0
+38D:\commerces\choco\views\wishList.edge134011011438348616 0
 47D:\commerces\choco\node_modules\lodash\after.js133963101876657188 0
 61D:\commerces\choco\node_modules\utility-types\dist\index.d.ts133990776230312221 0
 36D:\commerces\choco\node_modules\@swc133990779317438891 1
@@ -505,7 +507,7 @@
 41D:\commerces\choco\node_modules\wrap-ansi133963493141643340 1
 66D:\commerces\choco\node_modules\@parcel\runtime-service-worker\src133990776251674764 1
 70D:\commerces\choco\node_modules\light-my-request\types\index.test-d.ts133983445723872103 0
-51D:\commerces\choco\views\components\layout\app.edge134008682988708060 0
+51D:\commerces\choco\views\components\layout\app.edge134011503941143904 0
 66D:\commerces\choco\node_modules\type-fest\source\set-optional.d.ts133990776247453726 0
 78D:\commerces\choco\node_modules\@hapi\topo\node_modules\@hapi\hoek\lib\wait.js133956000435520519 0
 49D:\commerces\choco\node_modules\pino\package.json133983445727513625 0
@@ -522,7 +524,7 @@
 72D:\commerces\choco\node_modules\@aws-sdk\client-s3\dist-types\index.d.ts133987258601750275 0
 76D:\commerces\choco\node_modules\supports-preserve-symlinks-flag\package.json133964522422778995 0
 48D:\commerces\choco\node_modules\lodash\random.js133963101898614192 0
-31D:\commerces\choco\src\index.ts134008583582024021 0
+31D:\commerces\choco\src\index.ts134011475160921013 0
 76D:\commerces\choco\node_modules\fastify\test\use-semicolon-delimiter.test.js133983445730077681 0
 52D:\commerces\choco\node_modules\color-name\README.md133963493140725753 0
 70D:\commerces\choco\node_modules\sucrase\dist\parser\traverser\index.js133964522430765921 0
@@ -530,7 +532,7 @@
 67D:\commerces\choco\node_modules\fastify\test\types\schema.test-d.ts133983445731475668 0
 75D:\commerces\choco\node_modules\@parcel\workers\lib\threads\ThreadsChild.js133990776262418149 0
 67D:\commerces\choco\node_modules\uuid\dist\cjs-browser\uuid-bin.d.ts133987322704202292 0
-30D:\commerces\choco\src\plugins133987259565867475 1
+30D:\commerces\choco\src\plugins134011033219412306 1
 28D:\commerces\choco\src\types133972260274889417 1
 83D:\commerces\choco\node_modules\caniuse-lite\data\features\extended-system-fonts.js133963466057935882 0
 59D:\commerces\choco\node_modules\jackspeak\dist\esm\index.js133964522422090518 0
@@ -554,7 +556,7 @@
 67D:\commerces\choco\node_modules\@parcel\transformer-babel\README.md133990776262634312 0
 58D:\commerces\choco\node_modules\@smithy\hash-node\dist-cjs133987258461552864 1
 60D:\commerces\choco\node_modules\function-bind\test\.eslintrc133964522420551630 0
-41D:\commerces\choco\src\types\session.d.ts133995098943064840 0
+41D:\commerces\choco\src\types\session.d.ts134011469404882105 0
 74D:\commerces\choco\node_modules\@swc\helpers\cjs\_wrap_async_generator.cjs133990776268198681 0
 103D:\commerces\choco\node_modules\@smithy\util-body-length-node\dist-types\ts3.4\calculateBodyLength.d.ts133987258451870739 0
 35D:\commerces\choco\src\types\t.d.ts133962238361986600 0
@@ -626,7 +628,7 @@
 66D:\commerces\choco\node_modules\fastify\test\fluent-schema.test.js133983445725575271 0
 69D:\commerces\choco\node_modules\sucrase\dist\types\HelperManager.d.ts133964522441708767 0
 66D:\commerces\choco\node_modules\@fastify\static\test\static-encode133963499580214006 1
-44D:\commerces\choco\public\assets\css\app.css134010985603707356 0
+44D:\commerces\choco\public\assets\css\app.css134011867685922603 0
 86D:\commerces\choco\node_modules\@prisma\fetch-engine\dist\multipart-parser-ASKQAOL4.js133952620904712002 0
 72D:\commerces\choco\node_modules\yaml\dist\stringify\stringifyString.d.ts133964522452637361 0
 87D:\commerces\choco\node_modules\@fastify\static\node_modules\glob\dist\commonjs\glob.js133963499564398134 0
@@ -636,7 +638,6 @@
 52D:\commerces\choco\node_modules\uuid\dist\cjs\md5.js133987322702335615 0
 54D:\commerces\choco\node_modules\thread-stream\index.js133983445723630481 0
 47D:\commerces\choco\src\routes\discountRoutes.ts133961815844731882 0
-55D:\commerces\choco\node_modules\undici-types\fetch.d.ts133952578623608003 0
 63D:\commerces\choco\node_modules\caniuse-lite\data\regions\KY.js133963466060903716 0
 40D:\commerces\choco\node_modules\chokidar133952583871256952 1
 40D:\commerces\choco\node_modules\he\he.js133963101841470916 0
@@ -680,9 +681,9 @@
 54D:\commerces\choco\node_modules\update-browserslist-db133963466049042795 1
 70D:\commerces\choco\node_modules\autoprefixer\lib\hacks\filter-value.js133963466062637465 0
 42D:\commerces\choco\node_modules\edge-error133963101847045760 1
-46D:\commerces\choco\src\routes\wishlistItems.ts133971588139464956 0
+46D:\commerces\choco\src\routes\wishlistItems.ts134011028949180249 0
 54D:\commerces\choco\node_modules\uuid\dist\esm\nil.d.ts133987322703888514 0
-38D:\commerces\choco\src\plugins\edge.ts133995096627868492 0
+38D:\commerces\choco\src\plugins\edge.ts134011503861767202 0
 44D:\commerces\choco\node_modules\lmdb\open.js133990776278425627 0
 57D:\commerces\choco\node_modules\ordered-binary\index.d.ts133990776217188648 0
 68D:\commerces\choco\node_modules\@smithy\util-hex-encoding\dist-types133987258439499379 1
@@ -696,6 +697,24 @@
 55D:\commerces\choco\node_modules\sucrase\dist\esm\parser133964522429944482 1
 50D:\commerces\choco\node_modules\lodash\function.js133963101884566019 0
 43D:\commerces\choco\node_modules\detect-libc133990776213185240 1
+52D:\commerces\choco\node_modules\truncatise\README.md133963101845701989 0
+38D:\commerces\choco\src\plugins\i18n.ts134011485933760377 0
+58D:\commerces\choco\node_modules\@parcel\graph\package.json133990776261794849 0
+68D:\commerces\choco\node_modules\autoprefixer\lib\hacks\fullscreen.js133963466062825476 0
+92D:\commerces\choco\node_modules\prisma\prisma-client\runtime\query_compiler_bg.postgresql.js133952620915613334 0
+69D:\commerces\choco\node_modules\typescript\lib\lib.es2022.string.d.ts133952578627407633 0
+46D:\commerces\choco\node_modules\lodash\mean.js133963101891566128 0
+46D:\commerces\choco\node_modules\postcss-nested133964522422158192 1
+54D:\commerces\choco\node_modules\lodash\intersection.js133963101885676965 0
+64D:\commerces\choco\node_modules\fastify\docs\Guides\Ecosystem.md133983445730344803 0
+63D:\commerces\choco\node_modules\caniuse-lite\data\regions\NR.js133963466063022151 0
+70D:\commerces\choco\node_modules\sucrase\dist\parser\tokenizer\index.js133964522430752311 0
+60D:\commerces\choco\node_modules\binary-extensions\index.d.ts133952583871198272 0
+83D:\commerces\choco\node_modules\lmdb\dependencies\lmdb\libraries\liblmdb\mdb_dump.c133990776263647969 0
+76D:\commerces\choco\node_modules\@jridgewell\resolve-uri\dist\resolve-uri.mjs133964522422844547 0
+113D:\commerces\choco\node_modules\@smithy\protocol-http\dist-types\ts3.4\extensions\httpExtensionConfiguration.d.ts133987258531371949 0
+44D:\commerces\choco\node_modules\caniuse-lite133963466071237816 1
+50D:\commerces\choco\node_modules\lower-case\LICENSE133963101839961101 0
 67D:\commerces\choco\node_modules\simple-update-notifier\src\types.ts133952583871419808 0
 62D:\commerces\choco\node_modules\ajv\dist\runtime\ucs2length.js133983445726114136 0
 68D:\commerces\choco\node_modules\@aws-sdk\types\dist-es\middleware.js133987258529254679 0
@@ -763,12 +782,12 @@
 53D:\commerces\choco\node_modules\lodash\fp\valuesIn.js133963101903706468 0
 67D:\commerces\choco\node_modules\@parcel\compressor-raw\package.json133990776265690075 0
 51D:\commerces\choco\node_modules\sucrase\dist\cli.js133964522424505876 0
-39D:\commerces\choco\public\assets\alpine134010985604069819 1
+39D:\commerces\choco\public\assets\alpine134011867686022141 1
 64D:\commerces\choco\node_modules\quick-format-unescaped\readme.md133983445722420832 0
 65D:\commerces\choco\node_modules\yaml\dist\schema\yaml-1.1\bool.js133964522424881649 0
 78D:\commerces\choco\node_modules\@smithy\util-buffer-from\dist-types\index.d.ts133987258439234362 0
 55D:\commerces\choco\node_modules\pino\test\error.test.js133983445724863067 0
-36D:\commerces\choco\public\assets\css134010985603803144 1
+36D:\commerces\choco\public\assets\css134011867686002001 1
 77D:\commerces\choco\node_modules\tailwindcss\node_modules\jiti\dist\utils.d.ts133964522428073127 0
 55D:\commerces\choco\node_modules\pino-abstract-transport133983445723226629 1
 95D:\commerces\choco\node_modules\@aws-sdk\middleware-expect-continue\dist-types\ts3.4\index.d.ts133987258489801336 0
@@ -828,7 +847,7 @@
 83D:\commerces\choco\node_modules\yaml\browser\dist\compose\util-flow-indent-check.js133964522433926916 0
 51D:\commerces\choco\node_modules\debug\src\common.js133952583870933557 0
 63D:\commerces\choco\node_modules\@smithy\types\dist-cjs\index.js133987258564229553 0
-48D:\commerces\choco\public\assets\css\app.css.map134010985603759406 0
+48D:\commerces\choco\public\assets\css\app.css.map134011867685961135 0
 68D:\commerces\choco\node_modules\@aws-sdk\credential-provider-process133987258477966482 1
 71D:\commerces\choco\node_modules\typescript\lib\lib.esnext.iterator.d.ts133952578628617268 0
 47D:\commerces\choco\node_modules\normalize-range133963466061525118 1
@@ -839,12 +858,12 @@
 62D:\commerces\choco\node_modules\fast-deep-equal\es6\index.d.ts133983445722600289 0
 46D:\commerces\choco\node_modules\strnum\.vscode133987258438818160 1
 63D:\commerces\choco\node_modules\yaml\browser\dist\nodes\toJS.js133964522433820192 0
-46D:\commerces\choco\public\assets\alpine\app.js134010985603990481 0
+46D:\commerces\choco\public\assets\alpine\app.js134011867685922603 0
 71D:\commerces\choco\node_modules\@parcel\watcher\src\wasm\WasmBackend.cc133990776218024099 0
 53D:\commerces\choco\node_modules\safe-buffer\README.md133963499559811603 0
 79D:\commerces\choco\node_modules\@smithy\util-body-length-node\dist-cjs\index.js133987258438392326 0
 78D:\commerces\choco\node_modules\wrap-ansi-cjs\node_modules\ansi-regex\index.js133963493139451780 0
-50D:\commerces\choco\public\assets\alpine\app.js.map134010985604061179 0
+50D:\commerces\choco\public\assets\alpine\app.js.map134011867685961135 0
 46D:\commerces\choco\node_modules\lodash\drop.js133963101881918569 0
 82D:\commerces\choco\node_modules\autoprefixer\lib\hacks\text-decoration-skip-ink.js133963466065050963 0
 76D:\commerces\choco\node_modules\@swc\helpers\_\_super_prop_base\package.json133990776282317170 0
@@ -1452,19 +1471,6 @@
 45D:\commerces\choco\node_modules\camelcase-css133964522422158192 1
 68D:\commerces\choco\node_modules\pino\benchmarks\child-child.bench.js133983445724392204 0
 41D:\commerces\choco\node_modules\acorn\bin133963101839961101 1
-69D:\commerces\choco\node_modules\typescript\lib\lib.es2022.string.d.ts133952578627407633 0
-46D:\commerces\choco\node_modules\lodash\mean.js133963101891566128 0
-46D:\commerces\choco\node_modules\postcss-nested133964522422158192 1
-54D:\commerces\choco\node_modules\lodash\intersection.js133963101885676965 0
-64D:\commerces\choco\node_modules\fastify\docs\Guides\Ecosystem.md133983445730344803 0
-63D:\commerces\choco\node_modules\caniuse-lite\data\regions\NR.js133963466063022151 0
-70D:\commerces\choco\node_modules\sucrase\dist\parser\tokenizer\index.js133964522430752311 0
-60D:\commerces\choco\node_modules\binary-extensions\index.d.ts133952583871198272 0
-83D:\commerces\choco\node_modules\lmdb\dependencies\lmdb\libraries\liblmdb\mdb_dump.c133990776263647969 0
-76D:\commerces\choco\node_modules\@jridgewell\resolve-uri\dist\resolve-uri.mjs133964522422844547 0
-113D:\commerces\choco\node_modules\@smithy\protocol-http\dist-types\ts3.4\extensions\httpExtensionConfiguration.d.ts133987258531371949 0
-44D:\commerces\choco\node_modules\caniuse-lite133963466071237816 1
-50D:\commerces\choco\node_modules\lower-case\LICENSE133963101839961101 0
 100D:\commerces\choco\node_modules\@aws-sdk\client-s3\dist-types\ts3.4\commands\ListBucketsCommand.d.ts133987258602938227 0
 44D:\commerces\choco\node_modules\capital-case133963101849796922 1
 66D:\commerces\choco\node_modules\@fastify\proxy-addr\.gitattributes133983445721685007 0
@@ -1739,7 +1745,7 @@
 52D:\commerces\choco\node_modules\postcss-value-parser133963466049855751 1
 59D:\commerces\choco\node_modules\@fastify\forwarded\index.js133983445721889853 0
 80D:\commerces\choco\node_modules\tailwindcss\src\lib\evaluateTailwindFunctions.js133964522431457796 0
-32D:\commerces\choco\dist\index.js134010973946602760 0
+32D:\commerces\choco\dist\index.js134011856045450651 0
 54D:\commerces\choco\node_modules\package-json-from-dist133963493143417790 1
 43D:\commerces\choco\node_modules\http-errors133963499572839200 1
 91D:\commerces\choco\node_modules\@swc\helpers\esm\_class_static_private_field_destructure.js133990776276235849 0
@@ -2022,7 +2028,7 @@
 38D:\commerces\choco\node_modules\prisma133953589839978792 1
 78D:\commerces\choco\node_modules\caniuse-lite\data\features\css-nth-child-of.js133963466056187756 0
 74D:\commerces\choco\node_modules\@parcel\types-internal\scripts\build-ts.js133990776233313418 0
-45D:\commerces\choco\dist\routes\orderRoutes.js134010973945620449 0
+45D:\commerces\choco\dist\routes\orderRoutes.js134011856044188394 0
 49D:\commerces\choco\node_modules\term-size\license133990776213263426 0
 77D:\commerces\choco\node_modules\ajv\lib\vocabularies\validation\multipleOf.ts133983445731413710 0
 78D:\commerces\choco\node_modules\pino\test\browser-early-console-freeze.test.js133983445724054727 0
@@ -2968,6 +2974,7 @@
 70D:\commerces\choco\node_modules\prisma\prisma-client\runtime\edge.d.ts133952620922711056 0
 113D:\commerces\choco\node_modules\@aws-sdk\client-s3\dist-types\ts3.4\pagination\ListDirectoryBucketsPaginator.d.ts133987258603170402 0
 54D:\commerces\choco\node_modules\wrap-ansi-cjs\index.js133963493139399488 0
+44D:\commerces\choco\dist\routes\langRoutes.js134011856045315586 0
 60D:\commerces\choco\node_modules\uuid\dist\esm-browser\rng.js133987322702588231 0
 54D:\commerces\choco\node_modules\lmdb\dependencies\lmdb133990776219811143 1
 52D:\commerces\choco\node_modules\lodash\fp\convert.js133963101880671856 0
@@ -3629,6 +3636,7 @@
 42D:\commerces\choco\node_modules\isexe\test133963493142423478 1
 61D:\commerces\choco\node_modules\undici-types\eventsource.d.ts133952578623541708 0
 92D:\commerces\choco\node_modules\@fastify\static\test\static-pre-compressed\dir-gz\index.html133963499573306583 0
+55D:\commerces\choco\node_modules\undici-types\fetch.d.ts133952578623608003 0
 68D:\commerces\choco\node_modules\fast-glob\out\providers\transformers133964522427582871 1
 75D:\commerces\choco\node_modules\@aws-sdk\util-endpoints\dist-types\aws.d.ts133987258528770833 0
 58D:\commerces\choco\node_modules\undici-types\formdata.d.ts133952578623687145 0
@@ -4261,10 +4269,9 @@
 55D:\commerces\choco\node_modules\truncatise\package.json133963101839961101 0
 59D:\commerces\choco\node_modules\ret\dist\types\types.js.map133983445723759412 0
 82D:\commerces\choco\node_modules\lmdb\dependencies\lmdb\libraries\liblmdb\chacha8.h133990776275876515 0
-52D:\commerces\choco\node_modules\truncatise\README.md133963101845701989 0
 50D:\commerces\choco\node_modules\truncatise\test.js133963101847015947 0
 57D:\commerces\choco\node_modules\ajv\dist\runtime\quote.js133983445725564268 0
-51D:\commerces\choco\dist\services\invoiceServices.js134010973945501540 0
+51D:\commerces\choco\dist\services\invoiceServices.js134011856044076530 0
 71D:\commerces\choco\node_modules\light-my-request\benchmark\benchmark.js133983445722207319 0
 49D:\commerces\choco\node_modules\lodash\entries.js133963101882498204 0
 93D:\commerces\choco\node_modules\@aws-sdk\util-endpoints\dist-types\ts3.4\lib\isIpAddress.d.ts133987258550030497 0
@@ -5136,7 +5143,7 @@
 57D:\commerces\choco\node_modules\js-stringify\package.json133963101840056017 0
 88D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\esm-node\v3.js133987322692348575 0
 43D:\commerces\choco\node_modules\sucrase\bin133964522421199684 1
-44D:\commerces\choco\dist\routes\viewRoutes.js134010973946040595 0
+44D:\commerces\choco\dist\routes\viewRoutes.js134011856044640680 0
 49D:\commerces\choco\node_modules\astring\deno.json133963101847169631 0
 52D:\commerces\choco\node_modules\sucrase\package.json133964522433831972 0
 50D:\commerces\choco\node_modules\lodash\isLength.js133963101888453907 0
@@ -6560,7 +6567,6 @@
 71D:\commerces\choco\node_modules\prisma\prisma-client\runtime\library.js133952620914989838 0
 51D:\commerces\choco\node_modules\lodash\fp\update.js133963101902896070 0
 72D:\commerces\choco\node_modules\prisma\prisma-client\runtime\library.mjs133952620918829793 0
-92D:\commerces\choco\node_modules\prisma\prisma-client\runtime\query_compiler_bg.postgresql.js133952620915613334 0
 102D:\commerces\choco\node_modules\@aws-sdk\client-s3\dist-types\commands\GetBucketVersioningCommand.d.ts133987258599941312 0
 69D:\commerces\choco\node_modules\fastify\test\http-methods\get.test.js133983445725826454 0
 93D:\commerces\choco\node_modules\prisma\prisma-client\runtime\query_compiler_bg.postgresql.mjs133952620918829793 0
@@ -7593,7 +7599,7 @@
 84D:\commerces\choco\node_modules\edge-parser\node_modules\edge-lexer\build\index.d.ts133963101851569913 0
 65D:\commerces\choco\node_modules\no-case\dist.es2015\index.spec.js133963101843614877 0
 55D:\commerces\choco\node_modules\no-case\dist\index.d.ts133963101850986243 0
-44D:\commerces\choco\dist\routes\orderItems.js134010973945700789 0
+44D:\commerces\choco\dist\routes\orderItems.js134011856044286188 0
 53D:\commerces\choco\node_modules\no-case\dist\index.js133963101841605342 0
 57D:\commerces\choco\node_modules\no-case\dist\index.js.map133963101848069466 0
 60D:\commerces\choco\node_modules\no-case\dist\index.spec.d.ts133963101851590222 0
@@ -7620,10 +7626,10 @@
 45D:\commerces\choco\node_modules\mz\HISTORY.md133964522423384129 0
 46D:\commerces\choco\node_modules\mz\readline.js133964522423087790 0
 44D:\commerces\choco\node_modules\mz\README.md133964522420479039 0
+63D:\commerces\choco\node_modules\@aws-sdk\nested-clients\dist-es133987258552396291 1
+86D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\stringify.js133987322692162948 0
 47D:\commerces\choco\node_modules\cross-spawn\lib133963493141805287 1
 52D:\commerces\choco\node_modules\msgpackr-extract\bin133990776212754953 1
-86D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\stringify.js133987322692162948 0
-63D:\commerces\choco\node_modules\@aws-sdk\nested-clients\dist-es133987258552396291 1
 56D:\commerces\choco\node_modules\lodash\_createRecurry.js133963101866482295 0
 84D:\commerces\choco\node_modules\@smithy\middleware-retry\node_modules\uuid\README.md133987322692808743 0
 57D:\commerces\choco\node_modules\msgpackr-extract\index.js133990776213068969 0
@@ -7807,7 +7813,7 @@
 47D:\commerces\choco\node_modules\lodash\defer.js133963101881217302 0
 93D:\commerces\choco\node_modules\@smithy\node-config-provider\dist-es\fromSharedConfigFiles.js133987258488481088 0
 47D:\commerces\choco\node_modules\lodash\delay.js133963101881426930 0
-48D:\commerces\choco\dist\routes\analyticRoutes.js134010973946471929 0
+48D:\commerces\choco\dist\routes\analyticRoutes.js134011856045227010 0
 56D:\commerces\choco\node_modules\glob\dist\esm\index.d.ts133964522429983191 0
 54D:\commerces\choco\node_modules\lodash\differenceBy.js133963101881723681 0
 52D:\commerces\choco\node_modules\fastify\fastify.d.ts133983445731189192 0
@@ -7847,7 +7853,6 @@
 59D:\commerces\choco\node_modules\@parcel\utils\src\schema.js133990776280616312 0
 46D:\commerces\choco\node_modules\lodash\flow.js133963101884318783 0
 47D:\commerces\choco\node_modules\lodash\forIn.js133963101884404007 0
-51D:\commerces\choco\node_modules\lodash\unzipWith.js133963101902885995 0
 77D:\commerces\choco\node_modules\fast-glob\out\providers\transformers\entry.js133964522423370741 0
 52D:\commerces\choco\node_modules\lodash\forInRight.js133963101884429315 0
 79D:\commerces\choco\node_modules\@smithy\util-stream\dist-types\splitStream.d.ts133987258564161404 0
@@ -8064,6 +8069,7 @@
 46D:\commerces\choco\node_modules\lodash\uniq.js133963101902718102 0
 106D:\commerces\choco\node_modules\@aws-sdk\client-sso\dist-types\ts3.4\pagination\ListAccountsPaginator.d.ts133987258566221048 0
 47D:\commerces\choco\node_modules\lodash\unzip.js133963101902856896 0
+51D:\commerces\choco\node_modules\lodash\unzipWith.js133963101902885995 0
 87D:\commerces\choco\node_modules\@aws-sdk\util-endpoints\dist-types\resolveEndpoint.d.ts133987258554306139 0
 71D:\commerces\choco\node_modules\caniuse-lite\data\features\wake-lock.js133963466070563689 0
 88D:\commerces\choco\node_modules\@smithy\util-retry\dist-types\AdaptiveRetryStrategy.d.ts133987258522813533 0
@@ -9901,7 +9907,7 @@
 89D:\commerces\choco\node_modules\@jridgewell\gen-mapping\types\sourcemap-segment.d.cts.map133964522423910042 0
 62D:\commerces\choco\node_modules\find-my-way\benchmark\bench.js133983445722361886 0
 92D:\commerces\choco\node_modules\@smithy\credential-provider-imds\dist-cjs\config\Endpoint.js133987258462301227 0
-47D:\commerces\choco\dist\routes\wishlistItems.js134010973945751105 0
+47D:\commerces\choco\dist\routes\wishlistItems.js134011856044367014 0
 79D:\commerces\choco\node_modules\caniuse-lite\data\features\css-rebeccapurple.js133963466056299391 0
 73D:\commerces\choco\node_modules\find-my-way\benchmark\compare-branches.js133983445722600289 0
 69D:\commerces\choco\node_modules\find-my-way\benchmark\uri-decoding.js133983445725519408 0
@@ -11761,8 +11767,6 @@
 67D:\commerces\choco\node_modules\autoprefixer\lib\hacks\flex-grow.js133963466062726734 0
 62D:\commerces\choco\node_modules\autoprefixer\lib\hacks\flex.js133963466062755357 0
 67D:\commerces\choco\node_modules\@smithy\url-parser\dist-es\index.js133987258463633766 0
-58D:\commerces\choco\node_modules\@parcel\graph\package.json133990776261794849 0
-68D:\commerces\choco\node_modules\autoprefixer\lib\hacks\fullscreen.js133963466062825476 0
 66D:\commerces\choco\node_modules\autoprefixer\lib\hacks\gradient.js133963466062849949 0
 75D:\commerces\choco\node_modules\autoprefixer\lib\hacks\grid-column-align.js133963466062886037 0
 75D:\commerces\choco\node_modules\autoprefixer\lib\hacks\grid-rows-columns.js133963466062900850 0
@@ -12425,7 +12429,7 @@
 64D:\commerces\choco\node_modules\ajv\dist\compile\codegen\code.js133983445723242440 0
 67D:\commerces\choco\node_modules\ajv\dist\compile\codegen\index.d.ts133983445730707097 0
 65D:\commerces\choco\node_modules\ajv\dist\compile\codegen\index.js133983445724470721 0
-30D:\commerces\choco\dist\routes134008685859333053 1
+30D:\commerces\choco\dist\routes134011061919017946 1
 69D:\commerces\choco\node_modules\ajv\dist\compile\codegen\index.js.map133983445727990209 0
 67D:\commerces\choco\node_modules\ajv\dist\compile\codegen\scope.d.ts133983445733078153 0
 77D:\commerces\choco\node_modules\@smithy\util-endpoints\dist-types\ts3.4\types133987258573185191 1
@@ -12441,7 +12445,7 @@
 54D:\commerces\choco\node_modules\acorn\dist\acorn.d.mts133963101853456492 0
 87D:\commerces\choco\node_modules\@smithy\util-endpoints\dist-cjs\types\TreeRuleObject.js133987258568535041 0
 53D:\commerces\choco\node_modules\acorn\dist\acorn.d.ts133963101853586880 0
-46D:\commerces\choco\dist\authentication\auth.js134010973944938605 0
+46D:\commerces\choco\dist\authentication\auth.js134011856043302043 0
 89D:\commerces\choco\node_modules\@smithy\core\dist-es\middleware-http-auth-scheme\index.js133987258564229553 0
 51D:\commerces\choco\node_modules\acorn\dist\acorn.js133963101847169631 0
 52D:\commerces\choco\node_modules\acorn\dist\acorn.mjs133963101853176479 0
@@ -12971,7 +12975,6 @@
 82D:\commerces\choco\node_modules\@smithy\credential-provider-imds\dist-cjs\types.js133987258543728387 0
 73D:\commerces\choco\node_modules\@swc\helpers\esm\_ts_dispose_resources.js133990776278613652 0
 65D:\commerces\choco\node_modules\@swc\helpers\esm\_ts_generator.js133990776278613652 0
-85D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\uuid-bin.js133987322692183063 0
 62D:\commerces\choco\node_modules\@swc\helpers\esm\_ts_values.js133990776278701268 0
 82D:\commerces\choco\node_modules\@swc\helpers\esm\_unsupported_iterable_to_array.js133990776278733107 0
 58D:\commerces\choco\node_modules\@swc\helpers\esm\_using.js133990776278860927 0
@@ -13557,7 +13560,6 @@
 88D:\commerces\choco\node_modules\@parcel\watcher\node_modules\node-addon-api\node_api.gyp133990776210899308 0
 72D:\commerces\choco\node_modules\@smithy\util-body-length-browser\dist-es133987258438668124 1
 97D:\commerces\choco\node_modules\@smithy\middleware-endpoint\dist-types\resolveEndpointConfig.d.ts133987258559388528 0
-77D:\commerces\choco\node_modules\@smithy\util-body-length-browser\package.json133987258439345006 0
 74D:\commerces\choco\node_modules\@smithy\util-body-length-browser\README.md133987258439756844 0
 73D:\commerces\choco\node_modules\@smithy\middleware-content-length\LICENSE133987258461304651 0
 100D:\commerces\choco\node_modules\@smithy\util-body-length-browser\dist-types\calculateBodyLength.d.ts133987258442029732 0
@@ -13803,7 +13805,7 @@
 66D:\commerces\choco\node_modules\@smithy\types\dist-cjs\endpoint.js133987258548501976 0
 74D:\commerces\choco\node_modules\@parcel\markdown-ansi\src\markdown-ansi.js133990776234448527 0
 65D:\commerces\choco\node_modules\@smithy\types\dist-cjs\extensions133987258569056798 1
-57D:\commerces\choco\alpine\components\favoriteComponent.js133990816569881634 0
+57D:\commerces\choco\alpine\components\favoriteComponent.js134011023455011218 0
 70D:\commerces\choco\node_modules\@smithy\types\dist-cjs\externals-check133987258511134187 1
 77D:\commerces\choco\node_modules\@aws-crypto\crc32\build\module\aws_crc32.d.ts133987258488659050 0
 69D:\commerces\choco\node_modules\@smithy\types\dist-cjs\feature-ids.js133987258554260791 0
@@ -14344,7 +14346,7 @@
 75D:\commerces\choco\node_modules\@smithy\middleware-content-length\README.md133987258482545021 0
 68D:\commerces\choco\node_modules\@nodelib\fs.scandir\out\constants.js133964522422288981 0
 87D:\commerces\choco\node_modules\@smithy\middleware-content-length\dist-types\index.d.ts133987258488322693 0
-44D:\commerces\choco\dist\routes\userRoutes.js134010973946181416 0
+44D:\commerces\choco\dist\routes\userRoutes.js134011856044803157 0
 93D:\commerces\choco\node_modules\@smithy\middleware-content-length\dist-types\ts3.4\index.d.ts133987258489612684 0
 82D:\commerces\choco\node_modules\@smithy\middleware-content-length\dist-es\index.js133987258474820595 0
 55D:\commerces\choco\node_modules\@smithy\md5-js\dist-cjs133987258468925650 1
@@ -14597,7 +14599,7 @@
 77D:\commerces\choco\node_modules\@smithy\core\dist-types\ts3.4\submodules\cbor133987258600281218 1
 82D:\commerces\choco\node_modules\@smithy\core\dist-types\ts3.4\submodules\protocols133987258597871037 1
 79D:\commerces\choco\node_modules\@smithy\core\dist-types\ts3.4\submodules\schema133987258600949528 1
-48D:\commerces\choco\dist\routes\discountRoutes.js134010973945909252 0
+48D:\commerces\choco\dist\routes\discountRoutes.js134011856044525134 0
 109D:\commerces\choco\node_modules\@smithy\core\dist-types\ts3.4\submodules\serde\copyDocumentWithTransform.d.ts133987258572085240 0
 89D:\commerces\choco\node_modules\@smithy\core\dist-types\ts3.4\submodules\serde\index.d.ts133987258575432928 0
 96D:\commerces\choco\node_modules\@smithy\core\dist-types\ts3.4\submodules\serde\quote-header.d.ts133987258597573771 0
@@ -15609,7 +15611,7 @@
 75D:\commerces\choco\node_modules\@parcel\core\test\fixtures\config\.parcelrc133990776290896069 0
 102D:\commerces\choco\node_modules\@aws-sdk\credential-provider-ini\dist-types\resolveSsoCredentials.d.ts133987258520974590 0
 93D:\commerces\choco\node_modules\@parcel\core\test\fixtures\common-targets-ignore\package.json133990776295630867 0
-48D:\commerces\choco\dist\utils\responseClasses.js134010973944166676 0
+48D:\commerces\choco\dist\utils\responseClasses.js134011856042574521 0
 91D:\commerces\choco\node_modules\@parcel\core\test\fixtures\application-targets\package.json133990776295610771 0
 62D:\commerces\choco\node_modules\@parcel\core\src\AssetGraph.js133990776291604003 0
 66D:\commerces\choco\node_modules\@parcel\core\src\CommittedAsset.js133990776292499565 0
@@ -16832,7 +16834,7 @@
 95D:\commerces\choco\node_modules\@aws-sdk\client-sso\dist-types\endpoint\EndpointParameters.d.ts133987258551931473 0
 93D:\commerces\choco\node_modules\@aws-sdk\client-sso\dist-types\endpoint\endpointResolver.d.ts133987258554295962 0
 102D:\commerces\choco\node_modules\@aws-sdk\client-sso\dist-types\commands\GetRoleCredentialsCommand.d.ts133987258557314223 0
-47D:\commerces\choco\dist\routes\settingsRoute.js134010973946404426 0
+47D:\commerces\choco\dist\routes\settingsRoute.js134011856045177544 0
 90D:\commerces\choco\node_modules\@aws-sdk\client-sso\dist-types\commands\LogoutCommand.d.ts133987258568002084 0
 103D:\commerces\choco\node_modules\@aws-sdk\client-sso\dist-types\auth\httpAuthExtensionConfiguration.d.ts133987258559324290 0
 85D:\commerces\choco\node_modules\@aws-sdk\client-sso\dist-es\extensionConfiguration.js133987258488794389 0
@@ -16866,6 +16868,7 @@
 88D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\md5-browser.js133987322691091427 0
 88D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\rng-browser.js133987322691672445 0
 89D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\sha1-browser.js133987322691852086 0
+85D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\uuid-bin.js133987322692183063 0
 79D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\v3.js133987322692348575 0
 85D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\validate.js133987322692705293 0
 84D:\commerces\choco\node_modules\@aws-sdk\client-s3\node_modules\uuid\dist\version.js133987322692740334 0
@@ -17497,7 +17500,7 @@
 33D:\commerces\choco\locals\en.json134010961746963315 0
 27D:\commerces\choco\dist\app133972249100117360 1
 38D:\commerces\choco\dist\authentication133956889145724813 1
-31D:\commerces\choco\dist\plugins133987287573201165 1
+31D:\commerces\choco\dist\plugins134011033297361920 1
 27D:\commerces\choco\dist\src133983441507962630 1
 35D:\commerces\choco\dist\src\plugins133983441507817527 1
 34D:\commerces\choco\dist\src\routes133983441507817527 1
@@ -17513,16 +17516,17 @@
 48D:\commerces\choco\dist\src\routes\viewRoutes.js133983441507705616 0
 50D:\commerces\choco\dist\src\authentication\auth.js133983441506567569 0
 56D:\commerces\choco\dist\src\authentication\middleware.js133983441505910404 0
-49D:\commerces\choco\dist\services\emailServices.js134010973944958732 0
-44D:\commerces\choco\dist\routes\authRoutes.js134010973945157338 0
-44D:\commerces\choco\dist\routes\cartRoutes.js134010973945454520 0
-48D:\commerces\choco\dist\routes\categoryRoutes.js134010973945217660 0
-44D:\commerces\choco\dist\routes\fileRoutes.js134010973946342751 0
-47D:\commerces\choco\dist\routes\variantRoutes.js134010973945295680 0
-38D:\commerces\choco\dist\plugins\aws.js134010973946201511 0
-39D:\commerces\choco\dist\plugins\edge.js134010973946101023 0
-41D:\commerces\choco\dist\plugins\prisma.js134010973944800512 0
-52D:\commerces\choco\dist\authentication\middleware.js134010973944107180 0
+49D:\commerces\choco\dist\services\emailServices.js134011856043354798 0
+44D:\commerces\choco\dist\routes\authRoutes.js134011856043732300 0
+44D:\commerces\choco\dist\routes\cartRoutes.js134011856044048359 0
+48D:\commerces\choco\dist\routes\categoryRoutes.js134011856043813378 0
+44D:\commerces\choco\dist\routes\fileRoutes.js134011856044998492 0
+47D:\commerces\choco\dist\routes\variantRoutes.js134011856043897153 0
+38D:\commerces\choco\dist\plugins\aws.js134011856044860955 0
+39D:\commerces\choco\dist\plugins\edge.js134011856044682559 0
+39D:\commerces\choco\dist\plugins\i18n.js134011856045285582 0
+41D:\commerces\choco\dist\plugins\prisma.js134011856043144602 0
+52D:\commerces\choco\dist\authentication\middleware.js134011856042199372 0
 38D:\commerces\choco\dist\app\components133972249099856211 1
 42D:\commerces\choco\dist\app\stores\cart.js133972256196633995 0
 46D:\commerces\choco\dist\app\components\cart.js133972256196622692 0
@@ -17530,11 +17534,11 @@
 35D:\commerces\choco\dashboard\assets134008670474486145 1
 39D:\commerces\choco\dashboard\index.html134008670533821642 0
 54D:\commerces\choco\dashboard\assets\index-DJyUtGdL.css134008667624514127 0
-32D:\commerces\choco\alpine\app.js134010984504434092 0
-36D:\commerces\choco\alpine\components134010982481550596 1
+32D:\commerces\choco\alpine\app.js134011855123928131 0
+36D:\commerces\choco\alpine\components134011850285860647 1
 32D:\commerces\choco\alpine\stores133995489232148510 1
 31D:\commerces\choco\alpine\utils133990751576005962 1
-38D:\commerces\choco\alpine\utils\api.js134010984190024037 0
+38D:\commerces\choco\alpine\utils\api.js134011854123319519 0
 43D:\commerces\choco\alpine\utils\services.js133995751007418762 0
 45D:\commerces\choco\alpine\stores\cartStore.js134000187471783409 0
 55D:\commerces\choco\alpine\stores\productGalleryStore.js133990754282712393 0
@@ -17544,5 +17548,6 @@
 53D:\commerces\choco\alpine\components\cartComponent.js133993742774798926 0
 57D:\commerces\choco\alpine\components\checkoutComponent.js133996508712868230 0
 53D:\commerces\choco\alpine\components\itemComponent.js133990817113886873 0
+57D:\commerces\choco\alpine\components\languageComponent.js134011867683975313 0
 58D:\commerces\choco\alpine\components\reviewingComponent.js134000702108834538 0
-57D:\commerces\choco\alpine\components\wishListComponent.js134010985602090274 0
+57D:\commerces\choco\alpine\components\wishListComponent.js134011015805023844 0

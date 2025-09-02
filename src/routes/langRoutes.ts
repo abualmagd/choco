@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
-import { ResError } from "../utils/responseClasses";
+import { CustomResponse, ResError } from "../utils/responseClasses";
 import { i18nPlugin } from "../plugins/i18n";
 
 export const LangRoutes: FastifyPluginAsync = async (
@@ -11,7 +11,6 @@ export const LangRoutes: FastifyPluginAsync = async (
 
     const supportedLngs = Object.keys(fastify.translations);
 
-    fastify.register(i18nPlugin);
     if (supportedLngs.includes(lang)) {
       reply.setCookie("language", lang, {
         path: "/",
@@ -23,7 +22,8 @@ export const LangRoutes: FastifyPluginAsync = async (
         .status(500);
     }
 
-    const referer = request.headers.referer || "/";
-    return reply.redirect(referer);
+    //const referer = request.headers.referer || "/";
+    //return reply.redirect(referer);
+    return reply.send(new CustomResponse("language changed", null));
   });
 };
