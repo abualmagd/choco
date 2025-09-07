@@ -1,0 +1,55 @@
+@layout('components/layout/app')
+
+
+
+
+@section('content')
+
+
+@each(order in orders)
+<div class=" w-full  rounded shadow-md grid  md:grid-cols-6 grid-cols-2 gap-3 p-6"
+    x-data="dateFormatter({{JSON.stringify(order.createdAt)}})">
+    <div class=" gap-3 flex flex-col">
+        <p>{{t('number')}}</p>
+        <a href="/orders/{{order.id}}" class=" text-blue-400">{{order.orderNumber}}</a>
+
+    </div>
+
+    <div class=" gap-3 flex flex-col">
+        <p>{{t('total')}}</p>
+        <p class=" text-gray-500">{{order.total}}</p>
+
+    </div>
+
+    <div class=" gap-3 flex flex-col">
+
+        <p>{{t('status')}}</p>
+        <p class=" text-gray-500">{{order.status}}</p>
+
+    </div>
+
+    <div class=" gap-3 flex flex-col">
+
+        <p>{{t('pay status')}}</p>
+        <p class=" text-gray-500">{{order.paymentStatus}}</p>
+
+    </div>
+    <div class=" gap-3 flex flex-col">
+
+        <p>{{t('tracking number')}}</p>
+        <p class=" text-gray-500">{{order.trackingNumber||'_'}}</p>
+
+    </div>
+
+    <div class=" gap-3 flex flex-col">
+
+        <p>{{t('created at')}}</p>
+        <p class="text-gray-500" x-text="myDate"></p>
+
+    </div>
+
+</div>
+
+@end
+
+@end

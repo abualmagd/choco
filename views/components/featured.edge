@@ -11,12 +11,12 @@
 
         @else
         @!component('components/cubicCard', {
-        id:1,
-        slug:"t-shkirkt-49jnnnj552",
-        cardImage:'/public/assetes/images/holder.jpg',
-        description:'Running shoes for men',
-        price:122,
-        currency:'$'
+        id:item.id,
+        slug:item.slug,
+        cardImage: item.images && item.images.length > 0 ? item.images[0].url : '/public/assetes/images/holder.jpg',
+        description:item.description||item.name,
+        price:item.price,
+        currency:settings.currencyLogo
         })
         @end
 

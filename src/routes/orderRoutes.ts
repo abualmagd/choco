@@ -2,6 +2,7 @@ import { CustomResponse } from "./../utils/responseClasses";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { ResError } from "../utils/responseClasses";
 import { OrderStatus, Prisma } from "@prisma/client";
+import _ from "underscore";
 import { createOrderInvoice } from "../services/invoiceServices";
 import { createHmac } from "crypto";
 import {
@@ -9,6 +10,7 @@ import {
   isAuthenticate,
   isModeratorAuth,
 } from "../authentication/middleware";
+import queryString from "query-string";
 
 export const orderRoutes: FastifyPluginAsync = async (
   fastify: FastifyInstance,
@@ -329,28 +331,41 @@ export const orderRoutes: FastifyPluginAsync = async (
 
   fastify.post("/order/webhook", async (request, reply) => {
     //webhook signature
-
-    const bodyParser = require("body-parser");
-    const crypto = require("crypto");
-    const queryString = require("query-string");
-    const _ = require("underscore");
-    const { data, event } = request.body;
+    console.log("called webhook");
+    const { data, event } = request.body as { data: any; event: any };
     data.signatureKeys.sort();
 
+    const queryString = await import("query-string");
+
     const objectSignaturePayload = _.pick(data, data.signatureKeys);
-    const signaturePayload = queryString.stringify(objectSignaturePayload);
-    const signature = crypto
-
-      .createHmac("sha256", PaymentApiKey)
-
+    const signaturePayload = queryString.default.stringify(
+      objectSignaturePayload
+    );
+    const signature = createHmac("sha256", process.env.KASHIER_KEY!)
       .update(signaturePayload)
-
       .digest("hex");
-    const kashierSignature = request.header("x-kashier-signature");
+    const kashierSignature = request.headers["x-kashier-signature"];
     if (kashierSignature === signature) {
       console.log("valid signature");
+      console.log("event: ", event);
+
+      if (
+        (event === "pay" && data.status === "SUCCESS") ||
+        (event === "capture" && data.status === "SUCCESS")
+      ) {
+        await fastify.prisma.order.update({
+          where: { id: parseInt(data.merchantOrderId) },
+          data: {
+            paymentStatus: "PAID",
+          },
+        });
+      }
+
+      return reply.status(200);
     } else {
       console.log("invalid signature");
+
+      return reply.status(500);
     }
   });
 };

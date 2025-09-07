@@ -1,0 +1,27 @@
+@layout('components/layout/app')
+
+
+@section('content')
+
+@if(products.length===0)
+<div class=" text-2xl font-bold">No products in this category yet </div>
+@end
+
+<div class=" flex flex-wrap justify-center w-full gap-6 ">
+    @each(product in products)
+    @!component('components/cubicCard', {
+    id:product.id,
+    slug:product.slug,
+    cardImage:product.images?product.images[0]:'/public/assetes/images/holder.jpg',
+    description:product.description||product.name,
+    price:product.price,
+    currency:settings.currencyLogo
+    })
+    @end
+</div>
+
+
+
+
+
+@end

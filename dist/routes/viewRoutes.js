@@ -5,7 +5,58 @@ const responseClasses_1 = require("../utils/responseClasses");
 const viewRoutes = async (fastify, opt) => {
     fastify.get("/", async (request, reply) => {
         try {
-            return reply.view("home", { username: "Ismail" });
+            const collections = await fastify.prisma.category.findMany({
+                take: 8,
+            });
+            const featured = await fastify.prisma.product.findMany({
+                take: 5,
+                where: {
+                    isFeatured: true,
+                },
+                include: {
+                    images: true,
+                    discounts: {
+                        where: {
+                            isActive: true,
+                            startDate: {
+                                lte: new Date(),
+                            },
+                            endDate: {
+                                gte: new Date(),
+                            },
+                        },
+                    },
+                },
+            });
+            const latest = await fastify.prisma.product.findMany({
+                take: 5,
+                orderBy: {
+                    createdAt: "desc",
+                },
+                include: {
+                    images: true,
+                    discounts: {
+                        where: {
+                            isActive: true,
+                            startDate: {
+                                lte: new Date(),
+                            },
+                            endDate: {
+                                gte: new Date(),
+                            },
+                        },
+                    },
+                },
+            });
+            const data = {
+                username: "Ismail",
+                collections: collections,
+                featured: featured,
+                latest: latest,
+                firstCategory: collections[collections.length - 2],
+                secondCategory: collections[collections.length - 1],
+            };
+            return reply.view("home", { data: data });
         }
         catch (error) {
             return reply.view("errorPage", { error: error });
@@ -246,12 +297,118 @@ const viewRoutes = async (fastify, opt) => {
                 where: { id: parseInt(merchantOrderId) },
                 data: {
                     status: "PROCESSING",
+                    paymentStatus: "PAID",
                 },
             });
             return reply.view("redirect", { order: order });
         }
         else {
             return reply.view("errorPage", { error: " payment failed" });
+        }
+    });
+    fastify.get("/user-orders", async (request, reply) => {
+        const userId = request.session.user?.id;
+        if (!userId) {
+            return reply.view("login");
+        }
+        const orders = await fastify.prisma.order.findMany({
+            where: {
+                userId: userId,
+            },
+        });
+        return reply.view("orders", { orders: orders });
+    });
+    fastify.get("/orders/:id", async (request, reply) => {
+        const userId = request.session.user?.id;
+        const { id } = request.params;
+        if (!userId) {
+            return reply.view("login");
+        }
+        const order = await fastify.prisma.order.findUnique({
+            where: {
+                id: parseInt(id),
+                userId: userId,
+            },
+            include: {
+                items: {
+                    include: {
+                        product: true,
+                    },
+                },
+                user: {
+                    include: {
+                        addresses: true,
+                    },
+                },
+            },
+        });
+        if (!order) {
+            return reply.view("notFound");
+        }
+        else {
+            return reply.view("showOrder", { order: order });
+        }
+    });
+    fastify.get("/featured-products", async (request, reply) => {
+        try {
+            const featured = await fastify.prisma.product.findMany({
+                take: 25,
+                where: {
+                    isFeatured: true,
+                },
+                include: {
+                    images: true,
+                    discounts: {
+                        where: {
+                            isActive: true,
+                            startDate: {
+                                lte: new Date(),
+                            },
+                            endDate: {
+                                gte: new Date(),
+                            },
+                        },
+                    },
+                },
+            });
+            if (!featured) {
+                return reply.view("notFound");
+            }
+            return reply.view("products", { products: featured });
+        }
+        catch (error) {
+            return reply.view("errorPage", { error: error });
+        }
+    });
+    fastify.get("/latest-products", async (request, reply) => {
+        try {
+            const latest = await fastify.prisma.product.findMany({
+                take: 25,
+                orderBy: {
+                    createdAt: "desc",
+                },
+                include: {
+                    images: true,
+                    discounts: {
+                        where: {
+                            isActive: true,
+                            startDate: {
+                                lte: new Date(),
+                            },
+                            endDate: {
+                                gte: new Date(),
+                            },
+                        },
+                    },
+                },
+            });
+            if (!latest) {
+                return reply.view("notFound");
+            }
+            return reply.view("products", { products: latest });
+        }
+        catch (error) {
+            return reply.view("errorPage", { error: error });
         }
     });
 };

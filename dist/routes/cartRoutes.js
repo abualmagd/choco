@@ -197,15 +197,19 @@ const cartRoutes = async (fastify, opt) => {
             const cart = await fastify.prisma.cart.findUnique({
                 where: { userId: request.session.user?.id },
             });
+            console.log("cart: ", cart);
             if (!cart) {
                 return reply.send(new responseClasses_1.ResError(500, "error in clearing cart", " cart clear error"));
             }
-            await fastify.prisma.cartItem.deleteMany({
-                where: { cartId: cart.id },
-            });
-            return reply
-                .status(200)
-                .send(new responseClasses_1.CustomResponse(" cart cleared well", null));
+            else {
+                const res = await fastify.prisma.cartItem.deleteMany({
+                    where: { cartId: cart.id },
+                });
+                console.log("delet ", res);
+                return reply
+                    .status(200)
+                    .send(new responseClasses_1.CustomResponse(" cart cleared well", null));
+            }
         }
         catch (error) {
             return reply.send(error);

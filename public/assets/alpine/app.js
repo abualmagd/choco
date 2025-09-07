@@ -698,6 +698,8 @@ var _languageComponent = require("./components/languageComponent");
 var _languageComponentDefault = parcelHelpers.interopDefault(_languageComponent);
 var _paymentComponent = require("./components/paymentComponent");
 var _paymentComponentDefault = parcelHelpers.interopDefault(_paymentComponent);
+var _dateFormatter = require("./components/dateFormatter");
+var _dateFormatterDefault = parcelHelpers.interopDefault(_dateFormatter);
 window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).store("productGallery", (0, _productGalleryStoreDefault.default));
 (0, _alpinejsDefault.default).store("cart", (0, _cartStoreDefault.default));
@@ -713,9 +715,10 @@ window.Alpine = (0, _alpinejsDefault.default);
 (0, _alpinejsDefault.default).data("wishListComponent", (0, _wishListComponentDefault.default));
 (0, _alpinejsDefault.default).data("languageComponent", (0, _languageComponentDefault.default));
 (0, _alpinejsDefault.default).data("paymentComponent", (0, _paymentComponentDefault.default));
+(0, _alpinejsDefault.default).data("dateFormatter", (0, _dateFormatterDefault.default));
 (0, _alpinejsDefault.default).start();
 
-},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo","./components/checkoutComponent":"fcqeV","./components/reviewingComponent":"cwHAh","./components/wishListComponent":"cntIL","./components/languageComponent":"4uwox","./components/paymentComponent":"RJ7cc"}],"69hXP":[function(require,module,exports,__globalThis) {
+},{"alpinejs":"69hXP","./stores/productGalleryStore":"al2ys","./stores/cartStore":"kZQ1H","./components/cartComponent":"eC9Vh","./components/favoriteComponent":"hwEGz","./components/authModalComponent":"ats9P","./components/accountComponent":"2gfxn","./components/adressComponent":"hsTDP","./components/itemComponent":"lhy3p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./stores/orderStore":"i2voo","./components/checkoutComponent":"fcqeV","./components/reviewingComponent":"cwHAh","./components/wishListComponent":"cntIL","./components/languageComponent":"4uwox","./components/paymentComponent":"RJ7cc","./components/dateFormatter":"7EFY6"}],"69hXP":[function(require,module,exports,__globalThis) {
 // packages/alpinejs/src/scheduler.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -3800,7 +3803,6 @@ exports.default = {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _api = require("../utils/api");
-var _services = require("../utils/services");
 exports.default = {
     count: 0,
     total: 0,
@@ -3817,6 +3819,11 @@ exports.default = {
         if (this.count !== 0) this.count = parseInt(this.count) - 1;
         localStorage.setItem("cartCount", this.count);
     },
+    async clearCart () {
+        this.count = 0;
+        await (0, _api.removeAllCartItem)();
+        localStorage.setItem("cartCount", 0);
+    },
     async asyncCartTotal () {
         try {
             const data = await (0, _api.cartTotalPrice)();
@@ -3828,7 +3835,7 @@ exports.default = {
     }
 };
 
-},{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f2P3u":[function(require,module,exports,__globalThis) {
+},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f2P3u":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateUserData", ()=>updateUserData);
@@ -3837,6 +3844,7 @@ parcelHelpers.export(exports, "addNewAddress", ()=>addNewAddress);
 parcelHelpers.export(exports, "updateAddress", ()=>updateAddress);
 parcelHelpers.export(exports, "updateItemQuatity", ()=>updateItemQuatity);
 parcelHelpers.export(exports, "removeCartItem", ()=>removeCartItem);
+parcelHelpers.export(exports, "removeAllCartItem", ()=>removeAllCartItem);
 parcelHelpers.export(exports, "cartTotalPrice", ()=>cartTotalPrice);
 parcelHelpers.export(exports, "addToCartApi", ()=>addToCartApi);
 parcelHelpers.export(exports, "addToWishList", ()=>addToWishList);
@@ -3942,6 +3950,21 @@ const removeCartItem = async (id)=>{
         method: "DELETE",
         credentials: "include"
     });
+    if (!res.ok) {
+        console.log(res);
+        throw Error(res.statusText);
+    } else return res.json();
+};
+const removeAllCartItem = async ()=>{
+    const res = await fetch("/api/cart/clear", {
+        headers: {
+            //"Content-Type": "application/json",
+            "x-api-key": "1vmWCOTz1wKzM03TZBg2Sprent6OKNIsqpYu6hYVmnh4izciZU1cd8cvMnG2yE"
+        },
+        method: "PUT",
+        credentials: "include"
+    });
+    console.log("res", res.statusText);
     if (!res.ok) {
         console.log(res);
         throw Error(res.statusText);
@@ -4088,7 +4111,7 @@ const createOrder = async (data)=>{
             method: "POST",
             credentials: "include"
         });
-        console.log(response);
+        //console.log(response);
         if (!response.ok) {
             if (response.statusText === "Unauthorized") throw new Error("Unauthorized");
             else throw new Error("Failed to add to wishlist");
@@ -4536,6 +4559,8 @@ exports.default = (item)=>({
 },{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i2voo":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+var _alpinejs = require("alpinejs");
+var _alpinejsDefault = parcelHelpers.interopDefault(_alpinejs);
 var _api = require("../utils/api");
 var _services = require("../utils/services");
 exports.default = {
@@ -4552,11 +4577,11 @@ exports.default = {
             const data = {
                 paymentMethod: "",
                 orderNumber: r,
-                subtotal: Alpine.store("cart").total,
+                subtotal: (0, _alpinejsDefault.default).store("cart").total,
                 tax: "0",
                 shipping: "0",
-                discount: Alpine.store("cart").discount,
-                total: Alpine.store("cart").total,
+                discount: (0, _alpinejsDefault.default).store("cart").discount,
+                total: (0, _alpinejsDefault.default).store("cart").total,
                 items: orderItems
             };
             const order = await (0, _api.createOrder)(data);
@@ -4568,7 +4593,7 @@ exports.default = {
     }
 };
 
-},{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fcqeV":[function(require,module,exports,__globalThis) {
+},{"../utils/api":"f2P3u","../utils/services":"fXQWd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","alpinejs":"69hXP"}],"fcqeV":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _api = require("../utils/api");
@@ -4581,6 +4606,10 @@ exports.default = (order)=>({
         shippingAddressId: order.shippingAddressId,
         paymentMethod: order.paymentMethod ?? null,
         shippingMethod: order.shippingMethod ?? null,
+        status: order.status,
+        init () {
+            Alpine.store("cart").clearCart();
+        },
         async updateMyOrder () {
             console.log(this.paymentMethod);
             await (0, _api.updateOrderById)(this.id, {
@@ -4700,8 +4729,8 @@ exports.default = (data)=>({
         currency: data.currency || "EGP",
         orderId: data.order.id.toString(),
         merchantId: "MID-25920-522",
-        merchantRedirect: "http://localhost:3000/redirect",
-        serverWebhook: "http://localhost:3000/webhook",
+        merchantRedirect: "https://hungry-rings-rhyme.loca.lt/redirect",
+        serverWebhook: "https://hungry-rings-rhyme.loca.lt/order/webhook",
         mode: "test",
         metaData: JSON.stringify({
             order_id: data.order.id,
@@ -4779,6 +4808,373 @@ exports.default = (data)=>({
         }
     });
 
-},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
+},{"../utils/api":"f2P3u","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7EFY6":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _dayjs = require("dayjs");
+var _dayjsDefault = parcelHelpers.interopDefault(_dayjs);
+exports.default = (createdAt)=>({
+        myDate: createdAt,
+        init () {
+            this.format();
+        },
+        format () {
+            this.myDate = (0, _dayjsDefault.default)(this.myDate).format("MMMM D, YYYY h:mm A");
+        }
+    });
+
+},{"dayjs":"NJZFB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"NJZFB":[function(require,module,exports,__globalThis) {
+!function(t, e) {
+    module.exports = e();
+}(this, function() {
+    "use strict";
+    var t = 1e3, e = 6e4, n = 36e5, r = "millisecond", i = "second", s = "minute", u = "hour", a = "day", o = "week", c = "month", f = "quarter", h = "year", d = "date", l = "Invalid Date", $ = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, y = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, M = {
+        name: "en",
+        weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
+        months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"),
+        ordinal: function(t) {
+            var e = [
+                "th",
+                "st",
+                "nd",
+                "rd"
+            ], n = t % 100;
+            return "[" + t + (e[(n - 20) % 10] || e[n] || e[0]) + "]";
+        }
+    }, m = function(t, e, n) {
+        var r = String(t);
+        return !r || r.length >= e ? t : "" + Array(e + 1 - r.length).join(n) + t;
+    }, v = {
+        s: m,
+        z: function(t) {
+            var e = -t.utcOffset(), n = Math.abs(e), r = Math.floor(n / 60), i = n % 60;
+            return (e <= 0 ? "+" : "-") + m(r, 2, "0") + ":" + m(i, 2, "0");
+        },
+        m: function t(e, n) {
+            if (e.date() < n.date()) return -t(n, e);
+            var r = 12 * (n.year() - e.year()) + (n.month() - e.month()), i = e.clone().add(r, c), s = n - i < 0, u = e.clone().add(r + (s ? -1 : 1), c);
+            return +(-(r + (n - i) / (s ? i - u : u - i)) || 0);
+        },
+        a: function(t) {
+            return t < 0 ? Math.ceil(t) || 0 : Math.floor(t);
+        },
+        p: function(t) {
+            return ({
+                M: c,
+                y: h,
+                w: o,
+                d: a,
+                D: d,
+                h: u,
+                m: s,
+                s: i,
+                ms: r,
+                Q: f
+            })[t] || String(t || "").toLowerCase().replace(/s$/, "");
+        },
+        u: function(t) {
+            return void 0 === t;
+        }
+    }, g = "en", D = {};
+    D[g] = M;
+    var p = "$isDayjsObject", S = function(t) {
+        return t instanceof _ || !(!t || !t[p]);
+    }, w = function t(e, n, r) {
+        var i;
+        if (!e) return g;
+        if ("string" == typeof e) {
+            var s = e.toLowerCase();
+            D[s] && (i = s), n && (D[s] = n, i = s);
+            var u = e.split("-");
+            if (!i && u.length > 1) return t(u[0]);
+        } else {
+            var a = e.name;
+            D[a] = e, i = a;
+        }
+        return !r && i && (g = i), i || !r && g;
+    }, O = function(t, e) {
+        if (S(t)) return t.clone();
+        var n = "object" == typeof e ? e : {};
+        return n.date = t, n.args = arguments, new _(n);
+    }, b = v;
+    b.l = w, b.i = S, b.w = function(t, e) {
+        return O(t, {
+            locale: e.$L,
+            utc: e.$u,
+            x: e.$x,
+            $offset: e.$offset
+        });
+    };
+    var _ = function() {
+        function M(t) {
+            this.$L = w(t.locale, null, !0), this.parse(t), this.$x = this.$x || t.x || {}, this[p] = !0;
+        }
+        var m = M.prototype;
+        return m.parse = function(t) {
+            this.$d = function(t) {
+                var e = t.date, n = t.utc;
+                if (null === e) return new Date(NaN);
+                if (b.u(e)) return new Date;
+                if (e instanceof Date) return new Date(e);
+                if ("string" == typeof e && !/Z$/i.test(e)) {
+                    var r = e.match($);
+                    if (r) {
+                        var i = r[2] - 1 || 0, s = (r[7] || "0").substring(0, 3);
+                        return n ? new Date(Date.UTC(r[1], i, r[3] || 1, r[4] || 0, r[5] || 0, r[6] || 0, s)) : new Date(r[1], i, r[3] || 1, r[4] || 0, r[5] || 0, r[6] || 0, s);
+                    }
+                }
+                return new Date(e);
+            }(t), this.init();
+        }, m.init = function() {
+            var t = this.$d;
+            this.$y = t.getFullYear(), this.$M = t.getMonth(), this.$D = t.getDate(), this.$W = t.getDay(), this.$H = t.getHours(), this.$m = t.getMinutes(), this.$s = t.getSeconds(), this.$ms = t.getMilliseconds();
+        }, m.$utils = function() {
+            return b;
+        }, m.isValid = function() {
+            return !(this.$d.toString() === l);
+        }, m.isSame = function(t, e) {
+            var n = O(t);
+            return this.startOf(e) <= n && n <= this.endOf(e);
+        }, m.isAfter = function(t, e) {
+            return O(t) < this.startOf(e);
+        }, m.isBefore = function(t, e) {
+            return this.endOf(e) < O(t);
+        }, m.$g = function(t, e, n) {
+            return b.u(t) ? this[e] : this.set(n, t);
+        }, m.unix = function() {
+            return Math.floor(this.valueOf() / 1e3);
+        }, m.valueOf = function() {
+            return this.$d.getTime();
+        }, m.startOf = function(t, e) {
+            var n = this, r = !!b.u(e) || e, f = b.p(t), l = function(t, e) {
+                var i = b.w(n.$u ? Date.UTC(n.$y, e, t) : new Date(n.$y, e, t), n);
+                return r ? i : i.endOf(a);
+            }, $ = function(t, e) {
+                return b.w(n.toDate()[t].apply(n.toDate("s"), (r ? [
+                    0,
+                    0,
+                    0,
+                    0
+                ] : [
+                    23,
+                    59,
+                    59,
+                    999
+                ]).slice(e)), n);
+            }, y = this.$W, M = this.$M, m = this.$D, v = "set" + (this.$u ? "UTC" : "");
+            switch(f){
+                case h:
+                    return r ? l(1, 0) : l(31, 11);
+                case c:
+                    return r ? l(1, M) : l(0, M + 1);
+                case o:
+                    var g = this.$locale().weekStart || 0, D = (y < g ? y + 7 : y) - g;
+                    return l(r ? m - D : m + (6 - D), M);
+                case a:
+                case d:
+                    return $(v + "Hours", 0);
+                case u:
+                    return $(v + "Minutes", 1);
+                case s:
+                    return $(v + "Seconds", 2);
+                case i:
+                    return $(v + "Milliseconds", 3);
+                default:
+                    return this.clone();
+            }
+        }, m.endOf = function(t) {
+            return this.startOf(t, !1);
+        }, m.$set = function(t, e) {
+            var n, o = b.p(t), f = "set" + (this.$u ? "UTC" : ""), l = (n = {}, n[a] = f + "Date", n[d] = f + "Date", n[c] = f + "Month", n[h] = f + "FullYear", n[u] = f + "Hours", n[s] = f + "Minutes", n[i] = f + "Seconds", n[r] = f + "Milliseconds", n)[o], $ = o === a ? this.$D + (e - this.$W) : e;
+            if (o === c || o === h) {
+                var y = this.clone().set(d, 1);
+                y.$d[l]($), y.init(), this.$d = y.set(d, Math.min(this.$D, y.daysInMonth())).$d;
+            } else l && this.$d[l]($);
+            return this.init(), this;
+        }, m.set = function(t, e) {
+            return this.clone().$set(t, e);
+        }, m.get = function(t) {
+            return this[b.p(t)]();
+        }, m.add = function(r, f) {
+            var d, l = this;
+            r = Number(r);
+            var $ = b.p(f), y = function(t) {
+                var e = O(l);
+                return b.w(e.date(e.date() + Math.round(t * r)), l);
+            };
+            if ($ === c) return this.set(c, this.$M + r);
+            if ($ === h) return this.set(h, this.$y + r);
+            if ($ === a) return y(1);
+            if ($ === o) return y(7);
+            var M = (d = {}, d[s] = e, d[u] = n, d[i] = t, d)[$] || 1, m = this.$d.getTime() + r * M;
+            return b.w(m, this);
+        }, m.subtract = function(t, e) {
+            return this.add(-1 * t, e);
+        }, m.format = function(t) {
+            var e = this, n = this.$locale();
+            if (!this.isValid()) return n.invalidDate || l;
+            var r = t || "YYYY-MM-DDTHH:mm:ssZ", i = b.z(this), s = this.$H, u = this.$m, a = this.$M, o = n.weekdays, c = n.months, f = n.meridiem, h = function(t, n, i, s) {
+                return t && (t[n] || t(e, r)) || i[n].slice(0, s);
+            }, d = function(t) {
+                return b.s(s % 12 || 12, t, "0");
+            }, $ = f || function(t, e, n) {
+                var r = t < 12 ? "AM" : "PM";
+                return n ? r.toLowerCase() : r;
+            };
+            return r.replace(y, function(t, r) {
+                return r || function(t) {
+                    switch(t){
+                        case "YY":
+                            return String(e.$y).slice(-2);
+                        case "YYYY":
+                            return b.s(e.$y, 4, "0");
+                        case "M":
+                            return a + 1;
+                        case "MM":
+                            return b.s(a + 1, 2, "0");
+                        case "MMM":
+                            return h(n.monthsShort, a, c, 3);
+                        case "MMMM":
+                            return h(c, a);
+                        case "D":
+                            return e.$D;
+                        case "DD":
+                            return b.s(e.$D, 2, "0");
+                        case "d":
+                            return String(e.$W);
+                        case "dd":
+                            return h(n.weekdaysMin, e.$W, o, 2);
+                        case "ddd":
+                            return h(n.weekdaysShort, e.$W, o, 3);
+                        case "dddd":
+                            return o[e.$W];
+                        case "H":
+                            return String(s);
+                        case "HH":
+                            return b.s(s, 2, "0");
+                        case "h":
+                            return d(1);
+                        case "hh":
+                            return d(2);
+                        case "a":
+                            return $(s, u, !0);
+                        case "A":
+                            return $(s, u, !1);
+                        case "m":
+                            return String(u);
+                        case "mm":
+                            return b.s(u, 2, "0");
+                        case "s":
+                            return String(e.$s);
+                        case "ss":
+                            return b.s(e.$s, 2, "0");
+                        case "SSS":
+                            return b.s(e.$ms, 3, "0");
+                        case "Z":
+                            return i;
+                    }
+                    return null;
+                }(t) || i.replace(":", "");
+            });
+        }, m.utcOffset = function() {
+            return 15 * -Math.round(this.$d.getTimezoneOffset() / 15);
+        }, m.diff = function(r, d, l) {
+            var $, y = this, M = b.p(d), m = O(r), v = (m.utcOffset() - this.utcOffset()) * e, g = this - m, D = function() {
+                return b.m(y, m);
+            };
+            switch(M){
+                case h:
+                    $ = D() / 12;
+                    break;
+                case c:
+                    $ = D();
+                    break;
+                case f:
+                    $ = D() / 3;
+                    break;
+                case o:
+                    $ = (g - v) / 6048e5;
+                    break;
+                case a:
+                    $ = (g - v) / 864e5;
+                    break;
+                case u:
+                    $ = g / n;
+                    break;
+                case s:
+                    $ = g / e;
+                    break;
+                case i:
+                    $ = g / t;
+                    break;
+                default:
+                    $ = g;
+            }
+            return l ? $ : b.a($);
+        }, m.daysInMonth = function() {
+            return this.endOf(c).$D;
+        }, m.$locale = function() {
+            return D[this.$L];
+        }, m.locale = function(t, e) {
+            if (!t) return this.$L;
+            var n = this.clone(), r = w(t, e, !0);
+            return r && (n.$L = r), n;
+        }, m.clone = function() {
+            return b.w(this.$d, this);
+        }, m.toDate = function() {
+            return new Date(this.valueOf());
+        }, m.toJSON = function() {
+            return this.isValid() ? this.toISOString() : null;
+        }, m.toISOString = function() {
+            return this.$d.toISOString();
+        }, m.toString = function() {
+            return this.$d.toUTCString();
+        }, M;
+    }(), k = _.prototype;
+    return O.prototype = k, [
+        [
+            "$ms",
+            r
+        ],
+        [
+            "$s",
+            i
+        ],
+        [
+            "$m",
+            s
+        ],
+        [
+            "$H",
+            u
+        ],
+        [
+            "$W",
+            a
+        ],
+        [
+            "$M",
+            c
+        ],
+        [
+            "$y",
+            h
+        ],
+        [
+            "$D",
+            d
+        ]
+    ].forEach(function(t) {
+        k[t[1]] = function(e) {
+            return this.$g(e, t[0], t[1]);
+        };
+    }), O.extend = function(t, e) {
+        return t.$i || (t(e, _, O), t.$i = !0), O;
+    }, O.locale = w, O.isDayjs = S, O.unix = function(t) {
+        return O(1e3 * t);
+    }, O.en = D[g], O.Ls = D, O.p = {}, O;
+});
+
+},{}]},["gIMj9","ihhsy"], "ihhsy", "parcelRequire6986", {})
 
 //# sourceMappingURL=app.js.map

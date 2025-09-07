@@ -9,6 +9,10 @@ export default (order) => ({
   shippingAddressId: order.shippingAddressId,
   paymentMethod: order.paymentMethod ?? null,
   shippingMethod: order.shippingMethod ?? null,
+  status: order.status,
+  init() {
+    Alpine.store("cart").clearCart();
+  },
 
   async updateMyOrder() {
     console.log(this.paymentMethod);

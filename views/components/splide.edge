@@ -29,12 +29,10 @@ if (window.Splide && window.splide.Extensions) {
 
         @each(item in collections)
         <li class="splide__slide">
-
           @component('components/card', {
-
-          title:'styllish shoes for women ',
+          title:item.description,
           action:{
-          link:'/',
+          link:'/category/'+item.slug,
           word:'shop now'
           }
           })

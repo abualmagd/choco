@@ -6,7 +6,7 @@
 @section('content')
 <div class=" h-[600px]">
   @component('components/splide', {
-  collections:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+  collections:data.collections
   })
 
   @end
@@ -19,27 +19,28 @@
 @component('components/featured', {
 title:'Featured Products',
 link:'/featured-products',
-featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+featuredProducts:data.featured
 })
 
 @end
 <div class=" h-7"></div>
 
 <div class=" flex md:flex-row flex-col gap-7 my-20 h-[500px]">
+
   @component('components/card', {
-  title:'Minimal Collection ',
-  cardImage:'/public/assetes/images/shoes.jpg',
+  title:data.firstCategory.slug||data.firstCategory.name,
+  cardImage:data.firstCategory.image||'/public/assetes/images/shoes.jpg',
   action:{
-  link:'/',
+  link:'/category/'+data.firstCategory.slug,
   word:'shop now'
   }
   })
   @end
   @component('components/card', {
-  title:'Sneakers ',
-  cardImage:'/public/assetes/images/shoes2.jpg',
+  title:data.secondCategory.slug||data.secondCategory.name,
+  cardImage:data.secondCategory.image||'/public/assetes/images/shoes2.jpg',
   action:{
-  link:'/',
+  link:'/category/'+data.secondCategory.slug,
   word:'shop now'
   }
   })
@@ -51,7 +52,7 @@ featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 @component('components/featured', {
 title:'Latest Products',
 link:'/latest-products',
-featuredProducts:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+featuredProducts:data.latest
 })
 
 @end

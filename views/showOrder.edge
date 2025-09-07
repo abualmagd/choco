@@ -1,0 +1,131 @@
+@layout('components/layout/app')
+
+@set('title', settings.title+ "-"+ "order")
+
+
+
+
+@section('content')
+<div class=" flex-1" x-data="checkoutComponent({{JSON.stringify(order)}})">
+    <!-- order prices-->
+    <ul class=" flex flex-col w-full p-3 shadow-md rounded">
+        <li class=" bg-gray-100 h-10 rounded my-2 flex  items-center pl-3 justify-between">
+            <p>Cart Total</p>
+            <p class=" w-40">Price</p>
+        </li>
+
+        <li class="  border-b-2 h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Subtotal:</p>
+            <p class=" w-40">{{order.subtotal}}</p>
+        </li>
+
+
+        <li class="  border-b-2 h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Shipping:</p>
+            <p class=" w-40">{{order.shipping}}</p>
+        </li>
+
+        <li class="  border-b-2 h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Tax:</p>
+            <p class=" w-40">{{order.tax}}</p>
+        </li>
+
+        <li class="   h-10 rounded pb-2 mt-2 flex items-center pl-3 justify-between">
+            <p>Total:</p>
+            <p class=" w-40"> <span class=" capitalize">{{settings.currencyLogo}} </span>{{order.total}}</p>
+        </li>
+    </ul>
+
+    <!-- order items-->
+    <ul class=" flex flex-col w-full p-3 shadow-md rounded my-4">
+        @each((item,index) in order.items)
+        <li
+            class="  h-14 rounded my-2 flex  items-center pl-3 justify-between {{index?'bg-transparent':'bg-gray-100'}} ">
+            <a target="_blank" href="{{" /products/"+order.items[index].product.slug||order.items[1].variant.slug}}"
+                class=" cursor-pointer">{{order.items[index].product.name||order.items[1].variant.name}}</a>
+            <div class=" flex flex-col">
+                <p class=" text-gray-400 text-sm capitalize">quantity</p>
+                <p>{{order.items[index].quantity}}</p>
+            </div>
+            <div class=" w-40 flex flex-col">
+                <p class=" text-gray-400 text-sm capitalize">Price</p>
+                <p>{{order.items[index].price}}</p>
+            </div>
+        </li>
+        @end
+    </ul>
+
+    <div class="flex flex-col w-full p-3 shadow-md rounded">
+        <h2 class=" text-xl font-bold">Shipping address</h2>
+        @if(order.user.addresses[0])
+        <div x-model="shippingAddressId" class=" flex flex-col ga-6">
+            <p>choose address</p>
+            <template x-for=" address in addresses">
+                <label>
+                    <input type="radio" name="address" :value="address.id" x-model="shippingAddressId"
+                        x-on:change="updateMyOrder" />
+                    <span x-text="butterifyAddress(address)"></span>
+                </label>
+
+            </template>
+        </div>
+        @else
+        @component('components/newAdress', {
+        address:null,
+        key:1
+        })
+        @end
+        @end
+
+
+        <div x-data class=" payment-method flex flex-col gap-1 px-2 my-6 w-52">
+            <h3 class=" font-bold text-lg capitalize">
+                your phone:
+            </h3><input type="tel" x-model="phone" x-on:change="updateMyOrder" maxlength="11"
+                pattern="01[01259][0-9]{8}" class=" outline-none border-none bg-gray-200 rounded px-3 py-1" />
+        </div>
+
+        <div class="payment-method flex flex-col gap-3 my-3 w-52">
+            <h3 class=" font-bold text-lg capitalize">
+                payment method:
+            </h3>
+            <select x-model="paymentMethod" x-on:change="updateMyOrder"
+                class=" border cursor-pointer border-[#F1F1F1] rounded-md h-10 w-52 ">
+                <option value="null">
+                    --
+                </option>
+                <option value="delivery">
+                    Cash on delivery
+                </option>
+                <option value="card">
+                    Visa card
+                </option>
+            </select>
+        </div>
+
+        <div x-show="status==='PENDING'"
+            class="max-w-full gap-3 mt-3 w-[700px] mx-auto pr-1 flex justify-center items-center">
+            <button @click="updateMyOrder" x-show="paymentMethod !=='card'"
+                class="text-white h-10 bg-black min-w-52 flex justify-center items-center  hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-lg  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                checkout
+            </button>
+            <div x-show="paymentMethod==='card'">
+                @!component('components/paymentCart', {
+                data:{
+                order:order,
+                user:order.user,
+                currency:settings.currency,
+                language:locales.currentLanguage,
+                hash:''
+                }
+                })
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+</div>
+@end

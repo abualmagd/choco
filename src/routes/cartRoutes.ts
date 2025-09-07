@@ -237,18 +237,22 @@ export const cartRoutes: FastifyPluginAsync = async (
       const cart = await fastify.prisma.cart.findUnique({
         where: { userId: request.session.user?.id },
       });
+      console.log("cart: ", cart);
       if (!cart) {
         return reply.send(
           new ResError(500, "error in clearing cart", " cart clear error")
         );
-      }
-      await fastify.prisma.cartItem.deleteMany({
-        where: { cartId: cart.id },
-      });
+      } else {
+        const res = await fastify.prisma.cartItem.deleteMany({
+          where: { cartId: cart.id },
+        });
 
-      return reply
-        .status(200)
-        .send(new CustomResponse(" cart cleared well", null));
+        console.log("delet ", res);
+
+        return reply
+          .status(200)
+          .send(new CustomResponse(" cart cleared well", null));
+      }
     } catch (error) {
       return reply.send(error);
     }

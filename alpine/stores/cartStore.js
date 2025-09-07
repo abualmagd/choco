@@ -1,5 +1,4 @@
-import { cartTotalPrice } from "../utils/api";
-import { notify } from "../utils/services";
+import { cartTotalPrice, removeAllCartItem } from "../utils/api";
 
 export default {
   count: 0,
@@ -21,6 +20,11 @@ export default {
   clearItemCart() {
     if (this.count !== 0) this.count = parseInt(this.count) - 1;
     localStorage.setItem("cartCount", this.count);
+  },
+  async clearCart() {
+    this.count = 0;
+    await removeAllCartItem();
+    localStorage.setItem("cartCount", 0);
   },
   async asyncCartTotal() {
     try {

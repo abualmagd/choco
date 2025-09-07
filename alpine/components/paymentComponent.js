@@ -6,8 +6,8 @@ export default (data) => ({
   currency: data.currency || "EGP",
   orderId: data.order.id.toString(), // Ensure it's a string
   merchantId: "MID-25920-522",
-  merchantRedirect: "http://localhost:3000/redirect", // Use actual port
-  serverWebhook: "http://localhost:3000/webhook", // Use actual port
+  merchantRedirect: "https://hungry-rings-rhyme.loca.lt/redirect", // Use actual port
+  serverWebhook: "https://hungry-rings-rhyme.loca.lt/order/webhook", // Use actual port
   mode: "test",
   metaData: JSON.stringify({
     order_id: data.order.id,

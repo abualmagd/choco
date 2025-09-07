@@ -112,6 +112,24 @@ export const removeCartItem = async (id) => {
   }
 };
 
+export const removeAllCartItem = async () => {
+  const res = await fetch("/api/cart/clear", {
+    headers: {
+      //"Content-Type": "application/json",
+      "x-api-key": process.env.API_KEY_1,
+    },
+    method: "PUT",
+    credentials: "include",
+  });
+  console.log("res", res.statusText);
+  if (!res.ok) {
+    console.log(res);
+    throw Error(res.statusText);
+  } else {
+    return res.json();
+  }
+};
+
 // to backend return cart total price
 export const cartTotalPrice = async () => {
   const res = await fetch(`/api/cart/total`, {
@@ -274,7 +292,7 @@ export const createOrder = async (data) => {
       method: "POST",
       credentials: "include",
     });
-    console.log(response);
+    //console.log(response);
     if (!response.ok) {
       if (response.statusText === "Unauthorized") {
         throw new Error("Unauthorized");

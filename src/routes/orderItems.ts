@@ -73,6 +73,7 @@ export const orderItemsRoutes: FastifyPluginAsync = async (
           items: true,
         },
       });
+
       return reply.send(orderItems);
     } catch (error) {
       return reply.send(error);
